@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: onlyone | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/onlyone/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Only One validation for CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation/"/>
+    <updated>2013-04-06T00:00:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation</id>
+    <content type="html"><![CDATA[<h3>Use case</h3>
+
+<p>You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.</p>
+
+<h3>Setup</h3>
+
+<p>I tend to use a <code>bool NOT NULL DEFAULT 0</code> field for this in the database. Then in my model I&rsquo;ll implement a custom validation function.</p>
+
+<p>```php
+&lt;?php
+public $validate = array(</p>
+
+<pre><code>    'default' =&gt; array( // Name of the field
+        'one' =&gt; array( // The name of the rule
+            'rule' =&gt; 'onlyOne', // My custom validation
+            'message' =&gt; 'Only one can be default. A default already exists',
+            'required' =&gt; false
+        )
+    )
+</code></pre>
+
+<p>);</p>
+
+<p>/<em>*
+ * Checks to ensure that only one record has the default flag
+ * @param array $check An array containing {field}=>{value}
+ * @return bool
+ </em>/</p>
+
+<pre><code>public function onlyOne($check) {
+    // If turning off default, we don't mind
+    if ($check['default'] == 0) {
+        return true;
+    }
+
+    // Find the current default
+    $default = $this-&gt;find('first', array(
+        'conditions' =&gt; array(
+            'default' =&gt; 1,
+        ),
+        'fields' =&gt; array('id', 'name')
+        ));
+
+    // No default exists
+    if (!$default) {
+        return true;
+    }
+
+    // If we are updating the current default
+    if ($default['Model']['id'] == $this-&gt;data['Model']['id']) {
+        return true;
+    }
+
+    return false;
+}
+</code></pre>
+
+<p>```</p>
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Third party libraries with CakePHP - Daves dev warblings</title>
+  <meta name="author" content="David Yell">
+
+  
+  <meta name="description" content="I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as PSR0. Where &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daves dev warblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2775424-18']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daves dev warblings</a></h1>
+  
+    <h2>For all the things I never remember</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jedistirfry.co.uk" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about.html">About</a></li>
+  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Third party libraries with CakePHP</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T15:23:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
+
+<h3>Where to put the files?</h3>
+
+<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
+
+<h3>How to load them?</h3>
+
+<p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#including-files-with-app-import">The App class in the cookbook</a>.</p>
+
+<p>The code will look like the following.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// DavesLibrary/DavesClass.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">TheNameOfMyClass</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Importing a Vendor library from a plugin? No problem, use plugin.notation</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;DavesPlugin.TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Make a brew!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">David Yell</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T15:23:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cakephp/'>cakephp</a>, <a class='category' href='/blog/categories/external/'>external</a>, <a class='category' href='/blog/categories/libraries/'>libraries</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/" data-via="yelldavid" data-counturl="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013-08/cakephp-config-for-nginx/" title="Previous Post: CakePHP config for Nginx">&laquo; CakePHP config for Nginx</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013-08/cake-events-system-listening/" title="Next Post: How to use a Component to listen to Cake events">How to use a Component to listen to Cake events &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013-09/dynamic-validation/">Dynamic validation in CakePHP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013-09/merging-admin-specific-helpers/">Merging Admin specific helpers</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/davidyell">@davidyell</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'davidyell',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/neon1024?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/neon1024">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - David Yell -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

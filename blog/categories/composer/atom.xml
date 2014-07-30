@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: composer | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/composer/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Creating a CakePHP project using Composer]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2014-05/cakephp-project-from-scratch-using-composer/"/>
+    <updated>2014-05-28T11:47:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2014-05/cakephp-project-from-scratch-using-composer</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
+
+<p>I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the framework as a dependancy.</p>
+
+<h3>Solution</h3>
+
+<p>So firstly you&rsquo;ll want to create yourself a project folder. For this example we&rsquo;ll create a project to adopt a cat.
+We need to create ourself a project folder, make it into a Git repo so we can version our code, and then we can start adding our dependancies.</p>
+
+<p><code>bash
+$ mkdir KittyMarket
+$ cd KittyMarket
+$ git init
+$ composer init
+</code></p>
+
+<p>So after the last command Composer will ask you about your project, so you can complete the details there. Be sure that you set your <code>"minimum-stability": "dev"</code> so that packages loading from <code>dev-master</code> will work.</p>
+
+<p>Then you can start defining your dependancies. Firstly you&rsquo;ll want <code>cakephp/cakephp</code> and set a version of the latest, currently <code>2.5.1</code>.</p>
+
+<p>After this I like to edit my <code>composer.json</code> to add some configuration, so that Composer will put things in the correct CakePHP place.</p>
+
+<p>```json</p>
+
+<pre><code>"config": {
+    "vendor-dir": "vendors",
+    "bin-dir": "vendors/bin"
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Once you&rsquo;ve added all your dependancies it&rsquo;s time to make the app. Be aware that the <code>../vendors/bin</code> might be different if you didn&rsquo;t use the above amend to your <code>composer.json</code>.</p>
+
+<p><code>bash
+$ mkdir app
+$ cd app
+$ ../vendors/bin/cake bake
+</code></p>
+
+<p>This will copy in the framework skeleton.</p>
+
+<h3>Done!</h3>
+
+<p>Make a brew!</p>
+]]></content>
+  </entry>
+  
+</feed>

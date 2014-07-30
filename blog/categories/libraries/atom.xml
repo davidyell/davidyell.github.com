@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: libraries | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/libraries/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Third party libraries with CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/"/>
+    <updated>2013-08-01T15:23:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp</id>
+    <content type="html"><![CDATA[<p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
+
+<h3>Where to put the files?</h3>
+
+<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
+
+<h3>How to load them?</h3>
+
+<p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#including-files-with-app-import">The App class in the cookbook</a>.</p>
+
+<p>The code will look like the following.
+```php
+&lt;?php
+App::import(&lsquo;Vendor&rsquo;, &lsquo;TheNameOfMyClass&rsquo;, array(&lsquo;file&rsquo; => &lsquo;DavesLibrary&rsquo;.DS.&lsquo;DavesClass.php&rsquo;));</p>
+
+<p>// DavesLibrary/DavesClass.php
+class TheNameOfMyClass { }</p>
+
+<p>// Importing a Vendor library from a plugin? No problem, use plugin.notation
+App::import(&lsquo;Vendor&rsquo;, &lsquo;DavesPlugin.TheNameOfMyClass&rsquo;, array(&lsquo;file&rsquo; => &lsquo;DavesLibrary&rsquo;.DS.&lsquo;DavesClass.php&rsquo;));
+```</p>
+
+<h3>Success</h3>
+
+<p>Make a brew!</p>
+]]></content>
+  </entry>
+  
+</feed>

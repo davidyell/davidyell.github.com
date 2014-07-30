@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2014-05/cakephp-project-from-scratch-using-composer/</loc>
+    <lastmod>2014-05-28T11:47:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search/</loc>
+    <lastmod>2014-03-04T10:54:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-11/custom-pagination/</loc>
+    <lastmod>2013-11-27T11:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-09/dynamic-validation/</loc>
+    <lastmod>2013-09-12T12:53:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers/</loc>
+    <lastmod>2013-09-10T14:32:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-08/how-to-create-hasmanythrough-multi-selects/</loc>
+    <lastmod>2013-08-13T16:29:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-08/cake-events-system-listening/</loc>
+    <lastmod>2013-08-09T15:29:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/</loc>
+    <lastmod>2013-08-01T15:23:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-08/cakephp-config-for-nginx/</loc>
+    <lastmod>2013-08-01T15:17:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-08/different-finds-in-cakephp/</loc>
+    <lastmod>2013-08-01T15:11:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-06/git-file-history/</loc>
+    <lastmod>2013-06-11T00:00:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-04/softdelete-return/</loc>
+    <lastmod>2013-04-16T00:00:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation/</loc>
+    <lastmod>2013-04-06T00:00:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/</loc>
+    <lastmod>2013-03-01T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-02/symfony-nginx/</loc>
+    <lastmod>2013-02-27T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-02/element-caching/</loc>
+    <lastmod>2013-02-07T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares/</loc>
+    <lastmod>2013-01-18T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-01/alert-box-element-for-cake/</loc>
+    <lastmod>2013-01-17T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-01/unity-alt-tab/</loc>
+    <lastmod>2013-01-16T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer/</loc>
+    <lastmod>2013-01-15T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2012-12/required-partial/</loc>
+    <lastmod>2012-12-18T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2011-07/removing-lck-files/</loc>
+    <lastmod>2011-07-21T00:00:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2008-11/handy-htaccess/</loc>
+    <lastmod>2008-11-20T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/2008-11/removing-svn-folders/</loc>
+    <lastmod>2008-11-07T00:00:00+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/about.html</loc>
+    <lastmod>2014-07-30T15:45:30+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/blog/archives/</loc>
+    <lastmod>2014-07-30T15:45:30+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://jedistirfry.co.uk/</loc>
+    <lastmod>2014-07-30T15:45:30+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
+</urlset>

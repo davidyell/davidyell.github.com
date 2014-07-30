@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pagination | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/pagination/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Pagination Helper links]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/"/>
+    <updated>2013-11-27T11:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-11/custom-pagination</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
+
+<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
+
+<p>The url I wanted to use was <code>/news/category/daves-awesome-category</code> and then paginating results on <code>/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn&rsquo;t want to play ball.</p>
+
+<p>I had already created my route.</p>
+
+<p><code>php
+Router::connect('/news/category/:category/*', array('controller' =&gt; 'news_articles', 'action' =&gt; 'index'), array('category' =&gt; '[a-z0-9-]+', 'pass' =&gt; array('category')));
+</code></p>
+
+<p>But instead of the expected links above, I was getting <code>/news/daves-awesome-category/page:2</code> missing out my keyword from the url.</p>
+
+<h3>Solution</h3>
+
+<p>The Paginator helper options array to the rescue! You can actually configure the options of the helper right in the view. Such a simple fix.</p>
+
+<p>Here is my pagination including the fix to adjust the url if a category is set.</p>
+
+<p>```php
+if (isset($category)) {</p>
+
+<pre><code>$this-&gt;Paginator-&gt;options['url'] = array('controller' =&gt; 'news_articles', 'action' =&gt; 'index', 'category' =&gt; $category['NewsCategory']['slug']);
+</code></pre>
+
+<p>}
+echo $this->Paginator->prev(&lsquo;&lt; &rsquo; . <strong>(&lsquo;previous&rsquo;), array(), null, array(&lsquo;class&rsquo; => &lsquo;prev disabled&rsquo;));
+echo $this->Paginator->numbers(array(&lsquo;separator&rsquo; => &lsquo;&rsquo;));
+echo $this->Paginator->next(</strong>(&lsquo;next&rsquo;) . &lsquo; >&rsquo;, array(), null, array(&lsquo;class&rsquo; => &lsquo;next disabled&rsquo;));
+```</p>
+
+<h3>Done!</h3>
+
+<p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
+]]></content>
+  </entry>
+  
+</feed>

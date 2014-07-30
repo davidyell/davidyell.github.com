@@ -1,114 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Daves dev warblings</title>
-  <meta name="author" content="David Yell">
-
-  
-  <meta name="description" content="Scenario I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://jedistirfry.co.uk">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Daves dev warblings" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-2775424-18']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Daves dev warblings</a></h1>
-  
-    <h2>For all the things I never remember</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jedistirfry.co.uk" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-  <li><a href="/about.html">About</a></li>
-  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2014-05-28T11:47:00+01:00" pubdate data-updated="true">May 28<sup>th</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
+  <entry>
+    <title type="html"><![CDATA[Creating a CakePHP project using Composer]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2014-05/cakephp-project-from-scratch-using-composer/"/>
+    <updated>2014-05-28T11:47:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2014-05/cakephp-project-from-scratch-using-composer</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
 
 <p>I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the framework as a dependancy.</p>
 
@@ -161,42 +71,15 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 <h3>Done!</h3>
 
 <p>Make a brew!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-04T10:54:00+00:00" pubdate data-updated="true">Mar 4<sup>th</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
+  <entry>
+    <title type="html"><![CDATA[Filtering dates using CakeDC/Search]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search/"/>
+    <updated>2014-03-04T10:54:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
 
 <p>I needed to do a search on a date field in my database which was stored as a <code>DATE</code>, but only filtering by month.</p>
 
@@ -270,42 +153,15 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 <h3>Done!</h3>
 
 <p>Make a brew!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-27T11:00:00+00:00" pubdate data-updated="true">Nov 27<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
+  <entry>
+    <title type="html"><![CDATA[Custom Pagination Helper links]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/"/>
+    <updated>2013-11-27T11:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-11/custom-pagination</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
 
 <p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
 
@@ -344,42 +200,15 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 <h3>Done!</h3>
 
 <p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-09/dynamic-validation/">Dynamic validation in CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-12T12:53:00+01:00" pubdate data-updated="true">Sep 12<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The scenario</h3>
+  <entry>
+    <title type="html"><![CDATA[Dynamic validation in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-09/dynamic-validation/"/>
+    <updated>2013-09-12T12:53:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-09/dynamic-validation</id>
+    <content type="html"><![CDATA[<h3>The scenario</h3>
 
 <p>You have two different forms which both submit data for the same model. Each of these forms has different fields, but both need to be validated before the data can be saved.</p>
 
@@ -565,42 +394,15 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 <h3>Success</h3>
 
 <p>Go and make a brew, you&rsquo;ve just done some dynamic validation. Right in the model too, exactly where it should be. ggwp.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-09/merging-admin-specific-helpers/">Merging Admin specific helpers</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-10T14:32:00+01:00" pubdate data-updated="true">Sep 10<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The scenario</h3>
+  <entry>
+    <title type="html"><![CDATA[Merging Admin specific helpers]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers/"/>
+    <updated>2013-09-10T14:32:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers</id>
+    <content type="html"><![CDATA[<h3>The scenario</h3>
 
 <p>You have a bunch of helpers which you are only using in the <code>/admin</code> section of your website. We don&rsquo;t need to load these on the front-end part of the site.</p>
 
@@ -648,42 +450,15 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 <h3>Success!</h3>
 
 <p>Make a brew.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/how-to-create-hasmanythrough-multi-selects/">How to create hasManyThrough multi-selects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-13T16:29:00+01:00" pubdate data-updated="true">Aug 13<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Updated 6th November 2013</strong></p>
+  <entry>
+    <title type="html"><![CDATA[How to create hasManyThrough multi-selects]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/how-to-create-hasmanythrough-multi-selects/"/>
+    <updated>2013-08-13T16:29:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/how-to-create-hasmanythrough-multi-selects</id>
+    <content type="html"><![CDATA[<p><strong>Updated 6th November 2013</strong></p>
 
 <h3>The scenario</h3>
 
@@ -951,42 +726,15 @@ If you are using checkboxes and want to validate your data you will need to ensu
 <h3>Success</h3>
 
 <p>Make a brew!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/cake-events-system-listening/">How to use a Component to listen to Cake events</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-09T15:29:00+01:00" pubdate data-updated="true">Aug 9<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I wanted a sleek way to inject SEO meta tags into my project without a large overhead and lots of complicated finds and model joints. Thanks to <a href="https://github.com/lorenzo">jose_zap&rsquo;s</a> suggestion, I decided to learn about the <a href="http://book.cakephp.org/2.0/en/core-libraries/events.html">Cake Events</a> system.</p>
+  <entry>
+    <title type="html"><![CDATA[How to use a Component to listen to Cake events]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/cake-events-system-listening/"/>
+    <updated>2013-08-09T15:29:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/cake-events-system-listening</id>
+    <content type="html"><![CDATA[<p>I wanted a sleek way to inject SEO meta tags into my project without a large overhead and lots of complicated finds and model joints. Thanks to <a href="https://github.com/lorenzo">jose_zap&rsquo;s</a> suggestion, I decided to learn about the <a href="http://book.cakephp.org/2.0/en/core-libraries/events.html">Cake Events</a> system.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1104,42 +852,15 @@ If you are using checkboxes and want to validate your data you will need to ensu
 <h3>Success</h3>
 
 <p>Make a brew!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/third-party-libraries-with-cakephp/">Third party libraries with CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T15:23:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[Third party libraries with CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/"/>
+    <updated>2013-08-01T15:23:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp</id>
+    <content type="html"><![CDATA[<p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
 
 <h3>Where to put the files?</h3>
 
@@ -1175,42 +896,15 @@ If you are using checkboxes and want to validate your data you will need to ensu
 <h3>Success</h3>
 
 <p>Make a brew!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/cakephp-config-for-nginx/">CakePHP config for Nginx</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T15:17:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config.</p>
+  <entry>
+    <title type="html"><![CDATA[CakePHP config for Nginx]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/cakephp-config-for-nginx/"/>
+    <updated>2013-08-01T15:17:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/cakephp-config-for-nginx</id>
+    <content type="html"><![CDATA[<p>I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config.</p>
 
 <p>Here is an example config template.</p>
 
@@ -1266,42 +960,15 @@ If you are using checkboxes and want to validate your data you will need to ensu
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/different-finds-in-cakephp/">Different finds in CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T15:11:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I had a reference for how to do different types of finds in CakePHP using the manual join method and the Containable or Linkable behaviours.</p>
+  <entry>
+    <title type="html"><![CDATA[Different finds in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/different-finds-in-cakephp/"/>
+    <updated>2013-08-01T15:11:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/different-finds-in-cakephp</id>
+    <content type="html"><![CDATA[<p>I had a reference for how to do different types of finds in CakePHP using the manual join method and the Containable or Linkable behaviours.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1461,135 +1128,539 @@ If you are using checkboxes and want to validate your data you will need to ensu
 </span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">paginate</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[How to display the history of a file in Git with diffs]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-06/git-file-history/"/>
+    <updated>2013-06-11T00:00:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-06/git-file-history</id>
+    <content type="html"><![CDATA[<h3>Use case</h3>
+
+<p>You want to see all the changes which have been made to a single file in the project.</p>
+
+<h3>References</h3>
+
+<p>This was solved by a brighter mind than my own.<br/>
+<a href="https://twitter.com/YellDavid/status/344398277275435008">Daniel Hofstetter ‏@dhofstet on Twitter</a></p>
+
+<h3>Solution</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git log -p &lt;filename&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are using the most excellent <a href="http://www.sourcetreeapp.com/">SourceTree</a> then you can select a file and go to <code>Actions</code> > <code>Log selected</code> to see a window of all the changes.</p>
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Hack to fix SoftDelete behaviour return in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-04/softdelete-return/"/>
+    <updated>2013-04-16T00:00:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-04/softdelete-return</id>
+    <content type="html"><![CDATA[<h3>Use case</h3>
+
+<p>You have downloaded and installed the <a href="https://github.com/cakedc/utils">Utils.SoftDelete</a> behaviour, but when you delete an item the return is <code>false</code> because the behaviour has stopped the delete and run an update instead.</p>
+
+<p>You still need to feedback to the user that the item has been deleted succesfully, ie, returning a <code>true</code>.</p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="https://github.com/CakeDC/utils/issues/19">https://github.com/CakeDC/utils/issues/19</a></li>
+<li><a href="https://groups.google.com/forum/?fromgroups=#!topic/cakephp-core/2vIZN8Sq8RE">cakephp-core › callbacks and returning true</a></li>
+</ul>
 
 
-    </article>
+<h3>Solution</h3>
+
+<p>This is a solution that I&rsquo;ve written myself based on the solutions of Ceeram and Augusto Franzoia.</p>
+
+<p>It will need to go into the <code>AppModel</code> of your application.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">$id</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$cascade</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="k">parent</span><span class="o">::</span><span class="na">delete</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$cascade</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nv">$result</span> <span class="o">===</span> <span class="k">false</span> <span class="o">&amp;&amp;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Behaviors</span><span class="o">-&gt;</span><span class="na">enabled</span><span class="p">(</span><span class="s1">&#39;SoftDelete&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>       <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+]]></content>
+  </entry>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/2">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
+  <entry>
+    <title type="html"><![CDATA[Only One validation for CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation/"/>
+    <updated>2013-04-06T00:00:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation</id>
+    <content type="html"><![CDATA[<h3>Use case</h3>
+
+<p>You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.</p>
+
+<h3>Setup</h3>
+
+<p>I tend to use a <code>bool NOT NULL DEFAULT 0</code> field for this in the database. Then in my model I&rsquo;ll implement a custom validation function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>        <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// Name of the field</span>
+</span><span class='line'>            <span class="s1">&#39;one&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// The name of the rule</span>
+</span><span class='line'>                <span class="s1">&#39;rule&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;onlyOne&#39;</span><span class="p">,</span> <span class="c1">// My custom validation</span>
+</span><span class='line'>                <span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Only one can be default. A default already exists&#39;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s1">&#39;required&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>            <span class="p">)</span>
+</span><span class='line'>        <span class="p">)</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Checks to ensure that only one record has the default flag</span>
+</span><span class='line'><span class="sd"> * @param array $check An array containing {field}=&gt;{value}</span>
+</span><span class='line'><span class="sd"> * @return bool</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">onlyOne</span><span class="p">(</span><span class="nv">$check</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// If turning off default, we don&#39;t mind</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$check</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// Find the current default</span>
+</span><span class='line'>        <span class="nv">$default</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>                <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>            <span class="p">),</span>
+</span><span class='line'>            <span class="s1">&#39;fields&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// No default exists</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$default</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// If we are updating the current default</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+]]></content>
+  </entry>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-09/dynamic-validation/">Dynamic validation in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-09/merging-admin-specific-helpers/">Merging Admin specific helpers</a>
-      </li>
-    
-  </ul>
-</section>
+  <entry>
+    <title type="html"><![CDATA[How to debug routes in Symfony2]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/"/>
+    <updated>2013-03-01T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony</id>
+    <content type="html"><![CDATA[<p>When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML and Annotation.</p>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
+<p>I picked annotation as it looked neater, but I wanted to find out how to find a controller from a url.</p>
+
+<h3>Trace a url back to a controller</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>app/console router:match /players/
+</span><span class='line'>Route <span class="s2">&quot;players_index&quot;</span> matches
+</span><span class='line'><span class="nv">$ </span>app/console router:debug players_index
+</span><span class='line'><span class="o">[</span>router<span class="o">]</span> Route <span class="s2">&quot;players_index&quot;</span>
+</span><span class='line'>Name         players_index
+</span><span class='line'>Pattern      /players/
+</span><span class='line'>Class        Symfony<span class="se">\C</span>omponent<span class="se">\R</span>outing<span class="se">\R</span>oute
+</span><span class='line'>Defaults     _controller: PingPong<span class="se">\B</span>undle<span class="se">\P</span>layerBundle<span class="se">\C</span>ontroller<span class="se">\P</span>layersController::indexAction
+</span><span class='line'>Requirements
+</span><span class='line'>Options      compiler_class: Symfony<span class="se">\C</span>omponent<span class="se">\R</span>outing<span class="se">\R</span>outeCompiler
+</span><span class='line'>Regex        <span class="c">#^/players/$#s</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will allow you to chase Controller annotated routes from the command line!</p>
+
+<h3>Success</h3>
+
+<p>Have a brew, you&rsquo;ve earned it.</p>
+]]></content>
+  </entry>
   
-  <a href="https://github.com/davidyell">@davidyell</a> on GitHub
+  <entry>
+    <title type="html"><![CDATA[Nginx config for Symfony2]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-02/symfony-nginx/"/>
+    <updated>2013-02-27T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-02/symfony-nginx</id>
+    <content type="html"><![CDATA[<p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">server_name</span> <span class="s">tabletennistracker.dev</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">root</span> <span class="s">/home/neon/Sites/TableTennisTracker/web</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">error_log</span> <span class="s">/var/log/nginx/tabletennistracker.error.log</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">access_log</span> <span class="s">/var/log/nginx/tabletennistracker.access.log</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kn">index</span> <span class="s">app.php</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri/</span> <span class="s">/app.php?</span><span class="nv">$query_string</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/(app|app_dev)\.php(/|$)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kn">fastcgi_split_path_info</span> <span class="s">^(.+\.php)(/.+)</span>$<span class="p">;</span>
+</span><span class='line'>    <span class="kn">fastcgi_pass</span> <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">include</span> <span class="s">fastcgi_params</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">fastcgi_param</span> <span class="s">SCRIPT_FILENAME</span> <span class="nv">$document_root$fastcgi_script_name</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
+
+<p>Time for another glass of wine!</p>
+]]></content>
+  </entry>
   
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+  <entry>
+    <title type="html"><![CDATA[How to cache an element in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-02/element-caching/"/>
+    <updated>2013-02-07T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-02/element-caching</id>
+    <content type="html"><![CDATA[<p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
 
-        github.showRepos({
-            user: 'davidyell',
-            count: 5,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+<blockquote><p>The url is here, <a href="http://book.cakephp.org/2.0/en/views.html#caching-elements">http://book.cakephp.org/2.0/en/views.html#caching-elements</a></p></blockquote>
 
+<p>Also worth including some code here to save me having to click a link.</p>
 
-<section>
-  <h1>On Delicious</h1>
-  <div id="delicious"></div>
-  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/neon1024?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
-  <p><a href="http://delicious.com/neon1024">My Delicious Bookmarks &raquo;</a></p>
-</section>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span>
+</span><span class='line'>    <span class="s1">&#39;helpbox&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;var&#39;</span> <span class="o">=&gt;</span> <span class="nv">$var</span><span class="p">),</span>
+</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;cache&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;first_use&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view_long&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-
-
+<p><strong>Params</strong><br/>
+Name of element, array of data then options. Ref, <a href="http://api.cakephp.org/class/view#method-Viewelement">http://api.cakephp.org/class/view#method-Viewelement</a><br/>
+<strong>NB</strong><br/>
+It&rsquo;s also worth remebering that if you are caching something it will be cached in that state from the moment it&rsquo;s called. If you something is dynamic and you are caching it, <em>always</em> use a proper <code>key</code> for it in the options array! Or use <code>$this-&gt;here</code> to use the current url slug as the key.</p>
+]]></content>
+  </entry>
   
-</aside>
+  <entry>
+    <title type="html"><![CDATA[Sharing folders from a Mac to Ubuntu using Samba]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares/"/>
+    <updated>2013-01-18T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares</id>
+    <content type="html"><![CDATA[<p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - David Yell -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+<h2>Using Samba / CIFS</h2>
 
-</footer>
+<h3>Setup</h3>
+
+<p>For this method you&rsquo;ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> > <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you&rsquo;ll want to share a folder, probably your home folder, <code>/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
+
+<h3>Connecting to the share</h3>
+
+<p>In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code>smb://192.168.0.1</code> then enter your local machine login.</p>
+
+<h3>Mounting the share</h3>
+
+<p>Check to make sure that you have <code>cifs</code> installed by looking for <code>cifs-utils</code> package.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>dpkg --get-selections cifs-utils
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</code>.</p>
+
+<p>In terminal</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mount -t cifs //server/share -o <span class="s1">&#39;username=david,password=mypassword,rw,nounix,noserverinfo,sec=ntlmssp,file_mode=0777,dir_mode=0777&#39;</span> /mnt/david_mac
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using NFS</h2>
+
+<h3>Setup</h3>
+
+<p>Firstly you need to edit the <code>/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code>"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
+
+<p>Next we need to make sure that the file is correct and nfsd is running.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>showmount -e
+</span><span class='line'><span class="nv">$ </span>sudo nfsd checkexports
+</span><span class='line'><span class="nv">$ </span>sudo nfsd status
+</span><span class='line'><span class="nv">$ </span>sudo nfsd restart
+</span><span class='line'><span class="nv">$ </span>showmount -e
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Mount the share</h3>
+
+<p><code>sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
+
+<h2>Done</h2>
+
+<p>Have a celebratory cup of tea. You deserve it.</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Twitter Bootstrap alert-box element for CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/alert-box-element-for-cake/"/>
+    <updated>2013-01-17T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/alert-box-element-for-cake</id>
+    <content type="html"><![CDATA[<p>So I like the <a href="http://twitter.github.com/bootstrap/components.html#alerts">Twitter Bootstrap alerts</a> and I wanted a way to use them in my <a href="http://cakephp.org/">CakePHP</a> projects when controller actions return flash messages.</p>
 
-<script type="text/javascript">
-      var disqus_shortname = 'jedistirfry';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+<h3>Element</h3>
 
+<p><strong>app/View/Elements/alert-box.ctp</strong></p>
 
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html+php'><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&quot;alert &lt;?php echo </span><span class="si">$class</span><span class="s2">;?&gt;&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$message</span><span class="p">;</span> <span class="cp">?&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span> <span class="na">onclick=</span><span class="s">&quot;$(this).parent().fadeOut();return false;&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<h3>Usage</h3>
+
+<p>The element is used from the controller by appending the <code>element</code> and <code>class</code> to the <code>$this-&gt;element()</code> call.<br/>
+<strong>Success</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article has been saved&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-success&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p><strong>Failed</strong></p>
 
-</body>
-</html>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article could not be saved. Please, try again.&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-error&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Allow alt-tab across all viewports in Ubuntu]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/unity-alt-tab/"/>
+    <updated>2013-01-16T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/unity-alt-tab</id>
+    <content type="html"><![CDATA[<p>I dev at work on a Mac and at home in an Ubuntu VM. On my Ubuntu machine I tend to spread my apps across multiple viewports for ease of organisation. However the new Ubuntu Unity plugin for Compiz means that alt-tab only works for your current viewport. Not ideal.</p>
+
+<h3>First thing&rsquo;s first</h3>
+
+<p>You&rsquo;ll need to install the CompizConfig Settings Manager. You can find this in the software centre by searching for &lsquo;<strong>Compiz</strong>&rsquo;, or you can install it from Terminal using <code>sudo apt-get install compizconfig-settings-manager</code>.</p>
+
+<h3>Configure Unity</h3>
+
+<p>Once this is installed it should appear in your applications bar on the left. If not, hit the Ubuntu button and type &lsquo;Compiz&rsquo;.</p>
+
+<p>Scroll down to the third section, and click on the &lsquo;<strong>Ubuntu Unity Plugin</strong>&rsquo;. Click on the &lsquo;<strong>Switcher</strong>&rsquo; tab at the top, and then untick the &lsquo;<strong>Bias alt-tab to prefer windows on the current viewport</strong>&rsquo;.</p>
+
+<h3>Make a brew!</h3>
+
+<p>That&rsquo;s it. Job done. Happy alt-tabbing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to implement CodeSniffer into Netbeans]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer/"/>
+    <updated>2013-01-15T00:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer</id>
+    <content type="html"><![CDATA[<h3>Things you will need</h3>
+
+<p><strong>Netbeans plugin</strong>
+Download the plugin from here, <a href="http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin">http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin</a><br/>
+<strong>OR</strong><br/>
+<a href="http://plugins.netbeans.org/plugin/42434/phpcsmd">http://plugins.netbeans.org/plugin/42434/phpcsmd</a><br/>
+This plugin will highlight the lines in your IDE rather than just ouputting items to your action window.</p>
+
+<p>Download whichever one you think will be less invasive in your dev. As switching between frameworks and standards can cause whole pages to go pink with <code>phpcsmd</code> plugin.</p>
+
+<p><strong>PEAR installed</strong>
+You can test this by typing into a terminal <code>which pear</code> and it should return a path. If you do not have PEAR installed, you can find out how to install it from the site, <a href="http://pear.php.net/">http://pear.php.net/</a></p>
+
+<p><strong>PEAR packages</strong>
+<em>Note</em>
+If you get errors whilst installing PEAR packages, try using <code>sudo</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear install PHP_CodeSniffer
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+<a href="http://pear.php.net/package/PHP_CodeSniffer">http://pear.php.net/package/PHP_CodeSniffer</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear channel-discover pear.phpmd.org
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear channel-discover pear.pdepend.org
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear install --alldeps phpmd/PHP_PMD
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+<a href="http://phpmd.org/">http://phpmd.org/</a></p>
+
+<h3>Install the plugin</h3>
+
+<p>In Netbeans click <strong>Tools</strong> > <strong>Plugins</strong> and click the <strong>Downloaded</strong> tab. Click on <strong>Add Plugins…</strong> and browse to where your <code>.nbm</code> file is located. Install this file and restart Netbeans.</p>
+
+<h3>Configuring the plugin</h3>
+
+<p>Now you need to configure the plugin so it can find your PEAR packages.
+You will need to configure this in <strong>Preferences</strong>.</p>
+
+<p>Click on the <strong>PHP</strong> tab, and browse to the <strong>phpMD</strong> tab. Click <strong>change</strong> and in here specify the path to your <code>phpmd</code>. For me this is <code>/usr/local/Cellar/php53/5.3.17/bin/phpcs</code> but you can test this in a terminal with <code>which phpmd</code> to ge the path.</p>
+
+<p>Now click on <strong>phpCodeSniffer</strong> tab and do the same as above to enter the path to your <code>phpcs</code> executable.</p>
+
+<h4>Other settings</h4>
+
+<p>In here I tend to specify that the <code>tabsize</code> is 4 to conform with PSR-2.</p>
+
+<h3>How do I &lsquo;run&rsquo; it?</h3>
+
+<p><strong>Window</strong> > <strong>Action items</strong></p>
+
+<p>or <code>CMD</code> + <code>6</code></p>
+
+<p>Then you can use the filters on the left to adjust which things it scans. I tend to use the &lsquo;paper sheet&rsquo; icon at the top which is &lsquo;current file&rsquo;. You can then use the funnel icon to specify which things you want displayed.</p>
+]]></content>
+  </entry>
+  
+</feed>

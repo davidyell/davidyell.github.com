@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: admin | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/admin/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-07-30T15:45:30+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Merging Admin specific helpers]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers/"/>
+    <updated>2013-09-10T14:32:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers</id>
+    <content type="html"><![CDATA[<h3>The scenario</h3>
+
+<p>You have a bunch of helpers which you are only using in the <code>/admin</code> section of your website. We don&rsquo;t need to load these on the front-end part of the site.</p>
+
+<h3>Solution</h3>
+
+<p>```php
+&lt;?php
+// app/AppController.php</p>
+
+<pre><code>public $helpers = array(
+    'Html',
+    'Form',
+);
+
+public $adminHelpers = array(
+    'NiceAdmin.Actions',
+    'NiceAdmin.Boolean',
+);
+</code></pre>
+
+<p>public function beforeFilter() {</p>
+
+<pre><code>if (isset($this-&gt;request-&gt;params['admin'])) {
+    $this-&gt;layout = 'admin';
+    $this-&gt;helpers = array_merge($this-&gt;helpers, $this-&gt;adminHelpers);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>Success!</h3>
+
+<p>Make a brew.</p>
+]]></content>
+  </entry>
+  
+</feed>
