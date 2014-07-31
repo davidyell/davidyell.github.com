@@ -9,19 +9,10 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So I am forever looking up this code. Code _required.scss 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-div.input{ &amp;.required label:after{ content: &quot;*&quot &hellip;">
+  <meta name="description" content="Things you will need Netbeans plugin
+Download the plugin from here, http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin
+OR
+http:// &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -91,6 +82,112 @@ div.input{ &amp;.required label:after{ content: &quot;*&quot &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-01/netbeans-codesniffer/">How to implement CodeSniffer into Netbeans</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-15T00:00:00+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Things you will need</h3>
+
+<p><strong>Netbeans plugin</strong>
+Download the plugin from here, <a href="http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin">http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin</a><br/>
+<strong>OR</strong><br/>
+<a href="http://plugins.netbeans.org/plugin/42434/phpcsmd">http://plugins.netbeans.org/plugin/42434/phpcsmd</a><br/>
+This plugin will highlight the lines in your IDE rather than just ouputting items to your action window.</p>
+
+<p>Download whichever one you think will be less invasive in your dev. As switching between frameworks and standards can cause whole pages to go pink with <code>phpcsmd</code> plugin.</p>
+
+<p><strong>PEAR installed</strong>
+You can test this by typing into a terminal <code>which pear</code> and it should return a path. If you do not have PEAR installed, you can find out how to install it from the site, <a href="http://pear.php.net/">http://pear.php.net/</a></p>
+
+<p><strong>PEAR packages</strong>
+<em>Note</em>
+If you get errors whilst installing PEAR packages, try using <code>sudo</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear install PHP_CodeSniffer
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+<a href="http://pear.php.net/package/PHP_CodeSniffer">http://pear.php.net/package/PHP_CodeSniffer</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear channel-discover pear.phpmd.org
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear channel-discover pear.pdepend.org
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pear install --alldeps phpmd/PHP_PMD
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+<a href="http://phpmd.org/">http://phpmd.org/</a></p>
+
+<h3>Install the plugin</h3>
+
+<p>In Netbeans click <strong>Tools</strong> > <strong>Plugins</strong> and click the <strong>Downloaded</strong> tab. Click on <strong>Add Plugins…</strong> and browse to where your <code>.nbm</code> file is located. Install this file and restart Netbeans.</p>
+
+<h3>Configuring the plugin</h3>
+
+<p>Now you need to configure the plugin so it can find your PEAR packages.
+You will need to configure this in <strong>Preferences</strong>.</p>
+
+<p>Click on the <strong>PHP</strong> tab, and browse to the <strong>phpMD</strong> tab. Click <strong>change</strong> and in here specify the path to your <code>phpmd</code>. For me this is <code>/usr/local/Cellar/php53/5.3.17/bin/phpcs</code> but you can test this in a terminal with <code>which phpmd</code> to ge the path.</p>
+
+<p>Now click on <strong>phpCodeSniffer</strong> tab and do the same as above to enter the path to your <code>phpcs</code> executable.</p>
+
+<h4>Other settings</h4>
+
+<p>In here I tend to specify that the <code>tabsize</code> is 4 to conform with PSR-2.</p>
+
+<h3>How do I &lsquo;run&rsquo; it?</h3>
+
+<p><strong>Window</strong> > <strong>Action items</strong></p>
+
+<p>or <code>CMD</code> + <code>6</code></p>
+
+<p>Then you can use the filters on the left to adjust which things it scans. I tend to use the &lsquo;paper sheet&rsquo; icon at the top which is &lsquo;current file&rsquo;. You can then use the funnel icon to specify which things you want displayed.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -323,6 +420,10 @@ div.input{ &amp;.required label:after{ content: &quot;*&quot &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
       </li>
     
@@ -336,10 +437,6 @@ div.input{ &amp;.required label:after{ content: &quot;*&quot &hellip;">
     
       <li class="post">
         <a href="/blog/2013-09/dynamic-validation/">Dynamic validation in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-09/merging-admin-specific-helpers/">Merging Admin specific helpers</a>
       </li>
     
   </ul>
