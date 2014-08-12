@@ -9,10 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="I had a reference for how to do different types of finds in CakePHP using the manual join method and the Containable or Linkable behaviours. 1
-2
-3
-4 &hellip;">
+  <meta name="description" content="I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config. Here is an example config &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +79,97 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-08/cakephp-config-for-nginx/">CakePHP config for Nginx</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T15:17:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config.</p>
+
+<p>Here is an example config template.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kn">listen</span>   <span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">server_name</span> <span class="s">example.dev</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># root directive should be global</span>
+</span><span class='line'>    <span class="kn">root</span> <span class="s">/Users/david/Sites/example_website/webroot</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1"># If you are using a project with the `/app` folder, you&#39;ll need to uncomment the following</span>
+</span><span class='line'>    <span class="c1"># root /Users/david/Sites/example_website/app/webroot;</span>
+</span><span class='line'>    <span class="kn">access_log</span>     <span class="s">/usr/local/var/log/nginx/example.access_log</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">error_log</span>      <span class="s">/usr/local/var/log/nginx/example.error_log</span> <span class="s">debug</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1"># debug will logs lots, don&#39;t use this in production</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kn">index</span>  <span class="s">index.php</span> <span class="s">index.html</span> <span class="s">index.htm</span><span class="p">;</span>
+</span><span class='line'>        <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri/</span> <span class="s">/index.php?</span><span class="nv">$uri&amp;$args</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kn">location</span> <span class="p">~</span> <span class="sr">\.php(/|$)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kn">fastcgi_pass</span>  <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1"># I use port 9001 as I have XDebug on port 9000, but php-fpm uses 9000 as default</span>
+</span><span class='line'>        <span class="kn">fastcgi_split_path_info</span> <span class="s">^(.+\.php)(/.*)</span>$<span class="p">;</span>
+</span><span class='line'>        <span class="kn">include</span> <span class="s">fastcgi_params</span><span class="p">;</span>
+</span><span class='line'>        <span class="kn">fastcgi_param</span>  <span class="s">SCRIPT_FILENAME</span>  <span class="nv">$document_root$fastcgi_script_name</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -924,56 +1012,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-01/unity-alt-tab/">Allow alt-tab across all viewports in Ubuntu</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-16T00:00:00+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I dev at work on a Mac and at home in an Ubuntu VM. On my Ubuntu machine I tend to spread my apps across multiple viewports for ease of organisation. However the new Ubuntu Unity plugin for Compiz means that alt-tab only works for your current viewport. Not ideal.</p>
-
-<h3>First thing&rsquo;s first</h3>
-
-<p>You&rsquo;ll need to install the CompizConfig Settings Manager. You can find this in the software centre by searching for &lsquo;<strong>Compiz</strong>&rsquo;, or you can install it from Terminal using <code>sudo apt-get install compizconfig-settings-manager</code>.</p>
-
-<h3>Configure Unity</h3>
-
-<p>Once this is installed it should appear in your applications bar on the left. If not, hit the Ubuntu button and type &lsquo;Compiz&rsquo;.</p>
-
-<p>Scroll down to the third section, and click on the &lsquo;<strong>Ubuntu Unity Plugin</strong>&rsquo;. Click on the &lsquo;<strong>Switcher</strong>&rsquo; tab at the top, and then untick the &lsquo;<strong>Bias alt-tab to prefer windows on the current viewport</strong>&rsquo;.</p>
-
-<h3>Make a brew!</h3>
-
-<p>That&rsquo;s it. Job done. Happy alt-tabbing.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -991,6 +1029,10 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
       </li>
     
@@ -1004,10 +1046,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
     
       <li class="post">
         <a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-09/dynamic-validation/">Dynamic validation in CakePHP</a>
       </li>
     
   </ul>
