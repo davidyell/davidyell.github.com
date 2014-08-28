@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-08-12T15:58:12+01:00</updated>
+  <updated>2014-08-28T17:35:00+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Installing and using pt-visual-explain]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/"/>
+    <updated>2014-08-28T17:14:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain</id>
+    <content type="html"><![CDATA[<h3>Why?</h3>
+
+<p>So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the <a href="https://joind.in/talk/view/11599">Profiling and Optimisation: A practical approach</a> by <a href="http://mark-story.com/">Mark Story</a>.</p>
+
+<p>One the tools mentioned was <code>pt-visual-explain</code>, and I&rsquo;ve been playing with it to see how it can help me better understand my queries and what is happening when I&rsquo;m getting data.</p>
+
+<p>I thought that I would document the process so I don&rsquo;t forget it.</p>
+
+<h3>Install</h3>
+
+<p>Go grab your specific platform download of <a href="http://www.percona.com/downloads/percona-toolkit/LATEST">Percona Toolkit</a>. Personally I used the <strong>tarball</strong> option for my work machine as it&rsquo;s OS X.</p>
+
+<h4>Mac OSX</h4>
+
+<p>Here are the instructions for installation on a Mac. I&rsquo;ve not tried it on my Ubuntu laptop, but when I do, I&rsquo;ll update this post.</p>
+
+<p>Then I unzipped the tarball into a folder. You&rsquo;ll notice that there is a <code>Makefile.PL</code>, this is a Perl script for building the various executables you&rsquo;ll need.</p>
+
+<p>Make sure you have Perl installed, <code>perl --version</code>, which you should be default I think. Then it&rsquo;s time to build the various executables.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>percona-toolkit-2.2.10
+</span><span class='line'><span class="nv">$ </span>perl Makefile.PL
+</span><span class='line'><span class="nv">$ </span>sudo make
+</span><span class='line'><span class="nv">$ </span>sudo make <span class="nb">test</span>
+</span><span class='line'><span class="nv">$ </span>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you&rsquo;ll probably find some warnings or errors about a missing Perl package called <code>DBD::MySQL</code>. So let&rsquo;s install this. I used <a href="http://bixsolutions.net/forum/thread-8.html">this guide</a>, but I will summarise it here.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>perl -MCPAN -e <span class="s1">&#39;shell&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>If this is the first time you&rsquo;ve used the Cpan module on your Mac you will be asked about configuring your Cpan set-up.</p></blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cpan&gt; get DBI
+</span><span class='line'>cpan&gt; get DBD::mysql
+</span><span class='line'>cpan&gt; <span class="nb">exit</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>sudo perl -MCPAN -e <span class="s1">&#39;install DBI&#39;</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/.cpan/build/DBD-mysql-x.xxx/
+</span><span class='line'><span class="nv">$ </span>perl Makefile.PL --testuser<span class="o">=</span><span class="s1">&#39;daz&#39;</span> --testpassword<span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Don&rsquo;t include the <code>--testpassword=''</code> argument if your database doesn&rsquo;t have a password.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>make
+</span><span class='line'><span class="nv">$ </span>make <span class="nb">test</span>
+</span><span class='line'><span class="nv">$ </span>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now it&rsquo;s time to run it and see what our queries look like.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pt-visual-explain --connect --host<span class="o">=</span>localhost --user<span class="o">=</span>root --database<span class="o">=</span>myDatabase ~/Percona/MyExampleQuery.sql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.</p>
+
+<h3>Done</h3>
+
+<p>That&rsquo;s it! Pretty simple really, apart from all that crap with Perl ;)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sorting multi-dimension model data]]></title>
@@ -1809,47 +1899,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
 <h2>Done</h2>
 
 <p>Have a celebratory cup of tea. You deserve it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Twitter Bootstrap alert-box element for CakePHP]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-01/alert-box-element-for-cake/"/>
-    <updated>2013-01-17T00:00:00+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-01/alert-box-element-for-cake</id>
-    <content type="html"><![CDATA[<p>So I like the <a href="http://twitter.github.com/bootstrap/components.html#alerts">Twitter Bootstrap alerts</a> and I wanted a way to use them in my <a href="http://cakephp.org/">CakePHP</a> projects when controller actions return flash messages.</p>
-
-<h3>Element</h3>
-
-<p><strong>app/View/Elements/alert-box.ctp</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html+php'><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&quot;alert &lt;?php echo </span><span class="si">$class</span><span class="s2">;?&gt;&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$message</span><span class="p">;</span> <span class="cp">?&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span> <span class="na">onclick=</span><span class="s">&quot;$(this).parent().fadeOut();return false;&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Usage</h3>
-
-<p>The element is used from the controller by appending the <code>element</code> and <code>class</code> to the <code>$this-&gt;element()</code> call.<br/>
-<strong>Success</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article has been saved&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-success&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Failed</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article could not be saved. Please, try again.&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-error&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

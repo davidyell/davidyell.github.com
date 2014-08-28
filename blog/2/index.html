@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config. Here is an example config &hellip;">
+  <meta name="description" content="I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as PSR0. Where &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,77 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-08/third-party-libraries-with-cakephp/">Third party libraries with CakePHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T15:23:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
+
+<h3>Where to put the files?</h3>
+
+<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
+
+<h3>How to load them?</h3>
+
+<p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#including-files-with-app-import">The App class in the cookbook</a>.</p>
+
+<p>The code will look like the following.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// DavesLibrary/DavesClass.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">TheNameOfMyClass</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Importing a Vendor library from a plugin? No problem, use plugin.notation</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;DavesPlugin.TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -944,74 +1015,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-01/alert-box-element-for-cake/">Twitter Bootstrap alert-box element for CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-17T00:00:00+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So I like the <a href="http://twitter.github.com/bootstrap/components.html#alerts">Twitter Bootstrap alerts</a> and I wanted a way to use them in my <a href="http://cakephp.org/">CakePHP</a> projects when controller actions return flash messages.</p>
-
-<h3>Element</h3>
-
-<p><strong>app/View/Elements/alert-box.ctp</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html+php'><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&quot;alert &lt;?php echo </span><span class="si">$class</span><span class="s2">;?&gt;&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$message</span><span class="p">;</span> <span class="cp">?&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;close&quot;</span> <span class="na">onclick=</span><span class="s">&quot;$(this).parent().fadeOut();return false;&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;times;</span><span class="nt">&lt;/a&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Usage</h3>
-
-<p>The element is used from the controller by appending the <code>element</code> and <code>class</code> to the <code>$this-&gt;element()</code> call.<br/>
-<strong>Success</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article has been saved&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-success&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Failed</strong></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;The article could not be saved. Please, try again.&#39;</span><span class="p">),</span> <span class="s1">&#39;alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;alert-error&#39;</span><span class="p">));</span> <span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -1029,6 +1032,10 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
       </li>
     
@@ -1042,10 +1049,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
     
       <li class="post">
         <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a>
       </li>
     
   </ul>

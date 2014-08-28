@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Scenario So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a &hellip;">
+  <meta name="description" content="Why? So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the Profiling and Optimisation: A practical &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,123 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-28T17:14:00+01:00" pubdate data-updated="true">Aug 28<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Why?</h3>
+
+<p>So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the <a href="https://joind.in/talk/view/11599">Profiling and Optimisation: A practical approach</a> by <a href="http://mark-story.com/">Mark Story</a>.</p>
+
+<p>One the tools mentioned was <code>pt-visual-explain</code>, and I&rsquo;ve been playing with it to see how it can help me better understand my queries and what is happening when I&rsquo;m getting data.</p>
+
+<p>I thought that I would document the process so I don&rsquo;t forget it.</p>
+
+<h3>Install</h3>
+
+<p>Go grab your specific platform download of <a href="http://www.percona.com/downloads/percona-toolkit/LATEST">Percona Toolkit</a>. Personally I used the <strong>tarball</strong> option for my work machine as it&rsquo;s OS X.</p>
+
+<h4>Mac OSX</h4>
+
+<p>Here are the instructions for installation on a Mac. I&rsquo;ve not tried it on my Ubuntu laptop, but when I do, I&rsquo;ll update this post.</p>
+
+<p>Then I unzipped the tarball into a folder. You&rsquo;ll notice that there is a <code>Makefile.PL</code>, this is a Perl script for building the various executables you&rsquo;ll need.</p>
+
+<p>Make sure you have Perl installed, <code>perl --version</code>, which you should be default I think. Then it&rsquo;s time to build the various executables.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>percona-toolkit-2.2.10
+</span><span class='line'><span class="nv">$ </span>perl Makefile.PL
+</span><span class='line'><span class="nv">$ </span>sudo make
+</span><span class='line'><span class="nv">$ </span>sudo make <span class="nb">test</span>
+</span><span class='line'><span class="nv">$ </span>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you&rsquo;ll probably find some warnings or errors about a missing Perl package called <code>DBD::MySQL</code>. So let&rsquo;s install this. I used <a href="http://bixsolutions.net/forum/thread-8.html">this guide</a>, but I will summarise it here.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>perl -MCPAN -e <span class="s1">&#39;shell&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>If this is the first time you&rsquo;ve used the Cpan module on your Mac you will be asked about configuring your Cpan set-up.</p></blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cpan&gt; get DBI
+</span><span class='line'>cpan&gt; get DBD::mysql
+</span><span class='line'>cpan&gt; <span class="nb">exit</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>sudo perl -MCPAN -e <span class="s1">&#39;install DBI&#39;</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/.cpan/build/DBD-mysql-x.xxx/
+</span><span class='line'><span class="nv">$ </span>perl Makefile.PL --testuser<span class="o">=</span><span class="s1">&#39;daz&#39;</span> --testpassword<span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Don&rsquo;t include the <code>--testpassword=''</code> argument if your database doesn&rsquo;t have a password.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>make
+</span><span class='line'><span class="nv">$ </span>make <span class="nb">test</span>
+</span><span class='line'><span class="nv">$ </span>sudo make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now it&rsquo;s time to run it and see what our queries look like.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pt-visual-explain --connect --host<span class="o">=</span>localhost --user<span class="o">=</span>root --database<span class="o">=</span>myDatabase ~/Percona/MyExampleQuery.sql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.</p>
+
+<h3>Done</h3>
+
+<p>That&rsquo;s it! Pretty simple really, apart from all that crap with Perl ;)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1457,77 +1574,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/third-party-libraries-with-cakephp/">Third party libraries with CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T15:23:00+01:00" pubdate data-updated="true">Aug 1<sup>st</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR0</a>.</p>
-
-<h3>Where to put the files?</h3>
-
-<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
-
-<h3>How to load them?</h3>
-
-<p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
-
-<p><a href="http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#including-files-with-app-import">The App class in the cookbook</a>.</p>
-
-<p>The code will look like the following.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// DavesLibrary/DavesClass.php</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">TheNameOfMyClass</span> <span class="p">{</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Importing a Vendor library from a plugin? No problem, use plugin.notation</span>
-</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">import</span><span class="p">(</span><span class="s1">&#39;Vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;DavesPlugin.TheNameOfMyClass&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DavesLibrary&#39;</span><span class="o">.</span><span class="nx">DS</span><span class="o">.</span><span class="s1">&#39;DavesClass.php&#39;</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Success</h3>
-
-<p>Make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1543,6 +1589,10 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
       </li>
     
@@ -1556,10 +1606,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
     
       <li class="post">
         <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a>
       </li>
     
   </ul>

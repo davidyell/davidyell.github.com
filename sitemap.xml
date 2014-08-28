@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</loc>
+    <lastmod>2014-08-28T17:14:00+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jedistirfry.co.uk/blog/2014-08/sorting-data/</loc>
     <lastmod>2014-08-12T15:42:10+01:00</lastmod>
     <priority>0.8</priority>
@@ -161,21 +167,21 @@
   
   <url>
     <loc>http://jedistirfry.co.uk/about.html</loc>
-    <lastmod>2014-08-12T15:58:12+01:00</lastmod>
+    <lastmod>2014-08-28T17:35:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jedistirfry.co.uk/blog/archives/</loc>
-    <lastmod>2014-08-12T15:58:12+01:00</lastmod>
+    <lastmod>2014-08-28T17:35:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jedistirfry.co.uk/</loc>
-    <lastmod>2014-08-12T15:58:12+01:00</lastmod>
+    <lastmod>2014-08-28T17:35:00+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
