@@ -4,7 +4,7 @@
   <title><![CDATA[Category: routing | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/routing/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-08-28T17:35:00+01:00</updated>
+  <updated>2014-09-26T11:48:27+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[How to debug routes in Symfony2]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/"/>
-    <updated>2013-03-01T00:00:00+00:00</updated>
+    <updated>2013-03-01T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony</id>
     <content type="html"><![CDATA[<p>When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML and Annotation.</p>
 

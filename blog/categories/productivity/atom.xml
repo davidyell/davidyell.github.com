@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: productivity | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/productivity/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2014-09-26T11:48:27+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Allow alt-tab across all viewports in Ubuntu]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/unity-alt-tab/"/>
+    <updated>2013-01-16T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/unity-alt-tab</id>
+    <content type="html"><![CDATA[<p>I dev at work on a Mac and at home in an Ubuntu VM. On my Ubuntu machine I tend to spread my apps across multiple viewports for ease of organisation. However the new Ubuntu Unity plugin for Compiz means that alt-tab only works for your current viewport. Not ideal.</p>
+
+<h3>First thing&rsquo;s first</h3>
+
+<p>You&rsquo;ll need to install the CompizConfig Settings Manager. You can find this in the software centre by searching for &lsquo;<strong>Compiz</strong>&rsquo;, or you can install it from Terminal using <code>sudo apt-get install compizconfig-settings-manager</code>.</p>
+
+<h3>Configure Unity</h3>
+
+<p>Once this is installed it should appear in your applications bar on the left. If not, hit the Ubuntu button and type &lsquo;Compiz&rsquo;.</p>
+
+<p>Scroll down to the third section, and click on the &lsquo;<strong>Ubuntu Unity Plugin</strong>&rsquo;. Click on the &lsquo;<strong>Switcher</strong>&rsquo; tab at the top, and then untick the &lsquo;<strong>Bias alt-tab to prefer windows on the current viewport</strong>&rsquo;.</p>
+
+<h3>Make a brew!</h3>
+
+<p>That&rsquo;s it. Job done. Happy alt-tabbing.</p>
+]]></content>
+  </entry>
+  
+</feed>

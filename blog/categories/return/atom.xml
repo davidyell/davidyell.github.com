@@ -4,7 +4,7 @@
   <title><![CDATA[Category: return | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/return/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-08-28T17:35:00+01:00</updated>
+  <updated>2014-09-26T11:48:27+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Hack to fix SoftDelete behaviour return in CakePHP]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-04/softdelete-return/"/>
-    <updated>2013-04-16T00:00:00+01:00</updated>
+    <updated>2013-04-16T10:43:25+01:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-04/softdelete-return</id>
     <content type="html"><![CDATA[<h3>Use case</h3>
 

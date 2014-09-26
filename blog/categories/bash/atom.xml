@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bash | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-08-28T17:35:00+01:00</updated>
+  <updated>2014-09-26T11:48:27+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[How to remove all .lck files from a folder]]></title>
     <link href="http://jedistirfry.co.uk/blog/2011-07/removing-lck-files/"/>
-    <updated>2011-07-21T00:00:00+01:00</updated>
+    <updated>2011-07-21T10:43:25+01:00</updated>
     <id>http://jedistirfry.co.uk/blog/2011-07/removing-lck-files</id>
     <content type="html"><![CDATA[<p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code>.lck</code> files to the server, you&rsquo;ll want this.</p>
 
@@ -31,7 +31,7 @@ find . -name "*.LCK" -exec rm {} \;
   <entry>
     <title type="html"><![CDATA[How to remove all .svn folders from a repo]]></title>
     <link href="http://jedistirfry.co.uk/blog/2008-11/removing-svn-folders/"/>
-    <updated>2008-11-07T00:00:00+00:00</updated>
+    <updated>2008-11-07T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2008-11/removing-svn-folders</id>
     <content type="html"><![CDATA[<p>So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information.</p>
 

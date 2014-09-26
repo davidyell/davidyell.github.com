@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-08-28T17:35:00+01:00</updated>
+  <updated>2014-09-26T11:48:27+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -1516,7 +1516,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[How to display the history of a file in Git with diffs]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-06/git-file-history/"/>
-    <updated>2013-06-11T00:00:00+01:00</updated>
+    <updated>2013-06-11T10:43:25+01:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-06/git-file-history</id>
     <content type="html"><![CDATA[<h3>Use case</h3>
 
@@ -1545,7 +1545,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[Hack to fix SoftDelete behaviour return in CakePHP]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-04/softdelete-return/"/>
-    <updated>2013-04-16T00:00:00+01:00</updated>
+    <updated>2013-04-16T10:43:25+01:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-04/softdelete-return</id>
     <content type="html"><![CDATA[<h3>Use case</h3>
 
@@ -1595,7 +1595,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[Only One validation for CakePHP]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation/"/>
-    <updated>2013-04-06T00:00:00+01:00</updated>
+    <updated>2013-04-06T10:43:25+01:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-04/onlyone-cake-validation</id>
     <content type="html"><![CDATA[<h3>Use case</h3>
 
@@ -1703,7 +1703,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[How to debug routes in Symfony2]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/"/>
-    <updated>2013-03-01T00:00:00+00:00</updated>
+    <updated>2013-03-01T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony</id>
     <content type="html"><![CDATA[<p>When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML and Annotation.</p>
 
@@ -1747,7 +1747,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[Nginx config for Symfony2]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-02/symfony-nginx/"/>
-    <updated>2013-02-27T00:00:00+00:00</updated>
+    <updated>2013-02-27T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-02/symfony-nginx</id>
     <content type="html"><![CDATA[<p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
 
@@ -1805,7 +1805,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <entry>
     <title type="html"><![CDATA[How to cache an element in CakePHP]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-02/element-caching/"/>
-    <updated>2013-02-07T00:00:00+00:00</updated>
+    <updated>2013-02-07T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-02/element-caching</id>
     <content type="html"><![CDATA[<p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
 
@@ -1838,7 +1838,7 @@ It&rsquo;s also worth remebering that if you are caching something it will be ca
   <entry>
     <title type="html"><![CDATA[Sharing folders from a Mac to Ubuntu using Samba]]></title>
     <link href="http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares/"/>
-    <updated>2013-01-18T00:00:00+00:00</updated>
+    <updated>2013-01-18T09:43:25+00:00</updated>
     <id>http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares</id>
     <content type="html"><![CDATA[<p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
 
