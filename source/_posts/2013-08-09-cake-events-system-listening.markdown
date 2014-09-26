@@ -2,7 +2,7 @@
 layout: post
 title: "How to use a Component to listen to Cake events"
 date: 2013-08-09 15:29
-comments: false
+comments: true
 categories: [cakephp, components, events]
 ---
 

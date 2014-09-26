@@ -2,8 +2,9 @@
 layout: post
 title: "Allow alt-tab across all viewports in Ubuntu"
 description: "How to be able to alt-tab across multiple viewports in Ubuntu"
-category:
+comments: true
 categories: [ubuntu, productivity]
+date: 2013-01-16 09:43:25
 ---
 
 I dev at work on a Mac and at home in an Ubuntu VM. On my Ubuntu machine I tend to spread my apps across multiple viewports for ease of organisation. However the new Ubuntu Unity plugin for Compiz means that alt-tab only works for your current viewport. Not ideal.

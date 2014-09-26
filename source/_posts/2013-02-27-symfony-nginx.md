@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'Nginx config for Symfony2'
+comments: true
 categories: [symfony2, nginx]
+date: 2013-02-27 09:43:25
 ---
 
 Wow, so I've just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I've finally cracked it, so this is a celebratory post to ensure that I don't have to look for the config again.

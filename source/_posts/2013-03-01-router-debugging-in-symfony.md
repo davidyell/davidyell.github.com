@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'How to debug routes in Symfony2'
+comments: true
 categories: [routing, symfony2]
+date: 2013-03-01 09:43:25
 ---
 
 When choosing my type of routing in Symfony2, I wanted to avoid using XML as I've been put off it by working with Magento, so that left YAML and Annotation.  

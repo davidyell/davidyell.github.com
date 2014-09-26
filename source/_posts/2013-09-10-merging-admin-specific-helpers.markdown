@@ -2,7 +2,7 @@
 layout: post
 title: "Merging Admin specific helpers"
 date: 2013-09-10 14:32
-comments: false
+comments: true
 categories: [cakephp, layout, admin, helpers, optimisation]
 ---
 

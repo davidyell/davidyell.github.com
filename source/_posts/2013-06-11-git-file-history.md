@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'How to display the history of a file in Git with diffs'
+comments: true
 categories: [git]
+date: 2013-06-11 09:43:25
 ---
 
 ### Use case

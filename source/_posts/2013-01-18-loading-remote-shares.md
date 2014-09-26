@@ -2,8 +2,9 @@
 layout: post
 title: "Sharing folders from a Mac to Ubuntu using Samba"
 description: "Loading my work folder at home on Ubuntu."
-category:
+comments: true
 categories: [samba, ubuntu]
+date: 2013-01-18 09:43:25
 ---
 
 So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.  

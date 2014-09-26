@@ -1,7 +1,9 @@
 ---
 layout: post
 title: "Sass required asterisk partial"
+comments: true
 categories: [sass, cakephp]
+date: 2012-12-18 09:43:25
 ---
 
 So I am forever looking up this code.  

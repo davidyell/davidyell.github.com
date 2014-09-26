@@ -2,7 +2,7 @@
 layout: post
 title: "CakePHP config for Nginx"
 date: 2013-08-01 15:17
-comments: false
+comments: true
 categories: [cakephp, nginx]
 ---
 

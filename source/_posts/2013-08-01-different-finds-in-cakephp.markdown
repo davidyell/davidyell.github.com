@@ -2,7 +2,7 @@
 layout: post
 title: "Different finds in CakePHP"
 date: 2013-08-01 15:11
-comments: false
+comments: true
 categories: [cakephp]
 ---
 I had a reference for how to do different types of finds in CakePHP using the manual join method and the Containable or Linkable behaviours.

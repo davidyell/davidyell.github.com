@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'Handy htaccess rules'
+comments: true
 categories: [htaccess, apache]
+date: 2008-11-20 09:43:25
 ---
 
 I don't tend to use Apache these days, having swapped over to using Nginx, but these always caught me out.  

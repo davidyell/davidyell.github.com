@@ -2,7 +2,7 @@
 layout: post
 title: "Third party libraries with CakePHP"
 date: 2013-08-01 15:23
-comments: false
+comments: true
 categories: [cakephp, libraries, external]
 ---
 

@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'How to remove all .svn folders from a repo'
+comments: true
 categories: [svn, bash]
+date: 2008-11-07 09:43:25
 ---
 
 So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information.

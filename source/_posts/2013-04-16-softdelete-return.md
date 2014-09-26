@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'Hack to fix SoftDelete behaviour return in CakePHP'
+comments: true
 categories: [cakephp, softdelete, return]
+date: 2013-04-16 09:43:25
 ---
 
 ### Use case

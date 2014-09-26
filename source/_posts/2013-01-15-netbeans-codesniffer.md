@@ -2,8 +2,9 @@
 layout: post
 title: "How to implement CodeSniffer into Netbeans"
 description: "Linking up phpcs and phpmd with Netbeans"
-category:
+comments: true
 categories: [pear, phpcs, phpmd, netbeans]
+date: 2013-01-15 09:43:25
 ---
 
 ###Things you will need

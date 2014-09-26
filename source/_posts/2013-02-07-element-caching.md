@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'How to cache an element in CakePHP'
+comments: true
 categories: [cakephp, cache, element]
+date: 2013-02-07 09:43:25
 ---
 
 So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it's in the [book](http://book.cakephp.org) but I always struggle to find the bit I need.  

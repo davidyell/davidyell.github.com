@@ -1,7 +1,9 @@
 ---
 layout: post
 title: 'Only One validation for CakePHP'
+comments: true
 categories: [cakephp, validation, onlyone]
+date: 2013-04-06 09:43:25
 ---
 
 ### Use case
