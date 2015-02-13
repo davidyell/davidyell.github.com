@@ -182,6 +182,9 @@ Here we&rsquo;ll assume the plugin is loaded already, the trait is being used an
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
 <span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
 </pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// I tend to configure Crud in my AppController to save on repitition</span>
 </span><span class='line'><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">use</span> <span class="nx">CrudControllerTrait</span><span class="p">;</span>
@@ -230,6 +233,9 @@ Here we&rsquo;ll assume the plugin is loaded already, the trait is being used an
 </span><span class='line'>              <span class="s1">&#39;limit&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
 </span><span class='line'>          <span class="p">];</span>
 </span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="c1">// Let crud handle the rest of the action</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>

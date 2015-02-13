@@ -4,7 +4,7 @@
   <title><![CDATA[Category: crud | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/crud/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-02-13T14:37:45+00:00</updated>
+  <updated>2015-02-13T14:47:14+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -88,6 +88,9 @@ public function index() {
             'limit' =&gt; 10
         ];
     });
+
+    // Let crud handle the rest of the action
+    return $this-&gt;Crud-&gt;execute();
 }
 </code></pre>
 
