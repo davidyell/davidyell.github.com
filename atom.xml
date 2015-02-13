@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-09-26T11:48:27+01:00</updated>
+  <updated>2015-02-13T14:37:45+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,155 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working with the Crud plugin in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-02/working-with-crud/"/>
+    <updated>2015-02-13T12:31:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-02/working-with-crud</id>
+    <content type="html"><![CDATA[<h2>So what is it?</h2>
+
+<p>It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake youself. These are the CRUD operations (Create, Read, Update and Delete), hence the name of the plugin.</p>
+
+<p>The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.</p>
+
+<p><a href="https://github.com/FriendsOfCake/crud">Read more about the plugin in the repo</a>.</p>
+
+<h2>I&rsquo;m sold, how do I use it?</h2>
+
+<p>Once the plugin is installed all you have to do is map a controller action to a crud action, create a controller and a view and you&rsquo;re job done. It&rsquo;s really that simple.</p>
+
+<p>Let&rsquo;s do an example. I will add comments to the code for various techniques.</p>
+
+<p><strong>Assumptions</strong><br/>
+Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// I tend to configure Crud in my AppController to save on repitition</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">use</span> <span class="nx">CrudControllerTrait</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$components</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>      <span class="c1">// Here we can configure our action maps, finders and all kinds of things</span>
+</span><span class='line'>      <span class="s1">&#39;Crud.Crud&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;actions&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// Map any index action to the Crud index action handler</span>
+</span><span class='line'>              <span class="s1">&#39;view&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="c1">// Configure the options for this action method</span>
+</span><span class='line'>                  <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.view&#39;</span><span class="p">,</span>
+</span><span class='line'>                  <span class="s1">&#39;validateId&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;admin_index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// We can even hookup prefix methods</span>
+</span><span class='line'>              <span class="s1">&#39;admin_add&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.add&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_edit&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.edit&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_delete&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.delete&#39;</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>  <span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create your ExamplesController.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExamplesController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// We don&#39;t need any code here because Crud plugin can handle the methods for us!</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// If we want to just change how this action finds it&#39;s data we can specify a custom </span>
+</span><span class='line'>  <span class="c1">// finder method and still have Crud do the rest of the work for us</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">findMethod</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// What if we want to change the pagination in the index action?</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// We can hook the beforePaginate event to make changes</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">&#39;beforePaginate&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// The event subject here is the controller, and paginator is the </span>
+</span><span class='line'>          <span class="c1">// paginator component.</span>
+</span><span class='line'>          <span class="c1">// So we can change the page limit to 10 to include 10 items per page</span>
+</span><span class='line'>          <span class="c1">// and we could contain a related model too!</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">paginator</span><span class="o">-&gt;</span><span class="na">settings</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;contain&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="s1">&#39;User&#39;</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;limit&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+</span><span class='line'>          <span class="p">];</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create our view Examples/index.ctp</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s1">&#39;examples index&#39;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$examples</span> <span class="k">as</span> <span class="nv">$example</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="nv">$example</span><span class="p">[</span><span class="s1">&#39;Example&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span><span class="cp">?&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Woah, we just did loads!</h2>
+
+<p>Yep, with the above example, we&rsquo;ve created all our admin prefixed Example methods, both our index and view methods. It&rsquo;s amazing how much quicker you can do stuff when you focus on the parts of your system which are not in the basic four CRUD actions.</p>
+
+<h2>Make a brew</h2>
+
+<p>Why not eh? You&rsquo;ve got loads of spare time now.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Installing and using pt-visual-explain]]></title>
@@ -1832,73 +1981,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
 Name of element, array of data then options. Ref, <a href="http://api.cakephp.org/class/view#method-Viewelement">http://api.cakephp.org/class/view#method-Viewelement</a><br/>
 <strong>NB</strong><br/>
 It&rsquo;s also worth remebering that if you are caching something it will be cached in that state from the moment it&rsquo;s called. If you something is dynamic and you are caching it, <em>always</em> use a proper <code>key</code> for it in the options array! Or use <code>$this-&gt;here</code> to use the current url slug as the key.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sharing folders from a Mac to Ubuntu using Samba]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares/"/>
-    <updated>2013-01-18T09:43:25+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares</id>
-    <content type="html"><![CDATA[<p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
-
-<h2>Using Samba / CIFS</h2>
-
-<h3>Setup</h3>
-
-<p>For this method you&rsquo;ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> > <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you&rsquo;ll want to share a folder, probably your home folder, <code>/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
-
-<h3>Connecting to the share</h3>
-
-<p>In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code>smb://192.168.0.1</code> then enter your local machine login.</p>
-
-<h3>Mounting the share</h3>
-
-<p>Check to make sure that you have <code>cifs</code> installed by looking for <code>cifs-utils</code> package.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>dpkg --get-selections cifs-utils
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</code>.</p>
-
-<p>In terminal</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mount -t cifs //server/share -o <span class="s1">&#39;username=david,password=mypassword,rw,nounix,noserverinfo,sec=ntlmssp,file_mode=0777,dir_mode=0777&#39;</span> /mnt/david_mac
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Using NFS</h2>
-
-<h3>Setup</h3>
-
-<p>Firstly you need to edit the <code>/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code>"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
-
-<p>Next we need to make sure that the file is correct and nfsd is running.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>showmount -e
-</span><span class='line'><span class="nv">$ </span>sudo nfsd checkexports
-</span><span class='line'><span class="nv">$ </span>sudo nfsd status
-</span><span class='line'><span class="nv">$ </span>sudo nfsd restart
-</span><span class='line'><span class="nv">$ </span>showmount -e
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Mount the share</h3>
-
-<p><code>sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
-
-<h2>Done</h2>
-
-<p>Have a celebratory cup of tea. You deserve it.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Why? So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the Profiling and Optimisation: A practical &hellip;">
+  <meta name="description" content="So what is it? It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,182 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-13T12:31:00+00:00" pubdate data-updated="true">Feb 13<sup>th</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>So what is it?</h2>
+
+<p>It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake youself. These are the CRUD operations (Create, Read, Update and Delete), hence the name of the plugin.</p>
+
+<p>The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.</p>
+
+<p><a href="https://github.com/FriendsOfCake/crud">Read more about the plugin in the repo</a>.</p>
+
+<h2>I&rsquo;m sold, how do I use it?</h2>
+
+<p>Once the plugin is installed all you have to do is map a controller action to a crud action, create a controller and a view and you&rsquo;re job done. It&rsquo;s really that simple.</p>
+
+<p>Let&rsquo;s do an example. I will add comments to the code for various techniques.</p>
+
+<p><strong>Assumptions</strong><br/>
+Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// I tend to configure Crud in my AppController to save on repitition</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">use</span> <span class="nx">CrudControllerTrait</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$components</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>      <span class="c1">// Here we can configure our action maps, finders and all kinds of things</span>
+</span><span class='line'>      <span class="s1">&#39;Crud.Crud&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;actions&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// Map any index action to the Crud index action handler</span>
+</span><span class='line'>              <span class="s1">&#39;view&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="c1">// Configure the options for this action method</span>
+</span><span class='line'>                  <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.view&#39;</span><span class="p">,</span>
+</span><span class='line'>                  <span class="s1">&#39;validateId&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;admin_index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// We can even hookup prefix methods</span>
+</span><span class='line'>              <span class="s1">&#39;admin_add&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.add&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_edit&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.edit&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_delete&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.delete&#39;</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>  <span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create your ExamplesController.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExamplesController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// We don&#39;t need any code here because Crud plugin can handle the methods for us!</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// If we want to just change how this action finds it&#39;s data we can specify a custom </span>
+</span><span class='line'>  <span class="c1">// finder method and still have Crud do the rest of the work for us</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">findMethod</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// What if we want to change the pagination in the index action?</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// We can hook the beforePaginate event to make changes</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">&#39;beforePaginate&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// The event subject here is the controller, and paginator is the </span>
+</span><span class='line'>          <span class="c1">// paginator component.</span>
+</span><span class='line'>          <span class="c1">// So we can change the page limit to 10 to include 10 items per page</span>
+</span><span class='line'>          <span class="c1">// and we could contain a related model too!</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">paginator</span><span class="o">-&gt;</span><span class="na">settings</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;contain&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="s1">&#39;User&#39;</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;limit&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+</span><span class='line'>          <span class="p">];</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create our view Examples/index.ctp</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s1">&#39;examples index&#39;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$examples</span> <span class="k">as</span> <span class="nv">$example</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="nv">$example</span><span class="p">[</span><span class="s1">&#39;Example&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span><span class="cp">?&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Woah, we just did loads!</h2>
+
+<p>Yep, with the above example, we&rsquo;ve created all our admin prefixed Example methods, both our index and view methods. It&rsquo;s amazing how much quicker you can do stuff when you focus on the parts of your system which are not in the basic four CRUD actions.</p>
+
+<h2>Make a brew</h2>
+
+<p>Why not eh? You&rsquo;ve got loads of spare time now.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1421,159 +1597,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/cake-events-system-listening/">How to use a Component to listen to Cake events</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-09T15:29:00+01:00" pubdate data-updated="true">Aug 9<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I wanted a sleek way to inject SEO meta tags into my project without a large overhead and lots of complicated finds and model joints. Thanks to <a href="https://github.com/lorenzo">jose_zap&rsquo;s</a> suggestion, I decided to learn about the <a href="http://book.cakephp.org/2.0/en/core-libraries/events.html">Cake Events</a> system.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Component to find and load seo data and inject it into the view</span>
-</span><span class='line'><span class="sd"> *</span>
-</span><span class='line'><span class="sd"> * @author David Yell &lt;neon1024@gmail.com&gt;</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;CakeEventListener&#39;</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;CakeEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">SeoComponent</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="k">implements</span> <span class="nx">CakeEventListener</span> <span class="p">{</span>
-</span><span class='line'>  
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Setup the component</span>
-</span><span class='line'><span class="sd"> * Called after the Controller::beforeFilter() and before the controller action</span>
-</span><span class='line'><span class="sd"> * </span>
-</span><span class='line'><span class="sd"> * @param Controller $controller</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">startup</span><span class="p">(</span><span class="nx">Controller</span> <span class="nv">$controller</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">parent</span><span class="o">::</span><span class="na">startup</span><span class="p">(</span><span class="nv">$controller</span><span class="p">);</span>
-</span><span class='line'>      <span class="nv">$controller</span><span class="o">-&gt;</span><span class="na">getEventManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">attach</span><span class="p">(</span><span class="nv">$this</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * List of callable functions which are attached to system events</span>
-</span><span class='line'><span class="sd"> * </span>
-</span><span class='line'><span class="sd"> * @return array</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">implementedEvents</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>          <span class="s1">&#39;View.beforeLayout&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;writeSeo&#39;</span>
-</span><span class='line'>      <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Inject the seo data into the view</span>
-</span><span class='line'><span class="sd"> * </span>
-</span><span class='line'><span class="sd"> * @param CakeEvent $event</span>
-</span><span class='line'><span class="sd"> * @return void</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">writeSeo</span><span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Looking for vars set to the view isn&#39;t especially robust! This should probably call a behaviour method which goes and looks up data</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_title&#39;</span><span class="p">]))</span> <span class="p">{</span>
-</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;title_for_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_title&#39;</span><span class="p">];</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_description&#39;</span><span class="p">]))</span> <span class="p">{</span>
-</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">meta</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_description&#39;</span><span class="p">],</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;block&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;meta&#39;</span><span class="p">));</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_keywords&#39;</span><span class="p">]))</span> <span class="p">{</span>
-</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">meta</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_keywords&#39;</span><span class="p">],</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;block&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;meta&#39;</span><span class="p">));</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Success</h3>
-
-<p>Make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1589,6 +1612,10 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
@@ -1602,10 +1629,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
     
       <li class="post">
         <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
       </li>
     
   </ul>
@@ -1657,7 +1680,7 @@ If you are using checkboxes and want to validate your data you will need to ensu
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - David Yell -
+  Copyright &copy; 2015 - David Yell -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

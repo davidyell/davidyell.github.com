@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2014-09-26T11:48:27+01:00</updated>
+  <updated>2015-02-13T14:37:45+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working with the Crud plugin in CakePHP]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-02/working-with-crud/"/>
+    <updated>2015-02-13T12:31:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-02/working-with-crud</id>
+    <content type="html"><![CDATA[<h2>So what is it?</h2>
+
+<p>It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake youself. These are the CRUD operations (Create, Read, Update and Delete), hence the name of the plugin.</p>
+
+<p>The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.</p>
+
+<p><a href="https://github.com/FriendsOfCake/crud">Read more about the plugin in the repo</a>.</p>
+
+<h2>I&rsquo;m sold, how do I use it?</h2>
+
+<p>Once the plugin is installed all you have to do is map a controller action to a crud action, create a controller and a view and you&rsquo;re job done. It&rsquo;s really that simple.</p>
+
+<p>Let&rsquo;s do an example. I will add comments to the code for various techniques.</p>
+
+<p><strong>Assumptions</strong><br/>
+Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.</p>
+
+<p>```php
+// I tend to configure Crud in my AppController to save on repitition
+class AppController extends Controller {</p>
+
+<pre><code>use CrudControllerTrait;
+
+public $components = [
+    // Here we can configure our action maps, finders and all kinds of things
+    'Crud.Crud' =&gt; [
+        'actions' =&gt; [
+            'index' =&gt; 'Crud.index', // Map any index action to the Crud index action handler
+            'view' =&gt; [
+                // Configure the options for this action method
+                'className' =&gt; 'Crud.view',
+                'validateId' =&gt; false
+            ],
+            'admin_index' =&gt; 'Crud.index', // We can even hookup prefix methods
+            'admin_add' =&gt; 'Crud.add',
+            'admin_edit' =&gt; 'Crud.edit',
+            'admin_delete' =&gt; 'Crud.delete'
+        ]
+    ]
+];
+</code></pre>
+
+<p>}</p>
+
+<p>// Create your ExamplesController.php
+class ExamplesController extends AppController {</p>
+
+<pre><code>// We don't need any code here because Crud plugin can handle the methods for us!
+
+// If we want to just change how this action finds it's data we can specify a custom 
+// finder method and still have Crud do the rest of the work for us
+public function view($slug) {
+    $this-&gt;Crud-&gt;action()-&gt;findMethod('slug');
+}
+
+// What if we want to change the pagination in the index action?
+public function index() {
+    // We can hook the beforePaginate event to make changes
+    $this-&gt;Crud-&gt;on('beforePaginate', function (CakeEvent $event) {
+        // The event subject here is the controller, and paginator is the 
+        // paginator component.
+        // So we can change the page limit to 10 to include 10 items per page
+        // and we could contain a related model too!
+        $event-&gt;subject()-&gt;paginator-&gt;settings = [
+            'contain' =&gt; [
+                'User'
+            ],
+            'limit' =&gt; 10
+        ];
+    });
+}
+</code></pre>
+
+<p>}</p>
+
+<p>// Create our view Examples/index.ctp</p>
+
+<div class='examples index'>
+    <?php foreach($examples as $example) {
+        echo $example['Example']['title'];
+    }?>
+</div>
+
+
+<p>```</p>
+
+<h2> Woah, we just did loads!</h2>
+
+<p>Yep, with the above example, we&rsquo;ve created all our admin prefixed Example methods, both our index and view methods. It&rsquo;s amazing how much quicker you can do stuff when you focus on the parts of your system which are not in the basic four CRUD actions.</p>
+
+<h2>Make a brew</h2>
+
+<p>Why not eh? You&rsquo;ve got loads of spare time now.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sorting multi-dimension model data]]></title>
@@ -342,49 +443,6 @@ $ ../vendors/bin/cake bake
 <h3>Done!</h3>
 
 <p>Make a brew!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Custom Pagination Helper links]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/"/>
-    <updated>2013-11-27T11:00:00+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-11/custom-pagination</id>
-    <content type="html"><![CDATA[<h3>Scenario</h3>
-
-<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
-
-<p>The url I wanted to use was <code>/news/category/daves-awesome-category</code> and then paginating results on <code>/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn&rsquo;t want to play ball.</p>
-
-<p>I had already created my route.</p>
-
-<p><code>php
-Router::connect('/news/category/:category/*', array('controller' =&gt; 'news_articles', 'action' =&gt; 'index'), array('category' =&gt; '[a-z0-9-]+', 'pass' =&gt; array('category')));
-</code></p>
-
-<p>But instead of the expected links above, I was getting <code>/news/daves-awesome-category/page:2</code> missing out my keyword from the url.</p>
-
-<h3>Solution</h3>
-
-<p>The Paginator helper options array to the rescue! You can actually configure the options of the helper right in the view. Such a simple fix.</p>
-
-<p>Here is my pagination including the fix to adjust the url if a category is set.</p>
-
-<p>```php
-if (isset($category)) {</p>
-
-<pre><code>$this-&gt;Paginator-&gt;options['url'] = array('controller' =&gt; 'news_articles', 'action' =&gt; 'index', 'category' =&gt; $category['NewsCategory']['slug']);
-</code></pre>
-
-<p>}
-echo $this->Paginator->prev(&lsquo;&lt; &rsquo; . <strong>(&lsquo;previous&rsquo;), array(), null, array(&lsquo;class&rsquo; => &lsquo;prev disabled&rsquo;));
-echo $this->Paginator->numbers(array(&lsquo;separator&rsquo; => &lsquo;&rsquo;));
-echo $this->Paginator->next(</strong>(&lsquo;next&rsquo;) . &lsquo; >&rsquo;, array(), null, array(&lsquo;class&rsquo; => &lsquo;next disabled&rsquo;));
-```</p>
-
-<h3>Done!</h3>
-
-<p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
 ]]></content>
   </entry>
   

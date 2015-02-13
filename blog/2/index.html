@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as PSR0. Where &hellip;">
+  <meta name="description" content="I wanted a sleek way to inject SEO meta tags into my project without a large overhead and lots of complicated finds and model joints. Thanks to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,159 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-08/cake-events-system-listening/">How to use a Component to listen to Cake events</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-09T15:29:00+01:00" pubdate data-updated="true">Aug 9<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wanted a sleek way to inject SEO meta tags into my project without a large overhead and lots of complicated finds and model joints. Thanks to <a href="https://github.com/lorenzo">jose_zap&rsquo;s</a> suggestion, I decided to learn about the <a href="http://book.cakephp.org/2.0/en/core-libraries/events.html">Cake Events</a> system.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Component to find and load seo data and inject it into the view</span>
+</span><span class='line'><span class="sd"> *</span>
+</span><span class='line'><span class="sd"> * @author David Yell &lt;neon1024@gmail.com&gt;</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;CakeEventListener&#39;</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">uses</span><span class="p">(</span><span class="s1">&#39;CakeEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Event&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">SeoComponent</span> <span class="k">extends</span> <span class="nx">Component</span> <span class="k">implements</span> <span class="nx">CakeEventListener</span> <span class="p">{</span>
+</span><span class='line'>  
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Setup the component</span>
+</span><span class='line'><span class="sd"> * Called after the Controller::beforeFilter() and before the controller action</span>
+</span><span class='line'><span class="sd"> * </span>
+</span><span class='line'><span class="sd"> * @param Controller $controller</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">startup</span><span class="p">(</span><span class="nx">Controller</span> <span class="nv">$controller</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">parent</span><span class="o">::</span><span class="na">startup</span><span class="p">(</span><span class="nv">$controller</span><span class="p">);</span>
+</span><span class='line'>      <span class="nv">$controller</span><span class="o">-&gt;</span><span class="na">getEventManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">attach</span><span class="p">(</span><span class="nv">$this</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * List of callable functions which are attached to system events</span>
+</span><span class='line'><span class="sd"> * </span>
+</span><span class='line'><span class="sd"> * @return array</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">implementedEvents</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>          <span class="s1">&#39;View.beforeLayout&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;writeSeo&#39;</span>
+</span><span class='line'>      <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Inject the seo data into the view</span>
+</span><span class='line'><span class="sd"> * </span>
+</span><span class='line'><span class="sd"> * @param CakeEvent $event</span>
+</span><span class='line'><span class="sd"> * @return void</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">writeSeo</span><span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Looking for vars set to the view isn&#39;t especially robust! This should probably call a behaviour method which goes and looks up data</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_title&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;title_for_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_title&#39;</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_description&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">meta</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_description&#39;</span><span class="p">],</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;block&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;meta&#39;</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_keywords&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">meta</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">viewVars</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;Content&#39;</span><span class="p">][</span><span class="s1">&#39;seo_keywords&#39;</span><span class="p">],</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;block&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;meta&#39;</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -921,100 +1074,6 @@ It&rsquo;s also worth remebering that if you are caching something it will be ca
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-01/loading-remote-shares/">Sharing folders from a Mac to Ubuntu using Samba</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-18T09:43:25+00:00" pubdate data-updated="true">Jan 18<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
-
-<h2>Using Samba / CIFS</h2>
-
-<h3>Setup</h3>
-
-<p>For this method you&rsquo;ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> > <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you&rsquo;ll want to share a folder, probably your home folder, <code>/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
-
-<h3>Connecting to the share</h3>
-
-<p>In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code>smb://192.168.0.1</code> then enter your local machine login.</p>
-
-<h3>Mounting the share</h3>
-
-<p>Check to make sure that you have <code>cifs</code> installed by looking for <code>cifs-utils</code> package.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>dpkg --get-selections cifs-utils
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</code>.</p>
-
-<p>In terminal</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mount -t cifs //server/share -o <span class="s1">&#39;username=david,password=mypassword,rw,nounix,noserverinfo,sec=ntlmssp,file_mode=0777,dir_mode=0777&#39;</span> /mnt/david_mac
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Using NFS</h2>
-
-<h3>Setup</h3>
-
-<p>Firstly you need to edit the <code>/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code>"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
-
-<p>Next we need to make sure that the file is correct and nfsd is running.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>showmount -e
-</span><span class='line'><span class="nv">$ </span>sudo nfsd checkexports
-</span><span class='line'><span class="nv">$ </span>sudo nfsd status
-</span><span class='line'><span class="nv">$ </span>sudo nfsd restart
-</span><span class='line'><span class="nv">$ </span>showmount -e
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Mount the share</h3>
-
-<p><code>sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
-
-<h2>Done</h2>
-
-<p>Have a celebratory cup of tea. You deserve it.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -1032,6 +1091,10 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
@@ -1045,10 +1108,6 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
     
       <li class="post">
         <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
       </li>
     
   </ul>
@@ -1100,7 +1159,7 @@ If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - David Yell -
+  Copyright &copy; 2015 - David Yell -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So I like the Twitter Bootstrap alerts and I wanted a way to use them in my CakePHP projects when controller actions return flash messages. Element &hellip;">
+  <meta name="description" content="So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,100 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-01/loading-remote-shares/">Sharing folders from a Mac to Ubuntu using Samba</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-18T09:43:25+00:00" pubdate data-updated="true">Jan 18<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
+
+<h2>Using Samba / CIFS</h2>
+
+<h3>Setup</h3>
+
+<p>For this method you&rsquo;ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> > <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you&rsquo;ll want to share a folder, probably your home folder, <code>/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
+
+<h3>Connecting to the share</h3>
+
+<p>In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code>smb://192.168.0.1</code> then enter your local machine login.</p>
+
+<h3>Mounting the share</h3>
+
+<p>Check to make sure that you have <code>cifs</code> installed by looking for <code>cifs-utils</code> package.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>dpkg --get-selections cifs-utils
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+If not, you&rsquo;ll need to install it. <code>sudo apt-get install cifs-utils</code>.</p>
+
+<p>In terminal</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mount -t cifs //server/share -o <span class="s1">&#39;username=david,password=mypassword,rw,nounix,noserverinfo,sec=ntlmssp,file_mode=0777,dir_mode=0777&#39;</span> /mnt/david_mac
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using NFS</h2>
+
+<h3>Setup</h3>
+
+<p>Firstly you need to edit the <code>/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code>"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
+
+<p>Next we need to make sure that the file is correct and nfsd is running.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>showmount -e
+</span><span class='line'><span class="nv">$ </span>sudo nfsd checkexports
+</span><span class='line'><span class="nv">$ </span>sudo nfsd status
+</span><span class='line'><span class="nv">$ </span>sudo nfsd restart
+</span><span class='line'><span class="nv">$ </span>showmount -e
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Mount the share</h3>
+
+<p><code>sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
+
+<h2>Done</h2>
+
+<p>Have a celebratory cup of tea. You deserve it.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -535,6 +629,10 @@ You will need to configure this in <strong>Preferences</strong>.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
@@ -548,10 +646,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     
       <li class="post">
         <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a>
       </li>
     
   </ul>
@@ -603,7 +697,7 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - David Yell -
+  Copyright &copy; 2015 - David Yell -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

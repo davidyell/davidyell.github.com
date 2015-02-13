@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Working with the Crud plugin in CakePHP - Daves dev warblings</title>
+  <meta name="author" content="David Yell">
+
+  
+  <meta name="description" content="So what is it? It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2015-02/working-with-crud">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daves dev warblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2775424-18']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daves dev warblings</a></h1>
+  
+    <h2>For all the things I never remember</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jedistirfry.co.uk" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about.html">About</a></li>
+  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Working with the Crud plugin in CakePHP</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-13T12:31:00+00:00" pubdate data-updated="true">Feb 13<sup>th</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>So what is it?</h2>
+
+<p>It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake youself. These are the CRUD operations (Create, Read, Update and Delete), hence the name of the plugin.</p>
+
+<p>The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.</p>
+
+<p><a href="https://github.com/FriendsOfCake/crud">Read more about the plugin in the repo</a>.</p>
+
+<h2>I&rsquo;m sold, how do I use it?</h2>
+
+<p>Once the plugin is installed all you have to do is map a controller action to a crud action, create a controller and a view and you&rsquo;re job done. It&rsquo;s really that simple.</p>
+
+<p>Let&rsquo;s do an example. I will add comments to the code for various techniques.</p>
+
+<p><strong>Assumptions</strong><br/>
+Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// I tend to configure Crud in my AppController to save on repitition</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">use</span> <span class="nx">CrudControllerTrait</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$components</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>      <span class="c1">// Here we can configure our action maps, finders and all kinds of things</span>
+</span><span class='line'>      <span class="s1">&#39;Crud.Crud&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;actions&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// Map any index action to the Crud index action handler</span>
+</span><span class='line'>              <span class="s1">&#39;view&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="c1">// Configure the options for this action method</span>
+</span><span class='line'>                  <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.view&#39;</span><span class="p">,</span>
+</span><span class='line'>                  <span class="s1">&#39;validateId&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;admin_index&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.index&#39;</span><span class="p">,</span> <span class="c1">// We can even hookup prefix methods</span>
+</span><span class='line'>              <span class="s1">&#39;admin_add&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.add&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_edit&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.edit&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="s1">&#39;admin_delete&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Crud.delete&#39;</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>  <span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create your ExamplesController.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExamplesController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// We don&#39;t need any code here because Crud plugin can handle the methods for us!</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// If we want to just change how this action finds it&#39;s data we can specify a custom </span>
+</span><span class='line'>  <span class="c1">// finder method and still have Crud do the rest of the work for us</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">findMethod</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// What if we want to change the pagination in the index action?</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// We can hook the beforePaginate event to make changes</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">&#39;beforePaginate&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// The event subject here is the controller, and paginator is the </span>
+</span><span class='line'>          <span class="c1">// paginator component.</span>
+</span><span class='line'>          <span class="c1">// So we can change the page limit to 10 to include 10 items per page</span>
+</span><span class='line'>          <span class="c1">// and we could contain a related model too!</span>
+</span><span class='line'>          <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">paginator</span><span class="o">-&gt;</span><span class="na">settings</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>              <span class="s1">&#39;contain&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>                  <span class="s1">&#39;User&#39;</span>
+</span><span class='line'>              <span class="p">],</span>
+</span><span class='line'>              <span class="s1">&#39;limit&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+</span><span class='line'>          <span class="p">];</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Create our view Examples/index.ctp</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">class</span><span class="o">=</span><span class="s1">&#39;examples index&#39;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$examples</span> <span class="k">as</span> <span class="nv">$example</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="nv">$example</span><span class="p">[</span><span class="s1">&#39;Example&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span><span class="cp">?&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Woah, we just did loads!</h2>
+
+<p>Yep, with the above example, we&rsquo;ve created all our admin prefixed Example methods, both our index and view methods. It&rsquo;s amazing how much quicker you can do stuff when you focus on the parts of your system which are not in the basic four CRUD actions.</p>
+
+<h2>Make a brew</h2>
+
+<p>Why not eh? You&rsquo;ve got loads of spare time now.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">David Yell</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-13T12:31:00+00:00" pubdate data-updated="true">Feb 13<sup>th</sup>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cakephp/'>cakephp</a>, <a class='category' href='/blog/categories/crud/'>crud</a>, <a class='category' href='/blog/categories/plugin/'>plugin</a>, <a class='category' href='/blog/categories/rad/'>rad</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jedistirfry.co.uk/blog/2015-02/working-with-crud/" data-via="yelldavid" data-counturl="http://jedistirfry.co.uk/blog/2015-02/working-with-crud/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014-08/pt-visual-explain/" title="Previous Post: Installing and using pt-visual-explain">&laquo; Installing and using pt-visual-explain</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/davidyell">@davidyell</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'davidyell',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/neon1024?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/neon1024">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - David Yell -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jedistirfry';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jedistirfry.co.uk/blog/2015-02/working-with-crud/';
+        var disqus_url = 'http://jedistirfry.co.uk/blog/2015-02/working-with-crud/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
