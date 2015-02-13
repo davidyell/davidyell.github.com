@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rad | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/rad/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-02-13T14:47:14+00:00</updated>
+  <updated>2015-02-13T14:55:20+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -71,6 +71,7 @@ class ExamplesController extends AppController {</p>
 // finder method and still have Crud do the rest of the work for us
 public function view($slug) {
     $this-&gt;Crud-&gt;action()-&gt;findMethod('slug');
+    return $this-&gt;Crud-&gt;execute();
 }
 
 // What if we want to change the pagination in the index action?
