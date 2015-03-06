@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-02-13T14:55:20+00:00</updated>
+  <updated>2015-03-06T12:33:50+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -1403,9 +1403,25 @@ If you are using checkboxes and want to validate your data you will need to ensu
 
 <h3>Where to put the files?</h3>
 
-<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
+<p>Third party files should always go into your <code>Vendor</code> folder inside your project, if they are not loaded using Composer.</p>
 
 <h3>How to load them?</h3>
+
+<p><strong>Update, 6 March 2015</strong><br/>
+One of the core developers for the framework <a href="http://stackoverflow.com/questions/8158129/loading-vendor-files-in-cakephp-2-0/8158269#8158269">advices against using the technique</a> I describe in this post. So I am amending the post to reflect this.</p>
+
+<h4>Using require_once</h4>
+
+<p>In order to include third party library files, you can use <code>require_once()</code>. The only complication is getting the correct path to use.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// To load app/Vendor/DavesLibrary/DavesClass.php</span>
+</span><span class='line'><span class="k">require_once</span><span class="p">(</span><span class="nx">APP</span> <span class="o">.</span> <span class="s1">&#39;Vendor&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;DavesLibrary&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;DavesClass.php&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>The older way</h4>
 
 <p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
 

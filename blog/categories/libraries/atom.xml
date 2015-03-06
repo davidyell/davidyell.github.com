@@ -4,7 +4,7 @@
   <title><![CDATA[Category: libraries | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/libraries/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-02-13T14:55:20+00:00</updated>
+  <updated>2015-03-06T12:33:50+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -22,9 +22,23 @@
 
 <h3>Where to put the files?</h3>
 
-<p>Third party files should always go into your <code>Vendor</code> folder inside your project.</p>
+<p>Third party files should always go into your <code>Vendor</code> folder inside your project, if they are not loaded using Composer.</p>
 
 <h3>How to load them?</h3>
+
+<p><strong>Update, 6 March 2015</strong><br/>
+One of the core developers for the framework <a href="http://stackoverflow.com/questions/8158129/loading-vendor-files-in-cakephp-2-0/8158269#8158269">advices against using the technique</a> I describe in this post. So I am amending the post to reflect this.</p>
+
+<h4>Using require_once</h4>
+
+<p>In order to include third party library files, you can use <code>require_once()</code>. The only complication is getting the correct path to use.</p>
+
+<p><code>php
+// To load app/Vendor/DavesLibrary/DavesClass.php
+require_once(APP . 'Vendor' . DS . 'DavesLibrary' . DS . 'DavesClass.php');
+</code></p>
+
+<h4>The older way</h4>
 
 <p>Usually you will want to use the <code>App</code> class to load your third party classes into your application using <code>App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
 
