@@ -58,6 +58,18 @@ ini_set('include_path', '..' . $ds . 'vendor' . $ds . 'cakephp' . $ds . 'cakephp
 
 As you are running your shell tasks from within `app` we can use a relative path.
 
+#### Edit your bootstrap to build the new paths
+```php
+// app/config/bootstrap.php
+App::build(
+	[
+		'Plugin' => [ROOT . '/Plugin/', ROOT . '/app/Plugin/'],
+		'Vendor' => [ROOT . '/vendor/', ROOT . '/app/Vendor/']
+	],
+	App::RESET
+);
+```
+
 #### Testing
 To check that the new setup is working you can run a `Console/cake` to check what the `core` value is.
 
