@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 2.x | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/2-dot-x/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-03-06T12:33:50+00:00</updated>
+  <updated>2015-03-18T12:14:38+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -76,6 +76,22 @@ ini_set('include_path', '..' . $ds . 'vendor' . $ds . 'cakephp' . $ds . 'cakephp
 </code></p>
 
 <p>As you are running your shell tasks from within <code>app</code> we can use a relative path.</p>
+
+<h4>Edit your bootstrap to build the new paths</h4>
+
+<p>```php
+// app/config/bootstrap.php
+App::build(</p>
+
+<pre><code>[
+    'Plugin' =&gt; [ROOT . '/Plugin/', ROOT . '/app/Plugin/'],
+    'Vendor' =&gt; [ROOT . '/vendor/', ROOT . '/app/Vendor/']
+],
+App::RESET
+</code></pre>
+
+<p>);
+```</p>
 
 <h4>Testing</h4>
 

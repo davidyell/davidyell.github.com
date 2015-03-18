@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-03-06T12:33:50+00:00</updated>
+  <updated>2015-03-18T12:14:38+00:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -510,6 +510,27 @@ So that the console commands can still find the right lib, we need to update the
 
 
 <p>As you are running your shell tasks from within <code>app</code> we can use a relative path.</p>
+
+<h4>Edit your bootstrap to build the new paths</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// app/config/bootstrap.php</span>
+</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">build</span><span class="p">(</span>
+</span><span class='line'>  <span class="p">[</span>
+</span><span class='line'>      <span class="s1">&#39;Plugin&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/Plugin/&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/app/Plugin/&#39;</span><span class="p">],</span>
+</span><span class='line'>      <span class="s1">&#39;Vendor&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/vendor/&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/app/Vendor/&#39;</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="nx">App</span><span class="o">::</span><span class="na">RESET</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h4>Testing</h4>
 
