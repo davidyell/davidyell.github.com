@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Paginating multiple types of list in the same controller - Daves dev warblings</title>
+  <meta name="author" content="David Yell">
+
+  
+  <meta name="description" content="What a complicated title Okay, agreed. Perhaps an example would be better. Imagine you have a ContentsController which you use in your application to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Daves dev warblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2775424-18']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Daves dev warblings</a></h1>
+  
+    <h2>For all the things I never remember</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jedistirfry.co.uk" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about.html">About</a></li>
+  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Paginating multiple types of list in the same controller</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-29T11:57:10+01:00" pubdate data-updated="true">Apr 29<sup>th</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>What a complicated title</h2>
+
+<p>Okay, agreed. Perhaps an example would be better. Imagine you have a <code>ContentsController</code> which you use in your application to render lots of different types of content. You might have <code>ContentTypes</code> such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your <code>ContentsController::index()</code> method could just output the same thing with just different data.</p>
+
+<p>This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.</p>
+
+<h2>Routing</h2>
+
+<p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Router</span><span class="o">::</span><span class="na">scope</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$routes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This now means that we can access all our different types of content on different urls so that it makes sense to the user.</p>
+
+<h2>Creating our links</h2>
+
+<p>So now we need to point users to our content.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// Link to the index</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Link to a single item</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">slug</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Paginating the index</h2>
+
+<p>As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;url&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="nv">$type</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">]</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will now pass the <code>type</code> correctly in all our pagination links, which means that it&rsquo;ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as <code>/guides?page=2</code>.</p>
+
+<h2>Getting the list</h2>
+
+<p>So you&rsquo;ll need to process the <code>type</code> when it&rsquo;s passed to your controller, so be sure to include it in your controllers method signature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">ContentsController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">(</span><span class="nv">$type</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Lookup the data by type</span>
+</span><span class='line'>      <span class="c1">// Perhaps with a custom finder</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Make a brew</h2>
+
+<p>It really is that simple!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">David Yell</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-29T11:57:10+01:00" pubdate data-updated="true">Apr 29<sup>th</sup>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cakephp/'>cakephp</a>, <a class='category' href='/blog/categories/cakephp3/'>cakephp3</a>, <a class='category' href='/blog/categories/pagination/'>pagination</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/" data-via="yelldavid" data-counturl="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015-02/working-with-crud/" title="Previous Post: Working with the Crud plugin in CakePHP">&laquo; Working with the Crud plugin in CakePHP</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/davidyell">@davidyell</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'davidyell',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/neon1024?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/neon1024">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - David Yell -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jedistirfry';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/';
+        var disqus_url = 'http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So what is it? It&rsquo;s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually &hellip;">
+  <meta name="description" content="What a complicated title Okay, agreed. Perhaps an example would be better. Imagine you have a ContentsController which you use in your application to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,126 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-29T11:57:10+01:00" pubdate data-updated="true">Apr 29<sup>th</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>What a complicated title</h2>
+
+<p>Okay, agreed. Perhaps an example would be better. Imagine you have a <code>ContentsController</code> which you use in your application to render lots of different types of content. You might have <code>ContentTypes</code> such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your <code>ContentsController::index()</code> method could just output the same thing with just different data.</p>
+
+<p>This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.</p>
+
+<h2>Routing</h2>
+
+<p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Router</span><span class="o">::</span><span class="na">scope</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$routes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This now means that we can access all our different types of content on different urls so that it makes sense to the user.</p>
+
+<h2>Creating our links</h2>
+
+<p>So now we need to point users to our content.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// Link to the index</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Link to a single item</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">slug</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Paginating the index</h2>
+
+<p>As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;url&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="nv">$type</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">]</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will now pass the <code>type</code> correctly in all our pagination links, which means that it&rsquo;ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as <code>/guides?page=2</code>.</p>
+
+<h2>Getting the list</h2>
+
+<p>So you&rsquo;ll need to process the <code>type</code> when it&rsquo;s passed to your controller, so be sure to include it in your controllers method signature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">ContentsController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">(</span><span class="nv">$type</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Lookup the data by type</span>
+</span><span class='line'>      <span class="c1">// Perhaps with a custom finder</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Make a brew</h2>
+
+<p>It really is that simple!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1323,309 +1443,6 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-08/how-to-create-hasmanythrough-multi-selects/">How to create hasManyThrough multi-selects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-13T16:29:00+01:00" pubdate data-updated="true">Aug 13<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Updated 6th November 2013</strong></p>
-
-<h3>The scenario</h3>
-
-<p>In your CMS you have a HABTM relationship between two models, something like <code>Post</code> and <code>Tag</code>. However you want to store some extra data about the <code>Tag</code>, such as who created it. This means that the relationship between the two models will in fact need to be a <code>hasManyThrough</code> and use a join model. <a href="http://book.cakephp.org/2.0/en/models/associations-linking-models-together.html#hasmany-through-the-join-model">You can read more about this type of relationship in the CakePHP CookBook</a>.</p>
-
-<p>You want to be able to select and save multiple tags when creating a <code>Post</code>. So the logical step here is to load a list of <code>Tag</code> items and display them in a multi-select element in our view.</p>
-
-<p>The alternative scenario is using checkboxes to add a <code>hasMany</code> relation to a parent record.</p>
-
-<h3>The problem</h3>
-
-<p>When creating a multi-select there is no form field configuration which will allow the data to be formatted in a way which is compatible with any of the <code>save()</code> methods.</p>
-
-<p>For example,
-Setting up your form using a multi-select such as <code>$this-&gt;Form-&gt;input('tag_id', array('type' =&gt; 'select', 'multiple' =&gt; true))</code> will not allow you to numerically index your fields. This means that your data will look like the following.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>array (size=1)
-</span><span class='line'>  'tag_id' =&gt; 
-</span><span class='line'>    array (size=3)
-</span><span class='line'>      0 =&gt; string '28' (length=2)
-</span><span class='line'>      1 =&gt; string '29' (length=2)
-</span><span class='line'>      2 =&gt; string '30' (length=2)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However this isn&rsquo;t compatible, and must be transformed into a numerically indexed form such as this.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>array (size=3)
-</span><span class='line'>  0 =&gt; 
-</span><span class='line'>    array (size=1)
-</span><span class='line'>      'tag_id' =&gt; string '28' (length=2)
-</span><span class='line'>  1 =&gt; 
-</span><span class='line'>    array (size=1)
-</span><span class='line'>      'tag_id' =&gt; string '29' (length=2)
-</span><span class='line'>  2 =&gt; 
-</span><span class='line'>    array (size=1)
-</span><span class='line'>      'tag_id' =&gt; string '30' (length=2)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This new data format can now be assigned to your join model and saved using <code>saveAll()</code>. However the dependency isn&rsquo;t respected and as such, you need the hack for deleting the existing join model records as you can see below.</p>
-
-<h3>Solution</h3>
-
-<h4>The models</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Model/Post.php</span>
-</span><span class='line'><span class="nv">$hasMany</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>  <span class="s1">&#39;PostsTag&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;PostsTag&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;foreignKey&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post_id&#39;</span>
-</span><span class='line'>  <span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Model/Tag.php</span>
-</span><span class='line'><span class="nv">$hasMany</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>  <span class="s1">&#39;PostsTag&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;PostsTag&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;foreignKey&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;tag_id&#39;</span>
-</span><span class='line'>  <span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Model/PostsTag.php</span>
-</span><span class='line'><span class="nv">$belongsTo</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>  <span class="s1">&#39;Post&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Post&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;foreignKey&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post_id&#39;</span>
-</span><span class='line'>  <span class="p">),</span>
-</span><span class='line'>  <span class="s1">&#39;Tag&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Tag&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;foreignKey&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;tag_id&#39;</span>
-</span><span class='line'>  <span class="p">),</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>The form in the view</h4>
-
-<p>If you want to use a multi-select field here you can use the following.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">input</span><span class="p">(</span>
-</span><span class='line'>  <span class="s1">&#39;PostsTag.tag_id&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;select&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;multiple&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;selected&#39;</span> <span class="o">=&gt;</span> <span class="nx">Hash</span><span class="o">::</span><span class="na">extract</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;PostsTag&#39;</span><span class="p">],</span> <span class="s1">&#39;{n}.tag_id&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you would like to use checkboxes instead you can change the Form Helper to use checkboxes.</p>
-
-<p><strong>Important note</strong><br/>
-If you are using checkboxes and want to validate your data you will need to ensure that the <code>hiddenField</code> option is not <strong>false</strong>. Otherwise the data will not appear in the data array and you will not be able to validate it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">input</span><span class="p">(</span>
-</span><span class='line'>  <span class="s1">&#39;Post.tag_id&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>      <span class="s1">&#39;multiple&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;options&#39;</span> <span class="o">=&gt;</span> <span class="nv">$tags</span> <span class="c1">// A list of tags fetched with $this-&gt;Post-&gt;Tag-&gt;find(&#39;list&#39;)</span>
-</span><span class='line'>  <span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>The controller except</h4>
-
-<p>Controller method excerpt to show the usage of the function</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="c1">// Here we are massaging the data in order to transform it</span>
-</span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;PostsTag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Post</span><span class="o">-&gt;</span><span class="na">PostsTag</span><span class="o">-&gt;</span><span class="na">massageHasManyForSaveAll</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;PostsTag&#39;</span><span class="p">],</span> <span class="s1">&#39;tag_id&#39;</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Post&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Post</span><span class="o">-&gt;</span><span class="na">saveAll</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>The AppModel hack</h4>
-
-<p>In the AppModel we need to implement a hack to massage the data. You&rsquo;ll notice that we call it on the join model, as above. This is important as the join model will have the correct relationships beteween the two models. We can use this to our advantage to find out the related keys for the delete.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd">* Transform a set of hasMany multi-select data into a format which can be saved</span>
-</span><span class='line'><span class="sd">* using saveAll in the controller</span>
-</span><span class='line'><span class="sd">* </span>
-</span><span class='line'><span class="sd">* @param array $data</span>
-</span><span class='line'><span class="sd">* @param str $fieldToSave</span>
-</span><span class='line'><span class="sd">* @param int $deleteId</span>
-</span><span class='line'><span class="sd">* @return array</span>
-</span><span class='line'><span class="sd">*/</span>
-</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">massageHasManyForSaveAll</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$fieldToSave</span><span class="p">,</span> <span class="nv">$deleteId</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">belongsTo</span> <span class="k">as</span> <span class="nv">$model</span> <span class="o">=&gt;</span> <span class="nv">$relationship</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nv">$relationship</span><span class="p">[</span><span class="s1">&#39;foreignKey&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nv">$fieldToSave</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="nv">$relatedModel</span> <span class="o">=</span> <span class="nv">$model</span><span class="p">;</span>
-</span><span class='line'>          <span class="nv">$relatedModelPrimaryKey</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$model</span><span class="p">}</span><span class="o">-&gt;</span><span class="na">primaryKey</span><span class="p">;</span>
-</span><span class='line'>          <span class="nv">$relatedForeignKey</span> <span class="o">=</span> <span class="nv">$relationship</span><span class="p">[</span><span class="s1">&#39;foreignKey&#39;</span><span class="p">];</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nv">$deleteId</span> <span class="o">!==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">deleteAll</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
-</span><span class='line'>          <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">alias</span> <span class="o">.</span><span class="s1">&#39;.&#39;</span><span class="o">.</span> <span class="nv">$relatedForeignKey</span> <span class="o">=&gt;</span> <span class="nv">$deleteId</span>
-</span><span class='line'>      <span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">is_array</span><span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="nv">$fieldToSave</span><span class="p">]))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">foreach</span> <span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="nv">$fieldToSave</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$packageId</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="nv">$return</span><span class="p">[]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$fieldToSave</span> <span class="o">=&gt;</span> <span class="nv">$packageId</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="k">return</span> <span class="nv">$return</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nv">$data</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Success</h3>
-
-<p>Make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1641,6 +1458,10 @@ If you are using checkboxes and want to validate your data you will need to ensu
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
       </li>
     
@@ -1654,10 +1475,6 @@ If you are using checkboxes and want to validate your data you will need to ensu
     
       <li class="post">
         <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
       </li>
     
   </ul>

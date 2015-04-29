@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me &hellip;">
+  <meta name="description" content="So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the book but &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-02/element-caching/">How to cache an element in CakePHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-07T09:43:25+00:00" pubdate data-updated="true">Feb 7<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
+
+<blockquote><p>The url is here, <a href="http://book.cakephp.org/2.0/en/views.html#caching-elements">http://book.cakephp.org/2.0/en/views.html#caching-elements</a></p></blockquote>
+
+<p>Also worth including some code here to save me having to click a link.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span>
+</span><span class='line'>    <span class="s1">&#39;helpbox&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;var&#39;</span> <span class="o">=&gt;</span> <span class="nv">$var</span><span class="p">),</span>
+</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;cache&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;first_use&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view_long&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Params</strong><br/>
+Name of element, array of data then options. Ref, <a href="http://api.cakephp.org/class/view#method-Viewelement">http://api.cakephp.org/class/view#method-Viewelement</a><br/>
+<strong>NB</strong><br/>
+It&rsquo;s also worth remebering that if you are caching something it will be cached in that state from the moment it&rsquo;s called. If you something is dynamic and you are caching it, <em>always</em> use a proper <code>key</code> for it in the options array! Or use <code>$this-&gt;here</code> to use the current url slug as the key.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -629,6 +689,10 @@ You will need to configure this in <strong>Preferences</strong>.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
       </li>
     
@@ -642,10 +706,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     
       <li class="post">
         <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a>
       </li>
     
   </ul>

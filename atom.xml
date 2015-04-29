@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-03-18T12:14:38+00:00</updated>
+  <updated>2015-04-29T12:25:54+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Paginating multiple types of list in the same controller]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/"/>
+    <updated>2015-04-29T11:57:10+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller</id>
+    <content type="html"><![CDATA[<h2>What a complicated title</h2>
+
+<p>Okay, agreed. Perhaps an example would be better. Imagine you have a <code>ContentsController</code> which you use in your application to render lots of different types of content. You might have <code>ContentTypes</code> such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your <code>ContentsController::index()</code> method could just output the same thing with just different data.</p>
+
+<p>This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.</p>
+
+<h2>Routing</h2>
+
+<p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Router</span><span class="o">::</span><span class="na">scope</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$routes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news/:slug&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span><span class="p">]]);</span>
+</span><span class='line'>    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;News&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This now means that we can access all our different types of content on different urls so that it makes sense to the user.</p>
+
+<h2>Creating our links</h2>
+
+<p>So now we need to point users to our content.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// Link to the index</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Link to a single item</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Guides&#39;</span><span class="p">,</span> <span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">slug</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2> Paginating the index</h2>
+
+<p>As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;url&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Contents&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="nv">$type</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">]</span>
+</span><span class='line'><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will now pass the <code>type</code> correctly in all our pagination links, which means that it&rsquo;ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as <code>/guides?page=2</code>.</p>
+
+<h2>Getting the list</h2>
+
+<p>So you&rsquo;ll need to process the <code>type</code> when it&rsquo;s passed to your controller, so be sure to include it in your controllers method signature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">ContentsController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">(</span><span class="nv">$type</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Lookup the data by type</span>
+</span><span class='line'>      <span class="c1">// Perhaps with a custom finder</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Make a brew</h2>
+
+<p>It really is that simple!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Working with the Crud plugin in CakePHP]]></title>
@@ -1993,39 +2086,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 <p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
 
 <p>Time for another glass of wine!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to cache an element in CakePHP]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-02/element-caching/"/>
-    <updated>2013-02-07T09:43:25+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-02/element-caching</id>
-    <content type="html"><![CDATA[<p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
-
-<blockquote><p>The url is here, <a href="http://book.cakephp.org/2.0/en/views.html#caching-elements">http://book.cakephp.org/2.0/en/views.html#caching-elements</a></p></blockquote>
-
-<p>Also worth including some code here to save me having to click a link.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span>
-</span><span class='line'>    <span class="s1">&#39;helpbox&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;var&#39;</span> <span class="o">=&gt;</span> <span class="nv">$var</span><span class="p">),</span>
-</span><span class='line'>    <span class="k">array</span><span class="p">(</span><span class="s1">&#39;cache&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;first_use&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;view_long&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Params</strong><br/>
-Name of element, array of data then options. Ref, <a href="http://api.cakephp.org/class/view#method-Viewelement">http://api.cakephp.org/class/view#method-Viewelement</a><br/>
-<strong>NB</strong><br/>
-It&rsquo;s also worth remebering that if you are caching something it will be cached in that state from the moment it&rsquo;s called. If you something is dynamic and you are caching it, <em>always</em> use a proper <code>key</code> for it in the options array! Or use <code>$this-&gt;here</code> to use the current url slug as the key.</p>
 ]]></content>
   </entry>
   

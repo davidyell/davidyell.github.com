@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-03-18T12:14:38+00:00</updated>
+  <updated>2015-04-29T12:25:54+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Paginating multiple types of list in the same controller]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/"/>
+    <updated>2015-04-29T11:57:10+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller</id>
+    <content type="html"><![CDATA[<h2>What a complicated title</h2>
+
+<p>Okay, agreed. Perhaps an example would be better. Imagine you have a <code>ContentsController</code> which you use in your application to render lots of different types of content. You might have <code>ContentTypes</code> such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your <code>ContentsController::index()</code> method could just output the same thing with just different data.</p>
+
+<p>This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.</p>
+
+<h2>Routing</h2>
+
+<p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
+
+<p>```php
+Router::scope(&lsquo;/&rsquo;, function ($routes) {</p>
+
+<pre><code>$routes-&gt;connect('/guides/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'Guides'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
+$routes-&gt;connect('/guides', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'Guides'], ['pass' =&gt; ['type']]);
+
+$routes-&gt;connect('/news/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'News'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
+$routes-&gt;connect('/news', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'News'], ['pass' =&gt; ['type']]);
+</code></pre>
+
+<p>});
+```</p>
+
+<p>This now means that we can access all our different types of content on different urls so that it makes sense to the user.</p>
+
+<h2>Creating our links</h2>
+
+<p>So now we need to point users to our content.</p>
+
+<p>```php
+// Link to the index
+echo $this->Html->link(&lsquo;Guides&rsquo;, [&lsquo;controller&rsquo; => &lsquo;Contents&rsquo;, &lsquo;action&rsquo; => &lsquo;index&rsquo;, &lsquo;type&rsquo; => &lsquo;Guides&rsquo;]);</p>
+
+<p>// Link to a single item
+echo $this->Html->link($guide->title, [&lsquo;controller&rsquo; => &lsquo;Contents&rsquo;, &lsquo;action&rsquo; => &lsquo;view&rsquo;, &lsquo;type&rsquo; => &lsquo;Guides&rsquo;, &lsquo;slug&rsquo; => $guide->slug]);
+```</p>
+
+<h2> Paginating the index</h2>
+
+<p>As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
+
+<p>```php
+$this->Paginator->options([</p>
+
+<pre><code>'url' =&gt; ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; $type-&gt;name]
+</code></pre>
+
+<p>]);
+```</p>
+
+<p>This will now pass the <code>type</code> correctly in all our pagination links, which means that it&rsquo;ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as <code>/guides?page=2</code>.</p>
+
+<h2>Getting the list</h2>
+
+<p>So you&rsquo;ll need to process the <code>type</code> when it&rsquo;s passed to your controller, so be sure to include it in your controllers method signature.</p>
+
+<p>```php
+class ContentsController extends AppController {</p>
+
+<pre><code>public function index($type)
+{
+    // Lookup the data by type
+    // Perhaps with a custom finder
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<h2>Make a brew</h2>
+
+<p>It really is that simple!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Working with the Crud plugin in CakePHP]]></title>
@@ -392,73 +472,6 @@ $ ../vendors/bin/cake bake
 </code></p>
 
 <p>This will copy in the framework skeleton.</p>
-
-<h3>Done!</h3>
-
-<p>Make a brew!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Filtering dates using CakeDC/Search]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search/"/>
-    <updated>2014-03-04T10:54:00+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search</id>
-    <content type="html"><![CDATA[<h3>Scenario</h3>
-
-<p>I needed to do a search on a date field in my database which was stored as a <code>DATE</code>, but only filtering by month.</p>
-
-<h3>Solution</h3>
-
-<p>So I had already implemented the <a href="https://github.com/cakedc/search">CakeDC/Search</a> into my project, so all I needed to do was create a custom method to return the right conditions for the query.</p>
-
-<p>My model already had the <code>filterArgs</code> setup.</p>
-
-<p>```php
-/<em>*
- * Setup default search filters
- *
- * @var array
- </em>/</p>
-
-<pre><code>public $filterArgs = [
-    'day_type_id' =&gt; ['type' =&gt; 'value'],
-    'month' =&gt; ['type' =&gt; 'query', 'method' =&gt; 'filterByMonth']
-];
-</code></pre>
-
-<p>```</p>
-
-<p>So I just added a <code>type</code> of <code>query</code> and passed in a <code>method</code>.</p>
-
-<p>```php
-/<strong>
- * Filter the pagination by month
- *
- * @param array $data
- * @return array
- </strong>/</p>
-
-<pre><code>public function filterByMonth(array $data = array()) {
-    return [
-        "DATE_FORMAT({$this-&gt;alias}.date, '%c')" =&gt; (int)$data['month']
-    ];
-}
-</code></pre>
-
-<p>```</p>
-
-<p>The <code>$data</code> array will contain all the fields setup in your model along with their values. So for me it looked like</p>
-
-<p>```php
-[</p>
-
-<pre><code>'day_type_id' =&gt; 3,
-'month' =&gt; '08' // Note the string type, hence why I cast to int
-</code></pre>
-
-<p>]
-```</p>
 
 <h3>Done!</h3>
 
