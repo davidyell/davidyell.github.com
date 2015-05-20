@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it&rsquo;s in the book but &hellip;">
+  <meta name="description" content="Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +71,6 @@
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
   <li><a href="/about.html">About</a></li>
-  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
 </ul>
 
 </nav>
@@ -79,6 +78,91 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-02/symfony-nginx/">Nginx config for Symfony2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-27T09:43:25+00:00" pubdate data-updated="true">Feb 27<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">server_name</span> <span class="s">tabletennistracker.dev</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">root</span> <span class="s">/home/neon/Sites/TableTennisTracker/web</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">error_log</span> <span class="s">/var/log/nginx/tabletennistracker.error.log</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">access_log</span> <span class="s">/var/log/nginx/tabletennistracker.access.log</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kn">index</span> <span class="s">app.php</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri/</span> <span class="s">/app.php?</span><span class="nv">$query_string</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/(app|app_dev)\.php(/|$)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kn">fastcgi_split_path_info</span> <span class="s">^(.+\.php)(/.+)</span>$<span class="p">;</span>
+</span><span class='line'>    <span class="kn">fastcgi_pass</span> <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">include</span> <span class="s">fastcgi_params</span><span class="p">;</span>
+</span><span class='line'>    <span class="kn">fastcgi_param</span> <span class="s">SCRIPT_FILENAME</span> <span class="nv">$document_root$fastcgi_script_name</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
+
+<p>Time for another glass of wine!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -689,6 +773,10 @@ You will need to configure this in <strong>Preferences</strong>.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
       </li>
     
@@ -702,10 +790,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     
       <li class="post">
         <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
       </li>
     
   </ul>

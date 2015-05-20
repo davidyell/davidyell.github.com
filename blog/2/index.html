@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Updated 6th November 2013 The scenario In your CMS you have a HABTM relationship between two models, something like Post and Tag. However you want to &hellip;">
+  <meta name="description" content="The scenario You have a bunch of helpers which you are only using in the /admin section of your website. We don&rsquo;t need to load these on the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +71,6 @@
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
   <li><a href="/about.html">About</a></li>
-  <li><a href="/CakePHP-Listing">CakePHP Listing plugin</a></li>
 </ul>
 
 </nav>
@@ -79,6 +78,89 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-09/merging-admin-specific-helpers/">Merging Admin specific helpers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T14:32:00+01:00" pubdate data-updated="true">Sep 10<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The scenario</h3>
+
+<p>You have a bunch of helpers which you are only using in the <code>/admin</code> section of your website. We don&rsquo;t need to load these on the front-end part of the site.</p>
+
+<h3>Solution</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="c1">// app/AppController.php</span>
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$helpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>      <span class="s1">&#39;Html&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s1">&#39;Form&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$adminHelpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>        <span class="s1">&#39;NiceAdmin.Actions&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;NiceAdmin.Boolean&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">params</span><span class="p">[</span><span class="s1">&#39;admin&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">layout</span> <span class="o">=</span> <span class="s1">&#39;admin&#39;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">helpers</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">helpers</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">adminHelpers</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success!</h3>
+
+<p>Make a brew.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1248,91 +1330,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-02/symfony-nginx/">Nginx config for Symfony2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-27T09:43:25+00:00" pubdate data-updated="true">Feb 27<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kn">server_name</span> <span class="s">tabletennistracker.dev</span><span class="p">;</span>
-</span><span class='line'>  <span class="kn">root</span> <span class="s">/home/neon/Sites/TableTennisTracker/web</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kn">error_log</span> <span class="s">/var/log/nginx/tabletennistracker.error.log</span><span class="p">;</span>
-</span><span class='line'>  <span class="kn">access_log</span> <span class="s">/var/log/nginx/tabletennistracker.access.log</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kn">index</span> <span class="s">app.php</span><span class="p">;</span>
-</span><span class='line'>    <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri/</span> <span class="s">/app.php?</span><span class="nv">$query_string</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/(app|app_dev)\.php(/|$)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kn">fastcgi_split_path_info</span> <span class="s">^(.+\.php)(/.+)</span>$<span class="p">;</span>
-</span><span class='line'>    <span class="kn">fastcgi_pass</span> <span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">9001</span><span class="p">;</span>
-</span><span class='line'>    <span class="kn">include</span> <span class="s">fastcgi_params</span><span class="p">;</span>
-</span><span class='line'>    <span class="kn">fastcgi_param</span> <span class="s">SCRIPT_FILENAME</span> <span class="nv">$document_root$fastcgi_script_name</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
-
-<p>Time for another glass of wine!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -1350,6 +1347,10 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
       </li>
     
@@ -1363,10 +1364,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
     
       <li class="post">
         <a href="/blog/2014-08/sorting-data/">Sorting multi-dimension model data</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a>
       </li>
     
   </ul>
