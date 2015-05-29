@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-05-20T16:23:31+01:00</updated>
+  <updated>2015-05-29T14:12:42+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,164 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Making a calendar]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-05/making-calendars/"/>
+    <updated>2015-05-29T11:04:12+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-05/making-calendars</id>
+    <content type="html"><![CDATA[<h2>How to generate a calendar using PHP?</h2>
+
+<p>At work I built a new holiday calendar system to replace the old system which was being closed down. The company needed a way for employees to request holiday and also managers to check booked holidays by team.</p>
+
+<p><a href="http://i.imgur.com/079nh27.png">This is what it looks like once it&rsquo;s been styled</a>.</p>
+
+<h2>Why have I written my own code?</h2>
+
+<p>A few reasons really, primarily because it&rsquo;s a learning experience and secondly because I don&rsquo;t recall being able to find a decent library with did it. No doubt there are a few, if you know any, please leave a comment and I&rsquo;ll update this post, thanks!</p>
+
+<h2>Calendar code</h2>
+
+<p>Just a point to note, this is written in a <a href="http://cakephp.org/">CakePHP</a> view, and uses a table.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;</span><span class="nx">table</span> <span class="nx">summary</span><span class="o">=</span><span class="s2">&quot;calendar&quot;</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&quot;table table-bordered&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;holiday-calendar&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">thead</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">tr</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;&lt;?=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Monday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Tuesday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Wednesday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Thursday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Friday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Saturday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">          &lt;th&gt;</span><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Sunday&#39;</span><span class="p">)</span><span class="cp">?&gt;</span><span class="x">&lt;/th&gt;</span>
+</span><span class='line'><span class="x">      &lt;/tr&gt;</span>
+</span><span class='line'><span class="x">  &lt;/thead&gt;</span>
+</span><span class='line'><span class="x">  &lt;tbody&gt;</span>
+</span><span class='line'><span class="x">      &lt;tr&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;?php</span>
+</span><span class='line'>          <span class="c1">// $days is a CakePHP2 data array of days</span>
+</span><span class='line'>          
+</span><span class='line'>          <span class="c1">// Work out when the month starts in the grid</span>
+</span><span class='line'>          <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">((</span><span class="nx">int</span><span class="p">)</span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="nb">strtotime</span><span class="p">(</span><span class="nv">$days</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Day&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]))</span> <span class="o">===</span> <span class="nv">$i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="c1">// This is a CakePHP element to make a table cell for the day</span>
+</span><span class='line'>                  <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span><span class="s1">&#39;calendar-day&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;day&#39;</span> <span class="o">=&gt;</span> <span class="nv">$days</span><span class="p">[</span><span class="mi">0</span><span class="p">]]);</span>
+</span><span class='line'>                  <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="k">echo</span> <span class="s2">&quot;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="nv">$numOutput</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="nv">$remainingCells</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">-</span> <span class="nv">$i</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="c1">// Output the remaining cells after the first day</span>
+</span><span class='line'>          <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;=</span> <span class="nv">$remainingCells</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span><span class="s1">&#39;calendar-day&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;day&#39;</span> <span class="o">=&gt;</span> <span class="nv">$days</span><span class="p">[</span><span class="nv">$i</span><span class="p">]]);</span>
+</span><span class='line'>              <span class="nv">$numOutput</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="cp">?&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;/tr&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">      &lt;tr&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;?php</span>
+</span><span class='line'>          <span class="nv">$dayOfWeek</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>          <span class="c1">// Output the remaining rows</span>
+</span><span class='line'>          <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="nv">$numOutput</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$days</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">element</span><span class="p">(</span><span class="s1">&#39;calendar-day&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;day&#39;</span> <span class="o">=&gt;</span> <span class="nv">$days</span><span class="p">[</span><span class="nv">$i</span><span class="p">]]);</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="c1">// Look for the end of the week to roll a new row</span>
+</span><span class='line'>              <span class="nv">$dayOfWeek</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="nv">$dayOfWeek</span> <span class="o">===</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nv">$dayOfWeek</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>                  <span class="k">echo</span> <span class="s2">&quot;&lt;/tr&gt;&lt;tr&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="c1">// Finish off the table with empty rows</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="nv">$dayOfWeek</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="nv">$dayOfWeek</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="k">echo</span> <span class="s2">&quot;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="cp">?&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;/tr&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">  &lt;/tbody&gt;</span>
+</span><span class='line'><span class="x">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>All done</h3>
+
+<p>That&rsquo;s it, you now have a nice horizontal calendar similar to Google Calendar!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[jQuery UI Accordion]]></title>
@@ -2069,50 +2227,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 <h3>Success</h3>
 
 <p>Go make a brew!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to debug routes in Symfony2]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/"/>
-    <updated>2013-03-01T09:43:25+00:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony</id>
-    <content type="html"><![CDATA[<p>When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML and Annotation.</p>
-
-<p>I picked annotation as it looked neater, but I wanted to find out how to find a controller from a url.</p>
-
-<h3>Trace a url back to a controller</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>app/console router:match /players/
-</span><span class='line'>Route <span class="s2">&quot;players_index&quot;</span> matches
-</span><span class='line'><span class="nv">$ </span>app/console router:debug players_index
-</span><span class='line'><span class="o">[</span>router<span class="o">]</span> Route <span class="s2">&quot;players_index&quot;</span>
-</span><span class='line'>Name         players_index
-</span><span class='line'>Pattern      /players/
-</span><span class='line'>Class        Symfony<span class="se">\C</span>omponent<span class="se">\R</span>outing<span class="se">\R</span>oute
-</span><span class='line'>Defaults     _controller: PingPong<span class="se">\B</span>undle<span class="se">\P</span>layerBundle<span class="se">\C</span>ontroller<span class="se">\P</span>layersController::indexAction
-</span><span class='line'>Requirements
-</span><span class='line'>Options      compiler_class: Symfony<span class="se">\C</span>omponent<span class="se">\R</span>outing<span class="se">\R</span>outeCompiler
-</span><span class='line'>Regex        <span class="c">#^/players/$#s</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will allow you to chase Controller annotated routes from the command line!</p>
-
-<h3>Success</h3>
-
-<p>Have a brew, you&rsquo;ve earned it.</p>
 ]]></content>
   </entry>
   
