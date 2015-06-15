@@ -10,6 +10,8 @@ It's a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by aut
 
 The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.
 
+This post is about Crud v3 which is for Cake 2.x
+
 [Read more about the plugin in the repo](https://github.com/FriendsOfCake/crud).
 
 ## I'm sold, how do I use it?
@@ -19,6 +21,7 @@ Let's do an example. I will add comments to the code for various techniques.
 
 **Assumptions**  
 Here we'll assume the plugin is loaded already, the trait is being used and we have a model called `Examples`.
+The following example is for Cake 2, as in Cake 3, there is no need to use the `prefix_method` notation.
 
 ```php
 // I tend to configure Crud in my AppController to save on repitition
