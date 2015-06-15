@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-05-29T14:12:42+01:00</updated>
+  <updated>2015-06-15T10:56:33+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -360,6 +360,8 @@
 
 <p>The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.</p>
 
+<p>This post is about Crud v3 which is for Cake 2.x</p>
+
 <p><a href="https://github.com/FriendsOfCake/crud">Read more about the plugin in the repo</a>.</p>
 
 <h2>I&rsquo;m sold, how do I use it?</h2>
@@ -369,7 +371,8 @@
 <p>Let&rsquo;s do an example. I will add comments to the code for various techniques.</p>
 
 <p><strong>Assumptions</strong><br/>
-Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.</p>
+Here we&rsquo;ll assume the plugin is loaded already, the trait is being used and we have a model called <code>Examples</code>.
+The following example is for Cake 2, as in Cake 3, there is no need to use the <code>prefix_method</code> notation.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
