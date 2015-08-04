@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML &hellip;">
+  <meta name="description" content="Use case You have downloaded and installed the Utils.SoftDelete behaviour, but when you delete an item the return is false because the behaviour has &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,218 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-04/softdelete-return/">Hack to fix SoftDelete behaviour return in CakePHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-16T10:43:25+01:00" pubdate data-updated="true">Apr 16<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Use case</h3>
+
+<p>You have downloaded and installed the <a href="https://github.com/cakedc/utils">Utils.SoftDelete</a> behaviour, but when you delete an item the return is <code>false</code> because the behaviour has stopped the delete and run an update instead.</p>
+
+<p>You still need to feedback to the user that the item has been deleted succesfully, ie, returning a <code>true</code>.</p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="https://github.com/CakeDC/utils/issues/19">https://github.com/CakeDC/utils/issues/19</a></li>
+<li><a href="https://groups.google.com/forum/?fromgroups=#!topic/cakephp-core/2vIZN8Sq8RE">cakephp-core › callbacks and returning true</a></li>
+</ul>
+
+
+<h3>Solution</h3>
+
+<p>This is a solution that I&rsquo;ve written myself based on the solutions of Ceeram and Augusto Franzoia.</p>
+
+<p>It will need to go into the <code>AppModel</code> of your application.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">$id</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$cascade</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="k">parent</span><span class="o">::</span><span class="na">delete</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$cascade</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nv">$result</span> <span class="o">===</span> <span class="k">false</span> <span class="o">&amp;&amp;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Behaviors</span><span class="o">-&gt;</span><span class="na">enabled</span><span class="p">(</span><span class="s1">&#39;SoftDelete&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>       <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-04/onlyone-cake-validation/">Only One validation for CakePHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-06T10:43:25+01:00" pubdate data-updated="true">Apr 6<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Use case</h3>
+
+<p>You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.</p>
+
+<h3>Setup</h3>
+
+<p>I tend to use a <code>bool NOT NULL DEFAULT 0</code> field for this in the database. Then in my model I&rsquo;ll implement a custom validation function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>        <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// Name of the field</span>
+</span><span class='line'>            <span class="s1">&#39;one&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// The name of the rule</span>
+</span><span class='line'>                <span class="s1">&#39;rule&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;onlyOne&#39;</span><span class="p">,</span> <span class="c1">// My custom validation</span>
+</span><span class='line'>                <span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Only one can be default. A default already exists&#39;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s1">&#39;required&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>            <span class="p">)</span>
+</span><span class='line'>        <span class="p">)</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Checks to ensure that only one record has the default flag</span>
+</span><span class='line'><span class="sd"> * @param array $check An array containing {field}=&gt;{value}</span>
+</span><span class='line'><span class="sd"> * @return bool</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">onlyOne</span><span class="p">(</span><span class="nv">$check</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// If turning off default, we don&#39;t mind</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$check</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// Find the current default</span>
+</span><span class='line'>        <span class="nv">$default</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>                <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>            <span class="p">),</span>
+</span><span class='line'>            <span class="s1">&#39;fields&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// No default exists</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$default</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// If we are updating the current default</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -682,110 +894,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011-07/removing-lck-files/">How to remove all .lck files from a folder</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-21T10:43:25+01:00" pubdate data-updated="true">Jul 21<sup>st</sup>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code>.lck</code> files to the server, you&rsquo;ll want this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.LCK&quot;</span> -exec rm <span class="o">{}</span> <span class="se">\;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ref: <a href="http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html">http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008-11/handy-htaccess/">Handy htaccess rules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-20T09:43:25+00:00" pubdate data-updated="true">Nov 20<sup>th</sup>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I don&rsquo;t tend to use Apache these days, having swapped over to using Nginx, but these always caught me out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='apache'><span class='line'><span class="c"># Pass all the /forums stuff through the routing</span>
-</span><span class='line'><span class="nb">RewriteCond</span> %{REQUEST_URI} <span class="s2">&quot;/forums/&quot;</span>
-</span><span class='line'><span class="nb">RewriteRule</span> (.*) $1 [L]
-</span><span class='line'>
-</span><span class='line'><span class="c"># If you need to lock down access to a folder, such as a CMS, then use the following</span>
-</span><span class='line'><span class="nb">RewriteRule</span> ^cms(.*)$ <span class="sx">/maintenance.html</span> [R=301,L]
-</span><span class='line'>
-</span><span class='line'><span class="c"># Redirecting everyone to maintenance</span>
-</span><span class='line'><span class="c"># Reference, http://www.techiecorner.com/97/redirect-to-maintenance-page-during-upgrade-using-htaccess/</span>
-</span><span class='line'><span class="nb">RewriteCond</span> %{REQUEST_URI} !/maintenance.html$
-</span><span class='line'><span class="nb">RewriteRule</span> $ <span class="sx">/maintenance.html</span> [R=302,L]
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/4">&larr; Older</a>
@@ -803,6 +911,14 @@ You will need to configure this in <strong>Preferences</strong>.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
       </li>
     
@@ -812,14 +928,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     
       <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
   </ul>

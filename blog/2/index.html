@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="The scenario You have two different forms which both submit data for the same model. Each of these forms has different fields, but both need to be &hellip;">
+  <meta name="description" content="Scenario I needed to do a search on a date field in my database which was stored as a DATE, but only filtering by month. Solution So I had already &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,189 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-04T10:54:00+00:00" pubdate data-updated="true">Mar 4<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Scenario</h3>
+
+<p>I needed to do a search on a date field in my database which was stored as a <code>DATE</code>, but only filtering by month.</p>
+
+<h3>Solution</h3>
+
+<p>So I had already implemented the <a href="https://github.com/cakedc/search">CakeDC/Search</a> into my project, so all I needed to do was create a custom method to return the right conditions for the query.</p>
+
+<p>My model already had the <code>filterArgs</code> setup.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Setup default search filters</span>
+</span><span class='line'><span class="sd"> *</span>
+</span><span class='line'><span class="sd"> * @var array</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'>  <span class="k">public</span> <span class="nv">$filterArgs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>      <span class="s1">&#39;day_type_id&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="s1">&#39;month&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="s1">&#39;method&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;filterByMonth&#39;</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So I just added a <code>type</code> of <code>query</code> and passed in a <code>method</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Filter the pagination by month</span>
+</span><span class='line'><span class="sd"> *</span>
+</span><span class='line'><span class="sd"> * @param array $data</span>
+</span><span class='line'><span class="sd"> * @return array</span>
+</span><span class='line'><span class="sd"> **/</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">filterByMonth</span><span class="p">(</span><span class="k">array</span> <span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s2">&quot;DATE_FORMAT(</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">alias</span><span class="si">}</span><span class="s2">.date, &#39;%c&#39;)&quot;</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">int</span><span class="p">)</span><span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span>
+</span><span class='line'>        <span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>$data</code> array will contain all the fields setup in your model along with their values. So for me it looked like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="p">[</span>
+</span><span class='line'>    <span class="s1">&#39;day_type_id&#39;</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;month&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;08&#39;</span> <span class="c1">// Note the string type, hence why I cast to int</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Done!</h3>
+
+<p>Make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-27T11:00:00+00:00" pubdate data-updated="true">Nov 27<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Scenario</h3>
+
+<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
+
+<p>The url I wanted to use was <code>/news/category/daves-awesome-category</code> and then paginating results on <code>/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn&rsquo;t want to play ball.</p>
+
+<p>I had already created my route.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Router</span><span class="o">::</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news/category/:category/*&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news_articles&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;category&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z0-9-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But instead of the expected links above, I was getting <code>/news/daves-awesome-category/page:2</code> missing out my keyword from the url.</p>
+
+<h3>Solution</h3>
+
+<p>The Paginator helper options array to the rescue! You can actually configure the options of the helper right in the view. Such a simple fix.</p>
+
+<p>Here is my pagination including the fix to adjust the url if a category is set.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$category</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news_articles&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span> <span class="o">=&gt;</span> <span class="nv">$category</span><span class="p">[</span><span class="s1">&#39;NewsCategory&#39;</span><span class="p">][</span><span class="s1">&#39;slug&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">prev</span><span class="p">(</span><span class="s1">&#39;&lt; &#39;</span> <span class="o">.</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;previous&#39;</span><span class="p">),</span> <span class="k">array</span><span class="p">(),</span> <span class="k">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;prev disabled&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">numbers</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;separator&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">next</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39; &gt;&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="k">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;next disabled&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Done!</h3>
+
+<p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1268,218 +1451,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-04/softdelete-return/">Hack to fix SoftDelete behaviour return in CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-16T10:43:25+01:00" pubdate data-updated="true">Apr 16<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Use case</h3>
-
-<p>You have downloaded and installed the <a href="https://github.com/cakedc/utils">Utils.SoftDelete</a> behaviour, but when you delete an item the return is <code>false</code> because the behaviour has stopped the delete and run an update instead.</p>
-
-<p>You still need to feedback to the user that the item has been deleted succesfully, ie, returning a <code>true</code>.</p>
-
-<h3>References</h3>
-
-<ul>
-<li><a href="https://github.com/CakeDC/utils/issues/19">https://github.com/CakeDC/utils/issues/19</a></li>
-<li><a href="https://groups.google.com/forum/?fromgroups=#!topic/cakephp-core/2vIZN8Sq8RE">cakephp-core › callbacks and returning true</a></li>
-</ul>
-
-
-<h3>Solution</h3>
-
-<p>This is a solution that I&rsquo;ve written myself based on the solutions of Ceeram and Augusto Franzoia.</p>
-
-<p>It will need to go into the <code>AppModel</code> of your application.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">$id</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$cascade</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nv">$result</span> <span class="o">=</span> <span class="k">parent</span><span class="o">::</span><span class="na">delete</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$cascade</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nv">$result</span> <span class="o">===</span> <span class="k">false</span> <span class="o">&amp;&amp;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Behaviors</span><span class="o">-&gt;</span><span class="na">enabled</span><span class="p">(</span><span class="s1">&#39;SoftDelete&#39;</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>       <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">field</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Success</h3>
-
-<p>Go make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-04/onlyone-cake-validation/">Only One validation for CakePHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-06T10:43:25+01:00" pubdate data-updated="true">Apr 6<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Use case</h3>
-
-<p>You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.</p>
-
-<h3>Setup</h3>
-
-<p>I tend to use a <code>bool NOT NULL DEFAULT 0</code> field for this in the database. Then in my model I&rsquo;ll implement a custom validation function.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>        <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// Name of the field</span>
-</span><span class='line'>            <span class="s1">&#39;one&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// The name of the rule</span>
-</span><span class='line'>                <span class="s1">&#39;rule&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;onlyOne&#39;</span><span class="p">,</span> <span class="c1">// My custom validation</span>
-</span><span class='line'>                <span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Only one can be default. A default already exists&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="s1">&#39;required&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
-</span><span class='line'>            <span class="p">)</span>
-</span><span class='line'>        <span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Checks to ensure that only one record has the default flag</span>
-</span><span class='line'><span class="sd"> * @param array $check An array containing {field}=&gt;{value}</span>
-</span><span class='line'><span class="sd"> * @return bool</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">onlyOne</span><span class="p">(</span><span class="nv">$check</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// If turning off default, we don&#39;t mind</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$check</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// Find the current default</span>
-</span><span class='line'>        <span class="nv">$default</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>            <span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-</span><span class='line'>                <span class="s1">&#39;default&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">),</span>
-</span><span class='line'>            <span class="s1">&#39;fields&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// No default exists</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$default</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// If we are updating the current default</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">&#39;Model&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Success</h3>
-
-<p>Go make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -1497,6 +1468,14 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
       </li>
     
@@ -1506,14 +1485,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
     
       <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
   </ul>

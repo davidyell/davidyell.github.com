@@ -4,7 +4,7 @@
   <title><![CDATA[Category: crud | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/crud/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-06-15T10:56:33+01:00</updated>
+  <updated>2015-08-04T15:56:04+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to configure flash messages using Crud plugin]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/"/>
+    <updated>2015-07-21T21:33:09+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin</id>
+    <content type="html"><![CDATA[<h2>Scenario</h2>
+
+<p>You&rsquo;re using the <a href="https://github.com/friendsofcake/crud">Crud</a> plugin you might find that it will use the default flash message elements, so if, like me, you want to use something like <a href="http://getbootstrap.com/components/#alerts">Twitter Boostrap Alerts</a>, you&rsquo;re out of luck.</p>
+
+<p>Never fear, help is at hand.</p>
+
+<h2>Customise flash</h2>
+
+<p>```php
+// src/Controller/AppController.php
+public function beforeFilter(Event $event)
+{</p>
+
+<pre><code>$this-&gt;eventManager()-&gt;on('Crud.beforeHandle', function () {
+    $this-&gt;Crud-&gt;action()-&gt;config('messages.success', ['params' =&gt; ['class' =&gt; 'alert alert-success alert-dismissible']]);
+    $this-&gt;Crud-&gt;action()-&gt;config('messages.error', ['params' =&gt; ['class' =&gt; 'alert alert-danger alert-dismissible']]);
+});
+</code></pre>
+
+<p>}
+```</p>
+
+<p>I tend to put this, as per the example, in my <code>AppController</code> because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.</p>
+
+<h2>Success!</h2>
+
+<p>That&rsquo;s it! Go make a brew.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Working with the Crud plugin in CakePHP]]></title>

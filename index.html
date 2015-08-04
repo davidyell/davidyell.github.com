@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="How to generate a calendar using PHP? At work I built a new holiday calendar system to replace the old system which was being closed down. The &hellip;">
+  <meta name="description" content="Scenario You&rsquo;re using the Crud plugin you might find that it will use the default flash message elements, so if, like me, you want to use &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,182 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-21T21:33:09+01:00" pubdate data-updated="true">Jul 21<sup>st</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Scenario</h2>
+
+<p>You&rsquo;re using the <a href="https://github.com/friendsofcake/crud">Crud</a> plugin you might find that it will use the default flash message elements, so if, like me, you want to use something like <a href="http://getbootstrap.com/components/#alerts">Twitter Boostrap Alerts</a>, you&rsquo;re out of luck.</p>
+
+<p>Never fear, help is at hand.</p>
+
+<h2>Customise flash</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// src/Controller/AppController.php</span>
+</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">(</span><span class="nx">Event</span> <span class="nv">$event</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">eventManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">&#39;Crud.beforeHandle&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">config</span><span class="p">(</span><span class="s1">&#39;messages.success&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;params&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert alert-success alert-dismissible&#39;</span><span class="p">]]);</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">config</span><span class="p">(</span><span class="s1">&#39;messages.error&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;params&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert alert-danger alert-dismissible&#39;</span><span class="p">]]);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I tend to put this, as per the example, in my <code>AppController</code> because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.</p>
+
+<h2>Success!</h2>
+
+<p>That&rsquo;s it! Go make a brew.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-21T20:37:00+01:00" pubdate data-updated="true">Jul 21<sup>st</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So it seems that in Cake 3 you can no longer use the <code>find('neighbors')</code> to find posts which are next to each other according to a defined series.</p>
+
+<p>As I tend to use this for previous and next blog posts when viewing a blog post, I&rsquo;ll note down my technique here for future reference.</p>
+
+<h2>The method</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// src/Model/Table/ExamplesTable.php</span>
+</span><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * Find an item from a table by slug, along with it&#39;s two adjacent items</span>
+</span><span class='line'><span class="sd"> *</span>
+</span><span class='line'><span class="sd"> * @param string $slug</span>
+</span><span class='line'><span class="sd"> * @return array</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">neighbours</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nv">$current</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="nv">$slug</span><span class="p">])</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$previous</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">&#39;publish_date &lt;&#39;</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="o">-&gt;</span><span class="na">publish_date</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="s1">&#39;Y-m-d&#39;</span><span class="p">)])</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">order</span><span class="p">([</span><span class="s1">&#39;publish_date&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DESC&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">$next</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">&#39;publish_date &gt;&#39;</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="o">-&gt;</span><span class="na">publish_date</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="s1">&#39;Y-m-d&#39;</span><span class="p">)])</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">order</span><span class="p">([</span><span class="s1">&#39;publish_date&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DESC&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;current&#39;</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;previous&#39;</span> <span class="o">=&gt;</span> <span class="nv">$previous</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;next&#39;</span> <span class="o">=&gt;</span> <span class="nv">$next</span>
+</span><span class='line'>    <span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The finder</h2>
+
+<p>I&rsquo;ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you&rsquo;d need to join two query objects.</p>
+
+<p>There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.</p>
+
+<p>If you have any ideas on how to tackle this challenge, please let me know in the comments.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1255,189 +1431,6 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">Filtering dates using CakeDC/Search</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-04T10:54:00+00:00" pubdate data-updated="true">Mar 4<sup>th</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
-
-<p>I needed to do a search on a date field in my database which was stored as a <code>DATE</code>, but only filtering by month.</p>
-
-<h3>Solution</h3>
-
-<p>So I had already implemented the <a href="https://github.com/cakedc/search">CakeDC/Search</a> into my project, so all I needed to do was create a custom method to return the right conditions for the query.</p>
-
-<p>My model already had the <code>filterArgs</code> setup.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Setup default search filters</span>
-</span><span class='line'><span class="sd"> *</span>
-</span><span class='line'><span class="sd"> * @var array</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'>  <span class="k">public</span> <span class="nv">$filterArgs</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>      <span class="s1">&#39;day_type_id&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="s1">&#39;month&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="s1">&#39;method&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;filterByMonth&#39;</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So I just added a <code>type</code> of <code>query</code> and passed in a <code>method</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * Filter the pagination by month</span>
-</span><span class='line'><span class="sd"> *</span>
-</span><span class='line'><span class="sd"> * @param array $data</span>
-</span><span class='line'><span class="sd"> * @return array</span>
-</span><span class='line'><span class="sd"> **/</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">filterByMonth</span><span class="p">(</span><span class="k">array</span> <span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s2">&quot;DATE_FORMAT(</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">alias</span><span class="si">}</span><span class="s2">.date, &#39;%c&#39;)&quot;</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">int</span><span class="p">)</span><span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span>
-</span><span class='line'>        <span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>$data</code> array will contain all the fields setup in your model along with their values. So for me it looked like</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="p">[</span>
-</span><span class='line'>    <span class="s1">&#39;day_type_id&#39;</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;month&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;08&#39;</span> <span class="c1">// Note the string type, hence why I cast to int</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Done!</h3>
-
-<p>Make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-11/custom-pagination/">Custom Pagination Helper links</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-27T11:00:00+00:00" pubdate data-updated="true">Nov 27<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
-
-<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
-
-<p>The url I wanted to use was <code>/news/category/daves-awesome-category</code> and then paginating results on <code>/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn&rsquo;t want to play ball.</p>
-
-<p>I had already created my route.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Router</span><span class="o">::</span><span class="na">connect</span><span class="p">(</span><span class="s1">&#39;/news/category/:category/*&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news_articles&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;category&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;[a-z0-9-]+&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But instead of the expected links above, I was getting <code>/news/daves-awesome-category/page:2</code> missing out my keyword from the url.</p>
-
-<h3>Solution</h3>
-
-<p>The Paginator helper options array to the rescue! You can actually configure the options of the helper right in the view. Such a simple fix.</p>
-
-<p>Here is my pagination including the fix to adjust the url if a category is set.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$category</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;controller&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news_articles&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span> <span class="o">=&gt;</span> <span class="nv">$category</span><span class="p">[</span><span class="s1">&#39;NewsCategory&#39;</span><span class="p">][</span><span class="s1">&#39;slug&#39;</span><span class="p">]);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">prev</span><span class="p">(</span><span class="s1">&#39;&lt; &#39;</span> <span class="o">.</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;previous&#39;</span><span class="p">),</span> <span class="k">array</span><span class="p">(),</span> <span class="k">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;prev disabled&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">numbers</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;separator&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">next</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39; &gt;&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="k">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;next disabled&#39;</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Done!</h3>
-
-<p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1453,6 +1446,14 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
       </li>
     
@@ -1462,14 +1463,6 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
     
       <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
   </ul>

@@ -9,8 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information. 1
-find . -name &quot;.svn&quot; -type d &hellip;">
+  <meta name="description" content="So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the .lck files to the server, you&rsquo;ll &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +84,110 @@ find . -name &quot;.svn&quot; -type d &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2011-07/removing-lck-files/">How to remove all .lck files from a folder</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-21T10:43:25+01:00" pubdate data-updated="true">Jul 21<sup>st</sup>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code>.lck</code> files to the server, you&rsquo;ll want this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.LCK&quot;</span> -exec rm <span class="o">{}</span> <span class="se">\;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ref: <a href="http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html">http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008-11/handy-htaccess/">Handy htaccess rules</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-20T09:43:25+00:00" pubdate data-updated="true">Nov 20<sup>th</sup>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I don&rsquo;t tend to use Apache these days, having swapped over to using Nginx, but these always caught me out.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='apache'><span class='line'><span class="c"># Pass all the /forums stuff through the routing</span>
+</span><span class='line'><span class="nb">RewriteCond</span> %{REQUEST_URI} <span class="s2">&quot;/forums/&quot;</span>
+</span><span class='line'><span class="nb">RewriteRule</span> (.*) $1 [L]
+</span><span class='line'>
+</span><span class='line'><span class="c"># If you need to lock down access to a folder, such as a CMS, then use the following</span>
+</span><span class='line'><span class="nb">RewriteRule</span> ^cms(.*)$ <span class="sx">/maintenance.html</span> [R=301,L]
+</span><span class='line'>
+</span><span class='line'><span class="c"># Redirecting everyone to maintenance</span>
+</span><span class='line'><span class="c"># Reference, http://www.techiecorner.com/97/redirect-to-maintenance-page-during-upgrade-using-htaccess/</span>
+</span><span class='line'><span class="nb">RewriteCond</span> %{REQUEST_URI} !/maintenance.html$
+</span><span class='line'><span class="nb">RewriteRule</span> $ <span class="sx">/maintenance.html</span> [R=302,L]
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2008-11/removing-svn-folders/">How to remove all .svn folders from a repo</a></h1>
     
     
@@ -138,6 +241,14 @@ find . -name &quot;.svn&quot; -type d &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
       </li>
     
@@ -147,14 +258,6 @@ find . -name &quot;.svn&quot; -type d &hellip;">
     
       <li class="post">
         <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-02/working-with-crud/">Working with the Crud plugin in CakePHP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014-08/pt-visual-explain/">Installing and using pt-visual-explain</a>
       </li>
     
   </ul>
