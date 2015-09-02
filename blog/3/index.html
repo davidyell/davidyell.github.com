@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Use case You have downloaded and installed the Utils.SoftDelete behaviour, but when you delete an item the return is false because the behaviour has &hellip;">
+  <meta name="description" content="Use case You want to see all the changes which have been made to a single file in the project. References This was solved by a brighter mind than my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013-06/git-file-history/">How to display the history of a file in Git with diffs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-11T10:43:25+01:00" pubdate data-updated="true">Jun 11<sup>th</sup>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Use case</h3>
+
+<p>You want to see all the changes which have been made to a single file in the project.</p>
+
+<h3>References</h3>
+
+<p>This was solved by a brighter mind than my own.<br/>
+<a href="https://twitter.com/YellDavid/status/344398277275435008">Daniel Hofstetter ‏@dhofstet on Twitter</a></p>
+
+<h3>Solution</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git log -p &lt;filename&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are using the most excellent <a href="http://www.sourcetreeapp.com/">SourceTree</a> then you can select a file and go to <code>Actions</code> > <code>Log selected</code> to see a window of all the changes.</p>
+
+<h3>Success</h3>
+
+<p>Go make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -825,75 +881,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012-12/required-partial/">Sass required asterisk partial</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-18T09:43:25+00:00" pubdate data-updated="true">Dec 18<sup>th</sup>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So I am forever looking up this code.</p>
-
-<h3>Code</h3>
-
-<p><code>_required.scss</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nt">div</span><span class="nc">.input</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">&amp;</span><span class="nc">.required</span> <span class="nt">label</span><span class="nd">:after</span><span class="p">{</span>
-</span><span class='line'>        <span class="na">content</span><span class="o">:</span> <span class="s2">&quot;*&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">&amp;</span><span class="nc">.error</span><span class="p">{</span>
-</span><span class='line'>        <span class="na">padding</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-</span><span class='line'>        <span class="na">color</span><span class="o">:</span> <span class="mh">#B94A48</span><span class="p">;</span>
-</span><span class='line'>        <span class="na">background-color</span><span class="o">:</span> <span class="mh">#F2DEDE</span><span class="p">;</span>
-</span><span class='line'>        <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="mh">#EED3D7</span><span class="p">;</span>
-</span><span class='line'>        <span class="na">border-radius</span><span class="o">:</span> <span class="mi">4</span><span class="kt">px</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will add a star after any required fields, and also give a nice error style.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/4">&larr; Older</a>
@@ -911,6 +898,10 @@ You will need to configure this in <strong>Preferences</strong>.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
       </li>
     
@@ -924,10 +915,6 @@ You will need to configure this in <strong>Preferences</strong>.</p>
     
       <li class="post">
         <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
       </li>
     
   </ul>

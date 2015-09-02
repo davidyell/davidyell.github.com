@@ -9,7 +9,8 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Scenario You&rsquo;re using the Crud plugin you might find that it will use the default flash message elements, so if, like me, you want to use &hellip;">
+  <meta name="description" content="Changes in 2.7 So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
+have &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,82 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-02T12:30:00+01:00" pubdate data-updated="true">Sep 2<sup>nd</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Changes in 2.7</h2>
+
+<p>So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
+have been refactored into the Flash Component, as they were with Cake 3.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/appendices/2-7-migration-guide.html#sessioncomponent">You can view the change in the migration log</a>.</p>
+
+<h2>How to update?</h2>
+
+<p>If, like me you&rsquo;re using the <code>setFlash</code> method for all your controller feedback, you&rsquo;ll need to update all that code.</p>
+
+<p>I used this regular expression which captures the various params and re-orders them for replacement in PHP Storm.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// Regex search
+</span><span class='line'>this-&gt;Session-&gt;setFlash\((.*),\s(.*),\s(.*)\);
+</span><span class='line'>
+</span><span class='line'>// Replace
+</span><span class='line'>this-&gt;Flash-&gt;set($1, ['params' =&gt; $3]);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will convert stuff like this,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="s1">&#39;Provider updated successfully&#39;</span><span class="p">,</span> <span class="s1">&#39;NiceAdmin.alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert-success&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="c1">// into</span>
+</span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Flash</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;Provider updated successfully&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;params&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert-success&#39;</span><span class="p">)]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So that&rsquo;s it, you can run this per script if you want to check it, or just across all your controllers.</p>
+
+<h2>All done!</h2>
+
+<p>Time for a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1343,94 +1420,6 @@ So that the console commands can still find the right lib, we need to update the
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-28T11:47:00+01:00" pubdate data-updated="true">May 28<sup>th</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
-
-<p>I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the framework as a dependancy.</p>
-
-<h3>Solution</h3>
-
-<p>So firstly you&rsquo;ll want to create yourself a project folder. For this example we&rsquo;ll create a project to adopt a cat.
-We need to create ourself a project folder, make it into a Git repo so we can version our code, and then we can start adding our dependancies.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir KittyMarket
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>KittyMarket
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'><span class="nv">$ </span>composer init
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So after the last command Composer will ask you about your project, so you can complete the details there. Be sure that you set your <code>"minimum-stability": "dev"</code> so that packages loading from <code>dev-master</code> will work.</p>
-
-<p>Then you can start defining your dependancies. Firstly you&rsquo;ll want <code>cakephp/cakephp</code> and set a version of the latest, currently <code>2.5.1</code>.</p>
-
-<p>After this I like to edit my <code>composer.json</code> to add some configuration, so that Composer will put things in the correct CakePHP place.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;config&quot;</span><span class="err">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;vendor-dir&quot;</span><span class="p">:</span> <span class="s2">&quot;vendors&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;bin-dir&quot;</span><span class="p">:</span> <span class="s2">&quot;vendors/bin&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once you&rsquo;ve added all your dependancies it&rsquo;s time to make the app. Be aware that the <code>../vendors/bin</code> might be different if you didn&rsquo;t use the above amend to your <code>composer.json</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir app
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>app
-</span><span class='line'><span class="nv">$ </span>../vendors/bin/cake bake
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will copy in the framework skeleton.</p>
-
-<h3>Done!</h3>
-
-<p>Make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1446,6 +1435,10 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
       </li>
     
@@ -1459,10 +1452,6 @@ We need to create ourself a project folder, make it into a Git repo so we can ve
     
       <li class="post">
         <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
       </li>
     
   </ul>

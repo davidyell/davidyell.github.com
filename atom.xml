@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-08-04T15:56:04+01:00</updated>
+  <updated>2015-09-02T12:35:52+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrading Session to Flash components in Cake 2.7]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/"/>
+    <updated>2015-09-02T12:30:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7</id>
+    <content type="html"><![CDATA[<h2>Changes in 2.7</h2>
+
+<p>So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
+have been refactored into the Flash Component, as they were with Cake 3.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/appendices/2-7-migration-guide.html#sessioncomponent">You can view the change in the migration log</a>.</p>
+
+<h2>How to update?</h2>
+
+<p>If, like me you&rsquo;re using the <code>setFlash</code> method for all your controller feedback, you&rsquo;ll need to update all that code.</p>
+
+<p>I used this regular expression which captures the various params and re-orders them for replacement in PHP Storm.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// Regex search
+</span><span class='line'>this-&gt;Session-&gt;setFlash\((.*),\s(.*),\s(.*)\);
+</span><span class='line'>
+</span><span class='line'>// Replace
+</span><span class='line'>this-&gt;Flash-&gt;set($1, ['params' =&gt; $3]);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will convert stuff like this,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="s1">&#39;Provider updated successfully&#39;</span><span class="p">,</span> <span class="s1">&#39;NiceAdmin.alert-box&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert-success&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="c1">// into</span>
+</span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Flash</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;Provider updated successfully&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;params&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert-success&#39;</span><span class="p">)]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So that&rsquo;s it, you can run this per script if you want to check it, or just across all your controllers.</p>
+
+<h2>All done!</h2>
+
+<p>Time for a brew!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to configure flash messages using Crud plugin]]></title>
@@ -2165,35 +2214,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 </span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">paginate</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">User</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to display the history of a file in Git with diffs]]></title>
-    <link href="http://jedistirfry.co.uk/blog/2013-06/git-file-history/"/>
-    <updated>2013-06-11T10:43:25+01:00</updated>
-    <id>http://jedistirfry.co.uk/blog/2013-06/git-file-history</id>
-    <content type="html"><![CDATA[<h3>Use case</h3>
-
-<p>You want to see all the changes which have been made to a single file in the project.</p>
-
-<h3>References</h3>
-
-<p>This was solved by a brighter mind than my own.<br/>
-<a href="https://twitter.com/YellDavid/status/344398277275435008">Daniel Hofstetter ‏@dhofstet on Twitter</a></p>
-
-<h3>Solution</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git log -p &lt;filename&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you are using the most excellent <a href="http://www.sourcetreeapp.com/">SourceTree</a> then you can select a file and go to <code>Actions</code> > <code>Log selected</code> to see a window of all the changes.</p>
-
-<h3>Success</h3>
-
-<p>Go make a brew!</p>
 ]]></content>
   </entry>
   

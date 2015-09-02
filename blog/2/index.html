@@ -9,7 +9,7 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Scenario I needed to do a search on a date field in my database which was stored as a DATE, but only filtering by month. Solution So I had already &hellip;">
+  <meta name="description" content="Scenario I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,94 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014-05/cakephp-project-from-scratch-using-composer/">Creating a CakePHP project using Composer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-28T11:47:00+01:00" pubdate data-updated="true">May 28<sup>th</sup>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Scenario</h3>
+
+<p>I want to start a new CakePHP project, but I don&rsquo;t want to download anything. Ideally I want to create my application with the framework as a dependancy.</p>
+
+<h3>Solution</h3>
+
+<p>So firstly you&rsquo;ll want to create yourself a project folder. For this example we&rsquo;ll create a project to adopt a cat.
+We need to create ourself a project folder, make it into a Git repo so we can version our code, and then we can start adding our dependancies.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir KittyMarket
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>KittyMarket
+</span><span class='line'><span class="nv">$ </span>git init
+</span><span class='line'><span class="nv">$ </span>composer init
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So after the last command Composer will ask you about your project, so you can complete the details there. Be sure that you set your <code>"minimum-stability": "dev"</code> so that packages loading from <code>dev-master</code> will work.</p>
+
+<p>Then you can start defining your dependancies. Firstly you&rsquo;ll want <code>cakephp/cakephp</code> and set a version of the latest, currently <code>2.5.1</code>.</p>
+
+<p>After this I like to edit my <code>composer.json</code> to add some configuration, so that Composer will put things in the correct CakePHP place.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;config&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;vendor-dir&quot;</span><span class="p">:</span> <span class="s2">&quot;vendors&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;bin-dir&quot;</span><span class="p">:</span> <span class="s2">&quot;vendors/bin&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you&rsquo;ve added all your dependancies it&rsquo;s time to make the app. Be aware that the <code>../vendors/bin</code> might be different if you didn&rsquo;t use the above amend to your <code>composer.json</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir app
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>app
+</span><span class='line'><span class="nv">$ </span>../vendors/bin/cake bake
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will copy in the framework skeleton.</p>
+
+<h3>Done!</h3>
+
+<p>Make a brew!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1395,62 +1483,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013-06/git-file-history/">How to display the history of a file in Git with diffs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-11T10:43:25+01:00" pubdate data-updated="true">Jun 11<sup>th</sup>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Use case</h3>
-
-<p>You want to see all the changes which have been made to a single file in the project.</p>
-
-<h3>References</h3>
-
-<p>This was solved by a brighter mind than my own.<br/>
-<a href="https://twitter.com/YellDavid/status/344398277275435008">Daniel Hofstetter ‏@dhofstet on Twitter</a></p>
-
-<h3>Solution</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git log -p &lt;filename&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you are using the most excellent <a href="http://www.sourcetreeapp.com/">SourceTree</a> then you can select a file and go to <code>Actions</code> > <code>Log selected</code> to see a window of all the changes.</p>
-
-<h3>Success</h3>
-
-<p>Go make a brew!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/3">&larr; Older</a>
@@ -1468,6 +1500,10 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
       </li>
     
@@ -1481,10 +1517,6 @@ One of the core developers for the framework <a href="http://stackoverflow.com/q
     
       <li class="post">
         <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">Paginating multiple types of list in the same controller</a>
       </li>
     
   </ul>
