@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp3 | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp3/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-02T12:35:52+01:00</updated>
+  <updated>2015-09-11T12:41:11+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -12,6 +12,134 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Connecting to a remote web service]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/"/>
+    <updated>2015-09-11T12:21:14+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service</id>
+    <content type="html"><![CDATA[<h2>First things first</h2>
+
+<p>So the first thing you&rsquo;ll need is the <a href="https://github.com/UseMuffin/Webservice">Webservice plugin</a>.</p>
+
+<p><code>bash
+composer require muffin/webservice:dev-master &amp;&amp; bin/cake plugin load Muffin/Webservice
+</code></p>
+
+<p>Then be sure to add the configuration for your service to the <code>config/app.php</code> file.
+This means you need to add another array key to your config, it should contain something like the following.</p>
+
+<p>```php
+&lsquo;Webservices&rsquo; => [</p>
+
+<pre><code>'Twitter' =&gt; [
+    'className' =&gt; 'Muffin\Webservice\Connection',
+    'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
+    'username' =&gt; $_ENV['GITHUB_USERNAME'],
+    'password' =&gt; $_ENV['GITHUB_PASSWORD'],
+]
+</code></pre>
+
+<p>]
+```</p>
+
+<p>I&rsquo;ll talk through the various config options here.</p>
+
+<h3>className</h3>
+
+<p>This is a proxy class which will pass method calls through to your own driver class.</p>
+
+<h3>service</h3>
+
+<p>This is your driver class where you&rsquo;ll write your code and connect to the service.</p>
+
+<h3>username/password</h3>
+
+<p>Any login credentials you need will have to be included.</p>
+
+<h2>Creating your driver class</h2>
+
+<p>So you need to create a new driver class, which uses the Webservice plugin as a base.
+For my example, I&rsquo;ve created my Twitter driver class in <code>src/Lib/Twitter/Driver/Twitter.php</code> which
+extends <code>Muffin\Webservice\AbstractDriver</code>, and I&rsquo;ve implemented the stub method, which is just <code>initialize</code>,
+to setup the client you want to use.</p>
+
+<p>```php
+// src/Lib/Twitter/Driver/Twitter.php
+namespace App\Lib\Twitter\Driver;</p>
+
+<p>use Cake\Network\Http\Client;
+use Muffin\Webservice\AbstractDriver;</p>
+
+<p>class Twitter extends AbstractDriver
+{</p>
+
+<pre><code>public function initialize()
+{
+    // Let's use the CakePHP Http client class
+    $this-&gt;_client = new \Cake\Network\Http\Client();
+}
+
+// etc
+</code></pre>
+
+<p>```</p>
+
+<p><strong>There is a gotcha here!</strong><br/>
+You will need to implement some methods from <code>Cake\Database\Connection</code> into
+your driver class so that DebugKit can interact with your driver. These methods
+can be copied and pasted from the Connection class.</p>
+
+<ul>
+<li><code>configName()</code></li>
+<li><code>logQueries()</code></li>
+<li><code>logger()</code></li>
+</ul>
+
+
+<h2>Creating your method</h2>
+
+<p>So assuming we want to get some tweets, we can create a method for that inside
+our driver class.</p>
+
+<p>```php</p>
+
+<pre><code>public function tweets()
+{
+    // Do some setup for Twitter
+    return $this-&gt;_client-&gt;post($url, $dataArray);
+}
+</code></pre>
+
+<p>```
+This will use the CakePHP Http Client to post to a Twitter url and return the response.</p>
+
+<h2> Using your new driver</h2>
+
+<p>So now we need to actually get the data to play with. In our controller we need to
+instantiate the connection and call our new method.</p>
+
+<p>```php
+// ExamplesController.php</p>
+
+<pre><code>public function getTweets()
+{
+    $connection = ConnectionManager::get('Twitter');
+    $tweets = $connection-&gt;tweets();
+    $this-&gt;set('tweets', $tweets);
+}
+</code></pre>
+
+<p>```</p>
+
+<p>You must make sure that the name of the connection you give to ConnectionManager matches
+the name you used in your <code>app.php</code> config setup.</p>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Job done! Have a brew.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to configure flash messages using Crud plugin]]></title>

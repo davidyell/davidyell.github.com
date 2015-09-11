@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</loc>
+    <lastmod>2015-09-11T12:21:14+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</loc>
     <lastmod>2015-09-02T12:30:00+01:00</lastmod>
     <priority>0.8</priority>
@@ -209,21 +215,21 @@
   
   <url>
     <loc>http://jedistirfry.co.uk/about.html</loc>
-    <lastmod>2015-09-02T12:35:52+01:00</lastmod>
+    <lastmod>2015-09-11T12:41:11+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jedistirfry.co.uk/blog/archives/</loc>
-    <lastmod>2015-09-02T12:35:52+01:00</lastmod>
+    <lastmod>2015-09-11T12:41:11+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jedistirfry.co.uk/</loc>
-    <lastmod>2015-09-02T12:35:52+01:00</lastmod>
+    <lastmod>2015-09-11T12:41:11+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

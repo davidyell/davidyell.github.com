@@ -9,8 +9,8 @@
   <meta name="author" content="David Yell">
 
   
-  <meta name="description" content="Changes in 2.7 So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
-have &hellip;">
+  <meta name="description" content="First things first So the first thing you&rsquo;ll need is the Webservice plugin. 1
+composer require muffin/webservice:dev-master &amp;&amp; bin/cake &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,187 @@ have &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015-09/connecting-to-a-web-service/">Connecting to a remote web service</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-11T12:21:14+01:00" pubdate data-updated="true">Sep 11<sup>th</sup>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>First things first</h2>
+
+<p>So the first thing you&rsquo;ll need is the <a href="https://github.com/UseMuffin/Webservice">Webservice plugin</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>composer require muffin/webservice:dev-master <span class="o">&amp;&amp;</span> bin/cake plugin load Muffin/Webservice
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then be sure to add the configuration for your service to the <code>config/app.php</code> file.
+This means you need to add another array key to your config, it should contain something like the following.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="s1">&#39;Webservices&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s1">&#39;Twitter&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Muffin\Webservice\Connection&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;service&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;App\Lib\Twitter\Driver\Twitter&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_ENV</span><span class="p">[</span><span class="s1">&#39;GITHUB_USERNAME&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_ENV</span><span class="p">[</span><span class="s1">&#39;GITHUB_PASSWORD&#39;</span><span class="p">],</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ll talk through the various config options here.</p>
+
+<h3>className</h3>
+
+<p>This is a proxy class which will pass method calls through to your own driver class.</p>
+
+<h3>service</h3>
+
+<p>This is your driver class where you&rsquo;ll write your code and connect to the service.</p>
+
+<h3>username/password</h3>
+
+<p>Any login credentials you need will have to be included.</p>
+
+<h2>Creating your driver class</h2>
+
+<p>So you need to create a new driver class, which uses the Webservice plugin as a base.
+For my example, I&rsquo;ve created my Twitter driver class in <code>src/Lib/Twitter/Driver/Twitter.php</code> which
+extends <code>Muffin\Webservice\AbstractDriver</code>, and I&rsquo;ve implemented the stub method, which is just <code>initialize</code>,
+to setup the client you want to use.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// src/Lib/Twitter/Driver/Twitter.php</span>
+</span><span class='line'><span class="k">namespace</span> <span class="nx">App\Lib\Twitter\Driver</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">use</span> <span class="nx">Cake\Network\Http\Client</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nx">Muffin\Webservice\AbstractDriver</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Twitter</span> <span class="k">extends</span> <span class="nx">AbstractDriver</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">initialize</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Let&#39;s use the CakePHP Http client class</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Cake\Network\Http\Client</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// etc</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>There is a gotcha here!</strong><br/>
+You will need to implement some methods from <code>Cake\Database\Connection</code> into
+your driver class so that DebugKit can interact with your driver. These methods
+can be copied and pasted from the Connection class.</p>
+
+<ul>
+<li><code>configName()</code></li>
+<li><code>logQueries()</code></li>
+<li><code>logger()</code></li>
+</ul>
+
+
+<h2>Creating your method</h2>
+
+<p>So assuming we want to get some tweets, we can create a method for that inside
+our driver class.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">tweets</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Do some setup for Twitter</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_client</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="nv">$dataArray</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will use the CakePHP Http Client to post to a Twitter url and return the response.</p>
+
+<h2> Using your new driver</h2>
+
+<p>So now we need to actually get the data to play with. In our controller we need to
+instantiate the connection and call our new method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// ExamplesController.php</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">getTweets</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$connection</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;Twitter&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nv">$tweets</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">tweets</span><span class="p">();</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;tweets&#39;</span><span class="p">,</span> <span class="nv">$tweets</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You must make sure that the name of the connection you give to ConnectionManager matches
+the name you used in your <code>app.php</code> config setup.</p>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Job done! Have a brew.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash component in Cake 2.7</a></h1>
     
     
       <p class="meta">
@@ -1261,165 +1441,6 @@ The following example is for Cake 2, as in Cake 3, there is no need to use the <
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">Requiring CakePHP 2.x using Composer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-31T15:00:34+01:00" pubdate data-updated="true">Jul 31<sup>st</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Scenario</h3>
-
-<p>You have started your project using one of the 2.x downloads. Now you are using Composer to pull in your plugins, but you are still having to commit the framework to your repo.</p>
-
-<p>So it&rsquo;s time to remove your CakePHP lib and start requiring it as a dependancy instead.</p>
-
-<p>I will assume you are fimiliar with <a href="http://getcomposer.org/">Composer</a>.</p>
-
-<h3>Solution</h3>
-
-<p>So it&rsquo;s actually pretty straight forward. For the sake of this example, we will assume that you have a standard layout in your current project.</p>
-
-<p>If you are not familiar with the current layout, <a href="https://github.com/cakephp/cakephp/tree/2.5.3">take a quick look at the 2.5.3 tag</a> to check the folders.</p>
-
-<p>To see what we are aiming at, <a href="https://github.com/FriendsOfCake/app-template">check out the Friends of Cake app-template</a>.</p>
-
-<p>If you don&rsquo;t already have a <code>composer.json</code> file, then you&rsquo;ll want to create that. <code>composer init</code> inside your project folder.</p>
-
-<h4>Adding the framework</h4>
-
-<p>Firstly we want to let Composer know that you want to require the framework, so let&rsquo;s update the <code>composer.json</code> to add the following to your <code>require</code> section.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;cakephp/cakephp&quot;</span><span class="err">:</span> <span class="s2">&quot;2.5.3&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can pick your version here if you want to lock in the version, which I&rsquo;d recommend. Or you could specify another version, such as <code>2.5.*</code>. <a href="https://getcomposer.org/doc/01-basic-usage.md#package-versions">Check the Composer docs for more on versions</a>.</p>
-
-<p>When you <code>composer update</code> now it should download the framework for you into <code>vendors/cakephp/cakephp</code>.</p>
-
-<h4>Pointing to the correct core</h4>
-
-<p>The next task is to tell CakePHP that we have a new place for it to find the core. There are only really a few files you need to update.</p>
-
-<ul>
-<li><code>app/webroot/index.php</code></li>
-<li><code>app/Console/cake.php</code></li>
-</ul>
-
-
-<p><strong>app/webroot/index.php</strong><br/>
-You&rsquo;ll want to update the <code>ROOT</code>, <code>APP_DIR</code>, <code>TMP</code> and the <code>CAKE_CORE_INCLUDE_PATH</code> constants.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nb">define</span><span class="p">(</span><span class="s1">&#39;ROOT&#39;</span><span class="p">,</span> <span class="nb">dirname</span><span class="p">(</span><span class="nb">dirname</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">)));</span>
-</span><span class='line'><span class="nb">define</span><span class="p">(</span><span class="s1">&#39;APP_DIR&#39;</span><span class="p">,</span> <span class="s1">&#39;app&#39;</span><span class="p">);</span> <span class="c1">// I define this as a string because why not right?</span>
-</span><span class='line'><span class="nb">define</span><span class="p">(</span><span class="s1">&#39;TMP&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;tmp&#39;</span> <span class="o">.</span> <span class="nx">DS</span><span class="p">);</span>
-</span><span class='line'><span class="nb">define</span><span class="p">(</span><span class="s1">&#39;CAKE_CORE_INCLUDE_PATH&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;vendor&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;cakephp&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;cakephp&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;lib&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>app/Console/cake.php</strong><br/>
-So that the console commands can still find the right lib, we need to update the include path here too.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nb">ini_set</span><span class="p">(</span><span class="s1">&#39;include_path&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">&#39;vendor&#39;</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">&#39;cakephp&#39;</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">&#39;cakephp&#39;</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">&#39;lib&#39;</span> <span class="o">.</span> <span class="nx">PATH_SEPARATOR</span> <span class="o">.</span> <span class="nb">ini_get</span><span class="p">(</span><span class="s1">&#39;include_path&#39;</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you are running your shell tasks from within <code>app</code> we can use a relative path.</p>
-
-<h4>Edit your bootstrap to build the new paths</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// app/config/bootstrap.php</span>
-</span><span class='line'><span class="nx">App</span><span class="o">::</span><span class="na">build</span><span class="p">(</span>
-</span><span class='line'>  <span class="p">[</span>
-</span><span class='line'>      <span class="s1">&#39;Plugin&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/Plugin/&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/app/Plugin/&#39;</span><span class="p">],</span>
-</span><span class='line'>      <span class="s1">&#39;Vendor&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/vendor/&#39;</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">&#39;/app/Vendor/&#39;</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">],</span>
-</span><span class='line'>  <span class="nx">App</span><span class="o">::</span><span class="na">RESET</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Testing</h4>
-
-<p>To check that the new setup is working you can run a <code>Console/cake</code> to check what the <code>core</code> value is.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>app
-</span><span class='line'><span class="nv">$ </span>Console/cake
-</span><span class='line'>
-</span><span class='line'>Welcome to CakePHP v2.5.3 Console
-</span><span class='line'>---------------------------------------------------------------
-</span><span class='line'>App : app
-</span><span class='line'>Path: /Users/david/Sites/example/app/
-</span><span class='line'>---------------------------------------------------------------
-</span><span class='line'>Current Paths:
-</span><span class='line'>
-</span><span class='line'> -app: app
-</span><span class='line'> -working: /Users/david/Sites/example/app
-</span><span class='line'> -root: /Users/david/Sites/example
-</span><span class='line'> -core: /Users/david/Sites/example/vendor/cakephp/cakephp/lib
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Done!</h3>
-
-<p>Feel free to delete your old <code>lib</code> folder as you now don&rsquo;t need it. Have fun updating your applications version of CakePHP using Composer.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/2">&larr; Older</a>
@@ -1435,7 +1456,11 @@ So that the console commands can still find the right lib, we need to update the
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash components in Cake 2.7</a>
+        <a href="/blog/2015-09/connecting-to-a-web-service/">Connecting to a remote web service</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash component in Cake 2.7</a>
       </li>
     
       <li class="post">
@@ -1448,10 +1473,6 @@ So that the console commands can still find the right lib, we need to update the
     
       <li class="post">
         <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-05/jquery-ui-accordion/">jQuery UI Accordion</a>
       </li>
     
   </ul>
