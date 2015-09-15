@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-11T12:41:11+01:00</updated>
+  <updated>2015-09-15T14:11:59+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -30,17 +30,22 @@ composer require muffin/webservice:dev-master &amp;&amp; bin/cake plugin load Mu
 This means you need to add another array key to your config, it should contain something like the following.</p>
 
 <p>```php
-&lsquo;Webservices&rsquo; => [</p>
+return [</p>
 
-<pre><code>'Twitter' =&gt; [
-    'className' =&gt; 'Muffin\Webservice\Connection',
-    'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
-    'username' =&gt; $_ENV['GITHUB_USERNAME'],
-    'password' =&gt; $_ENV['GITHUB_PASSWORD'],
+<pre><code>// The rest of your app config
+
+'Webservices' =&gt; [
+    'Twitter' =&gt; [
+        'className' =&gt; 'Muffin\Webservice\Connection',
+        'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
+        'username' =&gt; $_ENV['GITHUB_USERNAME'],
+        'password' =&gt; $_ENV['GITHUB_PASSWORD'],
+    ]
 ]
 </code></pre>
 
-<p>]
+<p>]; // This is the end of your config/app.php file, so the key sits on the
+   // same array level as &lsquo;Session&rsquo; above
 ```</p>
 
 <p>I&rsquo;ll talk through the various config options here.</p>
