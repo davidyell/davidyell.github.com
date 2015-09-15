@@ -16,14 +16,19 @@ Then be sure to add the configuration for your service to the `config/app.php` f
 This means you need to add another array key to your config, it should contain something like the following.
 
 ```php
-'Webservices' => [
-    'Twitter' => [
-        'className' => 'Muffin\Webservice\Connection',
-        'service' => 'App\Lib\Twitter\Driver\Twitter',
-        'username' => $_ENV['GITHUB_USERNAME'],
-        'password' => $_ENV['GITHUB_PASSWORD'],
-    ]
-]
+return [
+	// The rest of your app config
+	
+	'Webservices' => [
+	    'Twitter' => [
+	        'className' => 'Muffin\Webservice\Connection',
+	        'service' => 'App\Lib\Twitter\Driver\Twitter',
+	        'username' => $_ENV['GITHUB_USERNAME'],
+	        'password' => $_ENV['GITHUB_PASSWORD'],
+	    ]
+	]
+]; // This is the end of your config/app.php file, so the key sits on the 
+   // same array level as 'Session' above
 ```
 
 I'll talk through the various config options here.
