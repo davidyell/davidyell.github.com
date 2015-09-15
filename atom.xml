@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-15T14:11:59+01:00</updated>
+  <updated>2015-09-15T14:28:50+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -23,7 +23,17 @@
 <p>So the first thing you&rsquo;ll need is the <a href="https://github.com/UseMuffin/Webservice">Webservice plugin</a>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>composer require muffin/webservice:dev-master <span class="o">&amp;&amp;</span> bin/cake plugin load Muffin/Webservice
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>composer require muffin/webservice:dev-master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you need to load the plugin in your <code>config/bootstrap.php</code> and tell the
+ConnectionManager to consume your config.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">Plugin</span><span class="o">::</span><span class="na">load</span><span class="p">(</span><span class="s1">&#39;Muffin/Webservice&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">config</span><span class="p">(</span><span class="nx">Configure</span><span class="o">::</span><span class="na">consume</span><span class="p">(</span><span class="s1">&#39;Webservices&#39;</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

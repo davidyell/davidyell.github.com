@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-15T14:11:59+01:00</updated>
+  <updated>2015-09-15T14:28:50+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -23,7 +23,15 @@
 <p>So the first thing you&rsquo;ll need is the <a href="https://github.com/UseMuffin/Webservice">Webservice plugin</a>.</p>
 
 <p><code>bash
-composer require muffin/webservice:dev-master &amp;&amp; bin/cake plugin load Muffin/Webservice
+composer require muffin/webservice:dev-master
+</code></p>
+
+<p>Then you need to load the plugin in your <code>config/bootstrap.php</code> and tell the
+ConnectionManager to consume your config.</p>
+
+<p><code>php
+Plugin::load('Muffin/Webservice');
+ConnectionManager::config(Configure::consume('Webservices'));
 </code></p>
 
 <p>Then be sure to add the configuration for your service to the <code>config/app.php</code> file.

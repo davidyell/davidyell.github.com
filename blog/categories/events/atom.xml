@@ -4,7 +4,7 @@
   <title><![CDATA[Category: events | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/events/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-15T14:11:59+01:00</updated>
+  <updated>2015-09-15T14:28:50+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -25,7 +25,7 @@
 /<em>*
  * Component to find and load seo data and inject it into the view
  *
- * @author David Yell <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x6e;&#x65;&#111;&#110;&#x31;&#48;&#50;&#x34;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#110;&#101;&#111;&#x6e;&#x31;&#48;&#x32;&#52;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a>
+ * @author David Yell <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x6e;&#101;&#x6f;&#x6e;&#x31;&#x30;&#50;&#52;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;">&#x6e;&#x65;&#111;&#110;&#49;&#48;&#50;&#x34;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a>
  </em>/</p>
 
 <p>App::uses(&lsquo;CakeEventListener&rsquo;, &lsquo;Event&rsquo;);
