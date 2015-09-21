@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cakephp3 | Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/blog/categories/cakephp3/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-15T14:28:50+01:00</updated>
+  <updated>2015-09-21T10:32:38+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -46,8 +46,8 @@ return [</p>
     'Twitter' =&gt; [
         'className' =&gt; 'Muffin\Webservice\Connection',
         'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
-        'username' =&gt; $_ENV['GITHUB_USERNAME'],
-        'password' =&gt; $_ENV['GITHUB_PASSWORD'],
+        'username' =&gt; env('GITHUB_USERNAME'),
+        'password' =&gt; env('GITHUB_PASSWORD'),
     ]
 ]
 </code></pre>

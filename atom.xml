@@ -4,7 +4,7 @@
   <title><![CDATA[Daves dev warblings]]></title>
   <link href="http://jedistirfry.co.uk/atom.xml" rel="self"/>
   <link href="http://jedistirfry.co.uk/"/>
-  <updated>2015-09-15T14:28:50+01:00</updated>
+  <updated>2015-09-21T10:32:38+01:00</updated>
   <id>http://jedistirfry.co.uk/</id>
   <author>
     <name><![CDATA[David Yell]]></name>
@@ -60,8 +60,8 @@ This means you need to add another array key to your config, it should contain s
 </span><span class='line'>      <span class="s1">&#39;Twitter&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
 </span><span class='line'>          <span class="s1">&#39;className&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Muffin\Webservice\Connection&#39;</span><span class="p">,</span>
 </span><span class='line'>          <span class="s1">&#39;service&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;App\Lib\Twitter\Driver\Twitter&#39;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_ENV</span><span class="p">[</span><span class="s1">&#39;GITHUB_USERNAME&#39;</span><span class="p">],</span>
-</span><span class='line'>          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="nv">$_ENV</span><span class="p">[</span><span class="s1">&#39;GITHUB_PASSWORD&#39;</span><span class="p">],</span>
+</span><span class='line'>          <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;GITHUB_USERNAME&#39;</span><span class="p">),</span>
+</span><span class='line'>          <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;GITHUB_PASSWORD&#39;</span><span class="p">),</span>
 </span><span class='line'>      <span class="p">]</span>
 </span><span class='line'>  <span class="p">]</span>
 </span><span class='line'><span class="p">];</span> <span class="c1">// This is the end of your config/app.php file, so the key sits on the </span>
