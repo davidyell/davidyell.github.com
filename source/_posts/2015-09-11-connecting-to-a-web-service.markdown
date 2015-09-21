@@ -9,7 +9,15 @@ categories: ['cakephp', 'cakephp3']
 So the first thing you'll need is the [Webservice plugin](https://github.com/UseMuffin/Webservice).
 
 ```bash
-composer require muffin/webservice:dev-master && bin/cake plugin load Muffin/Webservice
+composer require muffin/webservice:dev-master
+```
+
+Then you need to load the plugin in your `config/bootstrap.php` and tell the 
+ConnectionManager to consume your config.
+
+```php
+Plugin::load('Muffin/Webservice');
+ConnectionManager::config(Configure::consume('Webservices'));
 ```
 
 Then be sure to add the configuration for your service to the `config/app.php` file. 
@@ -23,8 +31,8 @@ return [
 	    'Twitter' => [
 	        'className' => 'Muffin\Webservice\Connection',
 	        'service' => 'App\Lib\Twitter\Driver\Twitter',
-	        'username' => $_ENV['GITHUB_USERNAME'],
-	        'password' => $_ENV['GITHUB_PASSWORD'],
+	        'username' => env('GITHUB_USERNAME'),
+	        'password' => env('GITHUB_PASSWORD'),
 	    ]
 	]
 ]; // This is the end of your config/app.php file, so the key sits on the 
