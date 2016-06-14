@@ -11,7 +11,7 @@ So I like the [Twitter Bootstrap alerts](http://twitter.github.com/bootstrap/com
 
 ### Element  
 **app/View/Elements/alert-box.ctp**  
-```html+php
+```php
 <div class="alert <?php echo $class;?>">
     <?php echo $message; ?>
     <a href="#" class="close" onclick="$(this).parent().fadeOut();return false;">&times;</a>
