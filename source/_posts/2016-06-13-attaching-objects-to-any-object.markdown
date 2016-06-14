@@ -58,7 +58,7 @@ class PolicyBehavior extends Behavior
 }
 ```
 
-So the in the `initialize` method we need to create a relationship to the table we attached the behaviour to. This will create a `Table hasMany Policies` relationship, meaning that any item in your system can have many policies. You can update this relationship to match how you're working.
+So the in the `initialize()` method we need to create a relationship to the table we attached the behavior to. This will create a `Table hasMany Policies` relationship, meaning that any item in your system can have many policies. You can update this relationship to match how you're working.
 
 You can see that there are a number of options defined in the relationship. These are important, as they link the tables items together. So the `table_foreign_key` is a field in your `policies` db table used to store the primaryKey of the related item. So if you're attaching a Policy to a Car, this would be the `Car.id`. The `bindingKey` is the key used in the Policy table to join on.
 
@@ -66,9 +66,9 @@ In order to filter the different types of attachments, you need the `table_class
 
 I've also configured the `propertyName`, this means that any item you look for which contains `Policies` will have an entity property called `policies` with the related data inside.
 
-The last function in the behaviour is the `beforeFind`, this just ensures that whenever you look for the primary table class, you always return the related `policies`, you don't have to use this if you don't want to, but I found it handy to always have the related data in my use-case.
+The last function in the behavior is the `beforeFind`, this just ensures that whenever you look for the primary table class, you always return the related `policies`, you don't have to use this if you don't want to, but I found it handy to always have the related data in my use-case.
 
-So then, how do we use this new behaviour? Just attach it like you would any other behaviour, and that's it. `$this->addBehavior('Policy')`.
+So then, how do we use this new behavior? Just attach it like you would any other behavior, and that's it. `$this->addBehavior('Policy')`.
 
 **Be aware**  
 This just reads data, you'll need to ensure that you save the table alias, and the `foreignKey` into the related table when creating new items.
@@ -84,5 +84,5 @@ policies.table_foreign_key INT(11)
 ```
 
 ## That's it!
-Go make a brew.
+Go make a brew, and have a biscuit.
 
