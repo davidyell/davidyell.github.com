@@ -1,1 +1,351 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cakephp | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/cakephp/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Create an association to any object in your project]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/"/>
+    <updated>2016-06-13T14:41:01+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object</id>
+    <content type="html"><![CDATA[<p><a href="http://stackoverflow.com/questions/31953090/cakephp3-link-one-table-to-multiple-tables-depending-on-type/32965679#32965679">Adapted from my Stackoverflow answer</a>.</p>
+
+<h2>Why?</h2>
+
+<p>Well if you have a project where you need to add arbitrary information to
+anything across your whole application, you&rsquo;ll need a way to create that
+association in a simple way.</p>
+
+<p>The real-life example which got me learning this technique was that I needed to
+be able to add an exit click url to any item across my whole project, so that I
+could control traffic leaving the website.</p>
+
+<h2>How&rsquo;s it work?</h2>
+
+<p>For this example, we&rsquo;ll allow attaching of a Policy to any item in the system.</p>
+
+<p>This is actually a lot simpler than it first appears. I&rsquo;ve done this a few times
+so I&rsquo;ll detail the technique that I use.</p>
+
+<p>The first thing to do is create a behavior. This will allow you to enable any
+Table class in your application to have a policy attached to it.</p>
+
+<p>The behavior is very simple. I&rsquo;ll talk through it after the code.</p>
+
+<pre><code class="php">namespace App\Model\Behavior;
+
+use Cake\Event\Event;
+use Cake\ORM\Behavior;
+use Cake\ORM\Query;
+
+class PolicyBehavior extends Behavior
+{
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this-&gt;_table-&gt;hasMany('Policies', [
+            'className' =&gt; 'Policies',
+            'foreignKey' =&gt; 'table_foreign_key',
+            'bindingKey' =&gt; 'id',
+            'conditions' =&gt; ['table_class' =&gt; $this-&gt;_table-&gt;registryAlias()],
+            'propertyName' =&gt; 'policies'
+        ]);
+    }
+
+    public function beforeFind(Event $event, Query $query, \ArrayObject $options, $primary)
+    {
+        $query-&gt;contain(['Policies']);
+        return $query;
+    }
+}
+</code></pre>
+
+<p>So the in the <code>initialize</code> method we need to create a relationship to the table we attached the behaviour to. This will create a <code>Table hasMany Policies</code> relationship, meaning that any item in your system can have many policies. You can update this relationship to match how you&rsquo;re working.</p>
+
+<p>You can see that there are a number of options defined in the relationship. These are important, as they link the tables items together. So the <code>table_foreign_key</code> is a field in your <code>policies</code> db table used to store the primaryKey of the related item. So if you&rsquo;re attaching a Policy to a Car, this would be the <code>Car.id</code>. The <code>bindingKey</code> is the key used in the Policy table to join on.</p>
+
+<p>In order to filter the different types of attachments, you need the <code>table_class</code> field in your <code>policies</code> db table. This will be the name of the attached table class. So <code>Cars</code>, <code>Cats</code>, <code>Houses</code> etc. Then we can use this in the conditions, so anything pulling the primary table class will automatically filter the related <code>Policies</code> to match.</p>
+
+<p>I&rsquo;ve also configured the <code>propertyName</code>, this means that any item you look for which contains <code>Policies</code> will have an entity property called <code>policies</code> with the related data inside.</p>
+
+<p>The last function in the behaviour is the <code>beforeFind</code>, this just ensures that whenever you look for the primary table class, you always return the related <code>policies</code>, you don&rsquo;t have to use this if you don&rsquo;t want to, but I found it handy to always have the related data in my use-case.</p>
+
+<p>So then, how do we use this new behaviour? Just attach it like you would any other behaviour, and that&rsquo;s it. <code>$this-&gt;addBehavior('Policy')</code>.</p>
+
+<p><strong>Be aware</strong><br/>
+This just reads data, you&rsquo;ll need to ensure that you save the table alias, and the <code>foreignKey</code> into the related table when creating new items.</p>
+
+<p>Easiest way is to just use a <code>beforeSave()</code> and append the current Table class <code>alias()</code>, and <code>primaryKey()</code>.</p>
+
+<p>Just for clarity, your <code>policies</code> table schema will need, at a minimum.</p>
+
+<pre><code class="sql">policies.id
+policies.table_class VARCHAR(255)
+policies.table_foreign_key INT(11)
+</code></pre>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Go make a brew.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Connecting to a remote web service]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/"/>
+    <updated>2015-09-11T12:21:14+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service</id>
+    <content type="html"><![CDATA[<h2>First things first</h2>
+
+<p>So the first thing you&rsquo;ll need is the <a href="https://github.com/UseMuffin/Webservice">Webservice plugin</a>.</p>
+
+<pre><code class="bash">composer require muffin/webservice:dev-master
+</code></pre>
+
+<p>Then you need to load the plugin in your <code>config/bootstrap.php</code> and tell the
+ConnectionManager to consume your config.</p>
+
+<pre><code class="php">Plugin::load('Muffin/Webservice');
+ConnectionManager::config(Configure::consume('Webservices'));
+</code></pre>
+
+<p>Then be sure to add the configuration for your service to the <code>config/app.php</code> file.
+This means you need to add another array key to your config, it should contain something like the following.</p>
+
+<pre><code class="php">return [
+    // The rest of your app config
+
+    'Webservices' =&gt; [
+        'Twitter' =&gt; [
+            'className' =&gt; 'Muffin\Webservice\Connection',
+            'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
+            'username' =&gt; env('GITHUB_USERNAME'),
+            'password' =&gt; env('GITHUB_PASSWORD'),
+        ]
+    ]
+]; // This is the end of your config/app.php file, so the key sits on the 
+   // same array level as 'Session' above
+</code></pre>
+
+<p>I&rsquo;ll talk through the various config options here.</p>
+
+<h3>className</h3>
+
+<p>This is a proxy class which will pass method calls through to your own driver class.</p>
+
+<h3>service</h3>
+
+<p>This is your driver class where you&rsquo;ll write your code and connect to the service.</p>
+
+<h3>username/password</h3>
+
+<p>Any login credentials you need will have to be included.</p>
+
+<h2>Creating your driver class</h2>
+
+<p>So you need to create a new driver class, which uses the Webservice plugin as a base.
+For my example, I&rsquo;ve created my Twitter driver class in <code>src/Lib/Twitter/Driver/Twitter.php</code> which
+extends <code>Muffin\Webservice\AbstractDriver</code>, and I&rsquo;ve implemented the stub method, which is just <code>initialize</code>,
+to setup the client you want to use.</p>
+
+<pre><code class="php">// src/Lib/Twitter/Driver/Twitter.php
+namespace App\Lib\Twitter\Driver;
+
+use Cake\Network\Http\Client;
+use Muffin\Webservice\AbstractDriver;
+
+class Twitter extends AbstractDriver
+{
+    public function initialize()
+    {
+        // Let's use the CakePHP Http client class
+        $this-&gt;_client = new \Cake\Network\Http\Client();
+    }
+
+    // etc
+</code></pre>
+
+<p><strong>There is a gotcha here!</strong><br/>
+You will need to implement some methods from <code>Cake\Database\Connection</code> into
+your driver class so that DebugKit can interact with your driver. These methods
+can be copied and pasted from the Connection class.</p>
+
+<ul>
+<li><code>configName()</code></li>
+<li><code>logQueries()</code></li>
+<li><code>logger()</code></li>
+</ul>
+
+
+<h2>Creating your method</h2>
+
+<p>So assuming we want to get some tweets, we can create a method for that inside
+our driver class.</p>
+
+<pre><code class="php">    public function tweets()
+    {
+        // Do some setup for Twitter
+        return $this-&gt;_client-&gt;post($url, $dataArray);
+    }
+</code></pre>
+
+<p>This will use the CakePHP Http Client to post to a Twitter url and return the response.</p>
+
+<h2> Using your new driver</h2>
+
+<p>So now we need to actually get the data to play with. In our controller we need to
+instantiate the connection and call our new method.</p>
+
+<pre><code class="php">// ExamplesController.php
+    public function getTweets()
+    {
+        $connection = ConnectionManager::get('Twitter');
+        $tweets = $connection-&gt;tweets();
+        $this-&gt;set('tweets', $tweets);
+    }
+</code></pre>
+
+<p>You must make sure that the name of the connection you give to ConnectionManager matches
+the name you used in your <code>app.php</code> config setup.</p>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Job done! Have a brew.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrading Session to Flash component in Cake 2.7]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/"/>
+    <updated>2015-09-02T12:30:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7</id>
+    <content type="html"><![CDATA[<h2>Changes in 2.7</h2>
+
+<p>So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
+have been refactored into the Flash Component, as they were with Cake 3.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/appendices/2-7-migration-guide.html#sessioncomponent">You can view the change in the migration log</a>.</p>
+
+<h2>How to update?</h2>
+
+<p>If, like me you&rsquo;re using the <code>setFlash</code> method for all your controller feedback, you&rsquo;ll need to update all that code.</p>
+
+<p>I used this regular expression which captures the various params and re-orders them for replacement in PHP Storm.</p>
+
+<pre><code>// Regex search
+this-&gt;Session-&gt;setFlash\((.*),\s(.*),\s(.*)\);
+
+// Replace
+this-&gt;Flash-&gt;set($1, ['params' =&gt; $3]);
+</code></pre>
+
+<p>This will convert stuff like this,</p>
+
+<pre><code class="php">$this-&gt;Session-&gt;setFlash('Provider updated successfully', 'NiceAdmin.alert-box', array('class' =&gt; 'alert-success'));
+// into
+$this-&gt;Flash-&gt;set('Provider updated successfully', ['params' =&gt; array('class' =&gt; 'alert-success')]);
+</code></pre>
+
+<p>So that&rsquo;s it, you can run this per script if you want to check it, or just across all your controllers.</p>
+
+<h2>All done!</h2>
+
+<p>Time for a brew!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to configure flash messages using Crud plugin]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/"/>
+    <updated>2015-07-21T21:33:09+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin</id>
+    <content type="html"><![CDATA[<h2>Scenario</h2>
+
+<p>You&rsquo;re using the <a href="https://github.com/friendsofcake/crud">Crud</a> plugin you might find that it will use the default flash message elements, so if, like me, you want to use something like <a href="http://getbootstrap.com/components/#alerts">Twitter Boostrap Alerts</a>, you&rsquo;re out of luck.</p>
+
+<p>Never fear, help is at hand.</p>
+
+<h2>Customise flash</h2>
+
+<pre><code class="php">// src/Controller/AppController.php
+public function beforeFilter(Event $event)
+{
+    $this-&gt;eventManager()-&gt;on('Crud.beforeHandle', function () {
+        $this-&gt;Crud-&gt;action()-&gt;config('messages.success', ['params' =&gt; ['class' =&gt; 'alert alert-success alert-dismissible']]);
+        $this-&gt;Crud-&gt;action()-&gt;config('messages.error', ['params' =&gt; ['class' =&gt; 'alert alert-danger alert-dismissible']]);
+    });
+}
+</code></pre>
+
+<p>I tend to put this, as per the example, in my <code>AppController</code> because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.</p>
+
+<h2>Success!</h2>
+
+<p>That&rsquo;s it! Go make a brew.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding neighbours in CakePHP3]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/"/>
+    <updated>2015-07-21T20:37:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3</id>
+    <content type="html"><![CDATA[<p>So it seems that in Cake 3 you can no longer use the <code>find('neighbors')</code> to find posts which are next to each other according to a defined series.</p>
+
+<p>As I tend to use this for previous and next blog posts when viewing a blog post, I&rsquo;ll note down my technique here for future reference.</p>
+
+<h2>The method</h2>
+
+<pre><code class="php">// src/Model/Table/ExamplesTable.php
+/**
+ * Find an item from a table by slug, along with it's two adjacent items
+ *
+ * @param string $slug
+ * @return array
+ */
+public function neighbours($slug)
+{
+    $current = $this-&gt;find()
+        -&gt;where(['slug' =&gt; $slug])
+        -&gt;first();
+
+    $previous = $this-&gt;find()
+        -&gt;where(['publish_date &lt;' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
+        -&gt;order(['publish_date' =&gt; 'DESC'])
+        -&gt;first();
+
+    $next = $this-&gt;find()
+        -&gt;where(['publish_date &gt;' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
+        -&gt;order(['publish_date' =&gt; 'DESC'])
+        -&gt;first();
+
+    return [
+        'current' =&gt; $current,
+        'previous' =&gt; $previous,
+        'next' =&gt; $next
+    ];
+}
+</code></pre>
+
+<h2>The finder</h2>
+
+<p>I&rsquo;ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you&rsquo;d need to join two query objects.</p>
+
+<p>There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.</p>
+
+<p>If you have any ideas on how to tackle this challenge, please let me know in the comments.</p>
+]]></content>
+  </entry>
+  
+</feed>

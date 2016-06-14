@@ -1,1 +1,84 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: symfony2 | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/symfony2/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to debug routes in Symfony2]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony/"/>
+    <updated>2013-03-01T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-03/router-debugging-in-symfony</id>
+    <content type="html"><![CDATA[<p>When choosing my type of routing in Symfony2, I wanted to avoid using XML as I&rsquo;ve been put off it by working with Magento, so that left YAML and Annotation.</p>
+
+<p>I picked annotation as it looked neater, but I wanted to find out how to find a controller from a url.</p>
+
+<h3>Trace a url back to a controller</h3>
+
+<pre><code class="bash">$ app/console router:match /players/
+Route "players_index" matches
+$ app/console router:debug players_index
+[router] Route "players_index"
+Name         players_index
+Pattern      /players/
+Class        Symfony\Component\Routing\Route
+Defaults     _controller: PingPong\Bundle\PlayerBundle\Controller\PlayersController::indexAction
+Requirements 
+Options      compiler_class: Symfony\Component\Routing\RouteCompiler
+Regex        #^/players/$#s
+</code></pre>
+
+<p>This will allow you to chase Controller annotated routes from the command line!</p>
+
+<h3>Success</h3>
+
+<p>Have a brew, you&rsquo;ve earned it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nginx config for Symfony2]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-02/symfony-nginx/"/>
+    <updated>2013-02-27T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-02/symfony-nginx</id>
+    <content type="html"><![CDATA[<p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
+
+<pre><code class="nginx">server {
+  listen 80;
+
+  server_name tabletennistracker.dev;
+  root /home/neon/Sites/TableTennisTracker/web;
+
+  error_log /var/log/nginx/tabletennistracker.error.log;
+  access_log /var/log/nginx/tabletennistracker.access.log;
+
+  location / {
+    index app.php;
+    try_files $uri $uri/ /app.php?$query_string;
+  }
+
+  location ~ ^/(app|app_dev)\.php(/|$) {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass 127.0.0.1:9001;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+}
+</code></pre>
+
+<p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
+
+<p>Time for another glass of wine!</p>
+]]></content>
+  </entry>
+  
+</feed>

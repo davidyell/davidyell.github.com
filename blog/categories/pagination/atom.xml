@@ -1,1 +1,121 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pagination | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/pagination/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Paginating multiple types of list in the same controller]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/"/>
+    <updated>2015-04-29T11:57:10+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller</id>
+    <content type="html"><![CDATA[<h2>What a complicated title</h2>
+
+<p>Okay, agreed. Perhaps an example would be better. Imagine you have a <code>ContentsController</code> which you use in your application to render lots of different types of content. You might have <code>ContentTypes</code> such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your <code>ContentsController::index()</code> method could just output the same thing with just different data.</p>
+
+<p>This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.</p>
+
+<h2>Routing</h2>
+
+<p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
+
+<pre><code class="php">Router::scope('/', function ($routes) {
+    $routes-&gt;connect('/guides/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'Guides'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
+    $routes-&gt;connect('/guides', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'Guides'], ['pass' =&gt; ['type']]);
+
+    $routes-&gt;connect('/news/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'News'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
+    $routes-&gt;connect('/news', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'News'], ['pass' =&gt; ['type']]);
+});
+</code></pre>
+
+<p>This now means that we can access all our different types of content on different urls so that it makes sense to the user.</p>
+
+<h2>Creating our links</h2>
+
+<p>So now we need to point users to our content.</p>
+
+<pre><code class="php">// Link to the index
+echo $this-&gt;Html-&gt;link('Guides', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'Guides']);
+
+// Link to a single item
+echo $this-&gt;Html-&gt;link($guide-&gt;title, ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'Guides', 'slug' =&gt; $guide-&gt;slug]);
+</code></pre>
+
+<h2> Paginating the index</h2>
+
+<p>As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
+
+<pre><code class="php">$this-&gt;Paginator-&gt;options([
+    'url' =&gt; ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; $type-&gt;name]
+]);
+</code></pre>
+
+<p>This will now pass the <code>type</code> correctly in all our pagination links, which means that it&rsquo;ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as <code>/guides?page=2</code>.</p>
+
+<h2>Getting the list</h2>
+
+<p>So you&rsquo;ll need to process the <code>type</code> when it&rsquo;s passed to your controller, so be sure to include it in your controllers method signature.</p>
+
+<pre><code class="php">class ContentsController extends AppController {
+    public function index($type)
+    {
+        // Lookup the data by type
+        // Perhaps with a custom finder
+    }
+}
+</code></pre>
+
+<h2>Make a brew</h2>
+
+<p>It really is that simple!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Pagination Helper links]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/"/>
+    <updated>2013-11-27T11:00:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-11/custom-pagination</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
+
+<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
+
+<p>The url I wanted to use was <code>/news/category/daves-awesome-category</code> and then paginating results on <code>/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn&rsquo;t want to play ball.</p>
+
+<p>I had already created my route.</p>
+
+<pre><code class="php">Router::connect('/news/category/:category/*', array('controller' =&gt; 'news_articles', 'action' =&gt; 'index'), array('category' =&gt; '[a-z0-9-]+', 'pass' =&gt; array('category')));
+</code></pre>
+
+<p>But instead of the expected links above, I was getting <code>/news/daves-awesome-category/page:2</code> missing out my keyword from the url.</p>
+
+<h3>Solution</h3>
+
+<p>The Paginator helper options array to the rescue! You can actually configure the options of the helper right in the view. Such a simple fix.</p>
+
+<p>Here is my pagination including the fix to adjust the url if a category is set.</p>
+
+<pre><code class="php">if (isset($category)) {
+    $this-&gt;Paginator-&gt;options['url'] = array('controller' =&gt; 'news_articles', 'action' =&gt; 'index', 'category' =&gt; $category['NewsCategory']['slug']);
+}
+echo $this-&gt;Paginator-&gt;prev('&lt; ' . __('previous'), array(), null, array('class' =&gt; 'prev disabled'));
+echo $this-&gt;Paginator-&gt;numbers(array('separator' =&gt; ''));
+echo $this-&gt;Paginator-&gt;next(__('next') . ' &gt;', array(), null, array('class' =&gt; 'next disabled'));
+</code></pre>
+
+<h3>Done!</h3>
+
+<p>Make a brew, and probably have a biscuit too. Why not eh? You&rsquo;ve earned it.</p>
+]]></content>
+  </entry>
+  
+</feed>

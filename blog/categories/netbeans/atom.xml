@@ -1,1 +1,81 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: netbeans | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/netbeans/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to implement CodeSniffer into Netbeans]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer/"/>
+    <updated>2013-01-15T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer</id>
+    <content type="html"><![CDATA[<h3>Things you will need</h3>
+
+<p><strong>Netbeans plugin</strong>
+Download the plugin from here, <a href="http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin">http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin</a><br/>
+<strong>OR</strong><br/>
+<a href="http://plugins.netbeans.org/plugin/42434/phpcsmd">http://plugins.netbeans.org/plugin/42434/phpcsmd</a><br/>
+This plugin will highlight the lines in your IDE rather than just ouputting items to your action window.</p>
+
+<p>Download whichever one you think will be less invasive in your dev. As switching between frameworks and standards can cause whole pages to go pink with <code>phpcsmd</code> plugin.</p>
+
+<p><strong>PEAR installed</strong>
+You can test this by typing into a terminal <code>which pear</code> and it should return a path. If you do not have PEAR installed, you can find out how to install it from the site, <a href="http://pear.php.net/">http://pear.php.net/</a></p>
+
+<p><strong>PEAR packages</strong>
+<em>Note</em>
+If you get errors whilst installing PEAR packages, try using <code>sudo</code>.</p>
+
+<pre><code class="bash">$ pear install PHP_CodeSniffer
+</code></pre>
+
+<p><a href="http://pear.php.net/package/PHP_CodeSniffer">http://pear.php.net/package/PHP_CodeSniffer</a></p>
+
+<pre><code class="bash">$ pear channel-discover pear.phpmd.org
+</code></pre>
+
+<pre><code class="bash">$ pear channel-discover pear.pdepend.org
+</code></pre>
+
+<pre><code class="bash">$ pear install --alldeps phpmd/PHP_PMD
+</code></pre>
+
+<p><a href="http://phpmd.org/">http://phpmd.org/</a></p>
+
+<h3>Install the plugin</h3>
+
+<p>In Netbeans click <strong>Tools</strong> > <strong>Plugins</strong> and click the <strong>Downloaded</strong> tab. Click on <strong>Add Plugins…</strong> and browse to where your <code>.nbm</code> file is located. Install this file and restart Netbeans.</p>
+
+<h3>Configuring the plugin</h3>
+
+<p>Now you need to configure the plugin so it can find your PEAR packages.
+You will need to configure this in <strong>Preferences</strong>.</p>
+
+<p>Click on the <strong>PHP</strong> tab, and browse to the <strong>phpMD</strong> tab. Click <strong>change</strong> and in here specify the path to your <code>phpmd</code>. For me this is <code>/usr/local/Cellar/php53/5.3.17/bin/phpcs</code> but you can test this in a terminal with <code>which phpmd</code> to ge the path.</p>
+
+<p>Now click on <strong>phpCodeSniffer</strong> tab and do the same as above to enter the path to your <code>phpcs</code> executable.</p>
+
+<h4>Other settings</h4>
+
+<p>In here I tend to specify that the <code>tabsize</code> is 4 to conform with PSR-2.</p>
+
+<h3>How do I &lsquo;run&rsquo; it?</h3>
+
+<p><strong>Window</strong> > <strong>Action items</strong></p>
+
+<p>or <code>CMD</code> + <code>6</code></p>
+
+<p>Then you can use the filters on the left to adjust which things it scans. I tend to use the &lsquo;paper sheet&rsquo; icon at the top which is &lsquo;current file&rsquo;. You can then use the funnel icon to specify which things you want displayed.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,1 +1,68 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: finders | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/finders/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Finding neighbours in CakePHP3]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/"/>
+    <updated>2015-07-21T20:37:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3</id>
+    <content type="html"><![CDATA[<p>So it seems that in Cake 3 you can no longer use the <code>find('neighbors')</code> to find posts which are next to each other according to a defined series.</p>
+
+<p>As I tend to use this for previous and next blog posts when viewing a blog post, I&rsquo;ll note down my technique here for future reference.</p>
+
+<h2>The method</h2>
+
+<pre><code class="php">// src/Model/Table/ExamplesTable.php
+/**
+ * Find an item from a table by slug, along with it's two adjacent items
+ *
+ * @param string $slug
+ * @return array
+ */
+public function neighbours($slug)
+{
+    $current = $this-&gt;find()
+        -&gt;where(['slug' =&gt; $slug])
+        -&gt;first();
+
+    $previous = $this-&gt;find()
+        -&gt;where(['publish_date &lt;' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
+        -&gt;order(['publish_date' =&gt; 'DESC'])
+        -&gt;first();
+
+    $next = $this-&gt;find()
+        -&gt;where(['publish_date &gt;' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
+        -&gt;order(['publish_date' =&gt; 'DESC'])
+        -&gt;first();
+
+    return [
+        'current' =&gt; $current,
+        'previous' =&gt; $previous,
+        'next' =&gt; $next
+    ];
+}
+</code></pre>
+
+<h2>The finder</h2>
+
+<p>I&rsquo;ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you&rsquo;d need to join two query objects.</p>
+
+<p>There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.</p>
+
+<p>If you have any ideas on how to tackle this challenge, please let me know in the comments.</p>
+]]></content>
+  </entry>
+  
+</feed>

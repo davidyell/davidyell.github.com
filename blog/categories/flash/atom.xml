@@ -1,1 +1,56 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: flash | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/flash/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrading Session to Flash component in Cake 2.7]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/"/>
+    <updated>2015-09-02T12:30:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7</id>
+    <content type="html"><![CDATA[<h2>Changes in 2.7</h2>
+
+<p>So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component
+have been refactored into the Flash Component, as they were with Cake 3.</p>
+
+<p><a href="http://book.cakephp.org/2.0/en/appendices/2-7-migration-guide.html#sessioncomponent">You can view the change in the migration log</a>.</p>
+
+<h2>How to update?</h2>
+
+<p>If, like me you&rsquo;re using the <code>setFlash</code> method for all your controller feedback, you&rsquo;ll need to update all that code.</p>
+
+<p>I used this regular expression which captures the various params and re-orders them for replacement in PHP Storm.</p>
+
+<pre><code>// Regex search
+this-&gt;Session-&gt;setFlash\((.*),\s(.*),\s(.*)\);
+
+// Replace
+this-&gt;Flash-&gt;set($1, ['params' =&gt; $3]);
+</code></pre>
+
+<p>This will convert stuff like this,</p>
+
+<pre><code class="php">$this-&gt;Session-&gt;setFlash('Provider updated successfully', 'NiceAdmin.alert-box', array('class' =&gt; 'alert-success'));
+// into
+$this-&gt;Flash-&gt;set('Provider updated successfully', ['params' =&gt; array('class' =&gt; 'alert-success')]);
+</code></pre>
+
+<p>So that&rsquo;s it, you can run this per script if you want to check it, or just across all your controllers.</p>
+
+<h2>All done!</h2>
+
+<p>Time for a brew!</p>
+]]></content>
+  </entry>
+  
+</feed>

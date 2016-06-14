@@ -1,1 +1,71 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: search | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/search/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Filtering dates using CakeDC/Search]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search/"/>
+    <updated>2014-03-04T10:54:00+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search</id>
+    <content type="html"><![CDATA[<h3>Scenario</h3>
+
+<p>I needed to do a search on a date field in my database which was stored as a <code>DATE</code>, but only filtering by month.</p>
+
+<h3>Solution</h3>
+
+<p>So I had already implemented the <a href="https://github.com/cakedc/search">CakeDC/Search</a> into my project, so all I needed to do was create a custom method to return the right conditions for the query.</p>
+
+<p>My model already had the <code>filterArgs</code> setup.</p>
+
+<pre><code class="php">/**
+ * Setup default search filters
+ *
+ * @var array
+ */
+    public $filterArgs = [
+        'day_type_id' =&gt; ['type' =&gt; 'value'],
+        'month' =&gt; ['type' =&gt; 'query', 'method' =&gt; 'filterByMonth']
+    ];
+</code></pre>
+
+<p>So I just added a <code>type</code> of <code>query</code> and passed in a <code>method</code>.</p>
+
+<pre><code class="php">/**
+ * Filter the pagination by month
+ *
+ * @param array $data
+ * @return array
+ **/
+    public function filterByMonth(array $data = array()) {
+        return [
+            "DATE_FORMAT({$this-&gt;alias}.date, '%c')" =&gt; (int)$data['month']
+        ];
+    }
+</code></pre>
+
+<p>The <code>$data</code> array will contain all the fields setup in your model along with their values. So for me it looked like</p>
+
+<pre><code class="php">[
+    'day_type_id' =&gt; 3,
+    'month' =&gt; '08' // Note the string type, hence why I cast to int
+]
+</code></pre>
+
+<h3>Done!</h3>
+
+<p>Make a brew!</p>
+]]></content>
+  </entry>
+  
+</feed>

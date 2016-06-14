@@ -1,1 +1,90 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nginx | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/nginx/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CakePHP config for Nginx]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-08/cakephp-config-for-nginx/"/>
+    <updated>2013-08-01T15:17:00+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-08/cakephp-config-for-nginx</id>
+    <content type="html"><![CDATA[<p>I always have trouble configuring Nginx with CakePHP as I&rsquo;m forever trying to add extra things to the config.</p>
+
+<p>Here is an example config template.</p>
+
+<pre><code class="nginx">server {
+    listen   80;
+    server_name example.dev;
+
+    # root directive should be global
+    root /Users/david/Sites/example_website/webroot;
+    # If you are using a project with the `/app` folder, you'll need to uncomment the following
+    # root /Users/david/Sites/example_website/app/webroot;
+    access_log     /usr/local/var/log/nginx/example.access_log;
+    error_log      /usr/local/var/log/nginx/example.error_log debug;
+    # debug will logs lots, don't use this in production
+
+    location / {
+        index  index.php index.html index.htm;
+        try_files $uri $uri/ /index.php?$uri&amp;$args;
+    }
+
+    location ~ \.php(/|$) {
+        fastcgi_pass  127.0.0.1:9001; 
+        # I use port 9001 as I have XDebug on port 9000, but php-fpm uses 9000 as default
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+    }
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nginx config for Symfony2]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2013-02/symfony-nginx/"/>
+    <updated>2013-02-27T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2013-02/symfony-nginx</id>
+    <content type="html"><![CDATA[<p>Wow, so I&rsquo;ve just spent the last 2.5 hours trying to configure nginx to work with my Symfony2 project and I&rsquo;ve finally cracked it, so this is a celebratory post to ensure that I don&rsquo;t have to look for the config again.</p>
+
+<pre><code class="nginx">server {
+  listen 80;
+
+  server_name tabletennistracker.dev;
+  root /home/neon/Sites/TableTennisTracker/web;
+
+  error_log /var/log/nginx/tabletennistracker.error.log;
+  access_log /var/log/nginx/tabletennistracker.access.log;
+
+  location / {
+    index app.php;
+    try_files $uri $uri/ /app.php?$query_string;
+  }
+
+  location ~ ^/(app|app_dev)\.php(/|$) {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass 127.0.0.1:9001;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+}
+</code></pre>
+
+<p>The <a href="http://wiki.nginx.org/Symfony">nginx symfony page</a> had some strange <code>@rewrite</code> in it which was causing my server to fail on a redirect loop. This turned out to be the config which worked.</p>
+
+<p>Time for another glass of wine!</p>
+]]></content>
+  </entry>
+  
+</feed>

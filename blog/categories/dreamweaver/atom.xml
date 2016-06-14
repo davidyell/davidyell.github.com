@@ -1,1 +1,30 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: dreamweaver | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/dreamweaver/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to remove all .lck files from a folder]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2011-07/removing-lck-files/"/>
+    <updated>2011-07-21T10:43:25+01:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2011-07/removing-lck-files</id>
+    <content type="html"><![CDATA[<p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code>.lck</code> files to the server, you&rsquo;ll want this.</p>
+
+<pre><code class="bash">find . -name "*.LCK" -exec rm {} \;
+</code></pre>
+
+<p>Ref: <a href="http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html">http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

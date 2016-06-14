@@ -1,1 +1,45 @@
-[#<Jekyll::ContentFilters:0x007fcf33a16760 @options=nil, @caption=nil, @lang=nil, @url=nil, @title=nil>]
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sass | Daves dev warblings]]></title>
+  <link href="http://jedistirfry.co.uk/blog/categories/sass/atom.xml" rel="self"/>
+  <link href="http://jedistirfry.co.uk/"/>
+  <updated>2016-06-14T15:27:10+01:00</updated>
+  <id>http://jedistirfry.co.uk/</id>
+  <author>
+    <name><![CDATA[David Yell]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sass required asterisk partial]]></title>
+    <link href="http://jedistirfry.co.uk/blog/2012-12/required-partial/"/>
+    <updated>2012-12-18T09:43:25+00:00</updated>
+    <id>http://jedistirfry.co.uk/blog/2012-12/required-partial</id>
+    <content type="html"><![CDATA[<p>So I am forever looking up this code.</p>
+
+<h3>Code</h3>
+
+<p><code>_required.scss</code></p>
+
+<pre><code class="scss">div.input{
+    &amp;.required label:after{
+        content: "*";
+    }
+    &amp;.error{
+        padding: 10px;
+        color: #B94A48;
+        background-color: #F2DEDE;
+        border: 1px solid #EED3D7;
+        border-radius: 4px;
+    }
+}
+</code></pre>
+
+<p>This will add a star after any required fields, and also give a nice error style.</p>
+]]></content>
+  </entry>
+  
+</feed>
