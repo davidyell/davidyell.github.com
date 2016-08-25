@@ -3,7 +3,7 @@ layout: post
 title: "Create an association to any object in your project"
 date: 2016-06-13 14:41:01 +0100
 comments: true
-categories: ['cakephp', 'cakephp3']
+categories: ['cakephp', 'cakephp3', 'associations']
 ---
 
 [Adapted from my Stackoverflow answer](http://stackoverflow.com/questions/31953090/cakephp3-link-one-table-to-multiple-tables-depending-on-type/32965679#32965679).
