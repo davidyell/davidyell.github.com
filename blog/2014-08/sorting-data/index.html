@@ -1,462 +1,225 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
+<html lang="en">
+
+  <head>
   <meta charset="utf-8">
-  <title>Sorting multi-dimension model data - Daves dev warblings</title>
-  <meta name="author" content="David Yell">
-
-  
-  <meta name="description" content="Scenario So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <title>Sorting multi-dimension model data</title>
+  <meta name="description" content="Scenario So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a certain ...">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="/blog/2014-08/sorting-data/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
-  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2014-08/sorting-data">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Daves dev warblings" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-2775424-18']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Daves dev warblings</a></h1>
-  
-    <h2>For all the things I never remember</h2>
-  
-</hgroup>
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Daves dev warblings</a>
+
+    <nav class="site-nav">
+      <span class="menu-icon">
+        <svg viewBox="0 0 18 15" width="18px" height="15px">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </span>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About Dave</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
 
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jedistirfry.co.uk" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-  <li><a href="/about.html">About</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">Sorting multi-dimension model data</h1>
-    
-    
-      <p class="meta">
-        
 
 
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-12T15:42:10+01:00" pubdate data-updated="true">Aug 12<sup>th</sup>, 2014</time>
-        
-      </p>
-    
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Sorting multi-dimension model data</h1>
+    <p class="post-meta"><time datetime="2014-08-12T15:42:10+01:00" itemprop="datePublished">Aug 12, 2014</time></p>
   </header>
 
+  <div class="post-content" itemprop="articleBody">
+    <h3 id="scenario">Scenario</h3>
+<p>So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a certain value. Pretty hard using regular array methods, unless you start slicing arrays out of their dimension, sort them and inject them back in. We don’t want to do that because it’s fiddly.</p>
 
-<div class="entry-content"><h3>Scenario</h3>
-
-<p>So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a certain value. Pretty hard using regular array methods, unless you start slicing arrays out of their dimension, sort them and inject them back in. We don&rsquo;t want to do that because it&rsquo;s fiddly.</p>
-
-<h3>Solution</h3>
-
+<h3 id="solution">Solution</h3>
 <p>So the solution I like to use is to use <a href="http://php.net/manual/en/function.usort.php">usort()</a>. Which is a handy function allowing you to sort an array using your own function. Perfect if you want to sort a related models data.</p>
 
-<h3>Example</h3>
+<h3 id="example">Example</h3>
+<p>So for the example we’ll assume that we have a <code class="highlighter-rouge">League</code> model which <code class="highlighter-rouge">hasMany</code> <code class="highlighter-rouge">LeaguesUser</code>. We want to count the number of points a user has and order the data accordingly.</p>
 
-<p>So for the example we&rsquo;ll assume that we have a <code>League</code> model which <code>hasMany</code> <code>LeaguesUser</code>. We want to count the number of points a user has and order the data accordingly.</p>
+<p>When returned from a Cake <code class="highlighter-rouge">find()</code> we’ll end up with related data in dimensions.</p>
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+  <span class="s1">'League'</span> <span class="o">=&gt;</span> 
+    <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+      <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'Examples!'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+      <span class="s1">'slug'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'examples'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+      <span class="s1">'description'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'The league for people who like examples'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+      <span class="s1">'cover'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1000x1000.jpg'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+      <span class="s1">'image_dir'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="s1">'join_code'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'da39a3ee5e6b4b0d3255bfef95601890afd80709'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+      <span class="s1">'created'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'2014-08-04 10:45:45'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">19</span><span class="p">)</span>
+      <span class="s1">'modified'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'2014-08-11 14:54:34'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">19</span><span class="p">)</span>
+  <span class="s1">'LeaguesUser'</span> <span class="o">=&gt;</span> 
+    <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+      <span class="mi">0</span> <span class="o">=&gt;</span> 
+        <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+          <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'league_id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'user_id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'2'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'admin'</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="kc">true</span>
+          <span class="s1">'User'</span> <span class="o">=&gt;</span> 
+            <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+              <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'2'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+              <span class="s1">'email'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'test@example.com'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+              <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'testuser'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+              <span class="s1">'predictions'</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">2</span>
+              <span class="s1">'correct'</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">0</span>
+      <span class="mi">1</span> <span class="o">=&gt;</span> 
+        <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+          <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'2'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'league_id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'user_id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+          <span class="s1">'admin'</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="kc">false</span>
+          <span class="s1">'User'</span> <span class="o">=&gt;</span> 
+            <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+              <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+              <span class="s1">'email'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'testuser1@example.com'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+              <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">'testuser1'</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+              <span class="s1">'predictions'</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">2</span>
+              <span class="s1">'correct'</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">1</span>
+</code></pre>
+</div>
 
-<p>When returned from a Cake <code>find()</code> we&rsquo;ll end up with related data in dimensions.</p>
+<p>So let’s sort that <code class="highlighter-rouge">LeaguesUser['User']</code> dimension by the number of correct predicitons.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>  <span class="s1">&#39;League&#39;</span> <span class="o">=&gt;</span>
-</span><span class='line'>    <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;Examples!&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;examples&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;description&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;The league for people who like examples&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;cover&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1000x1000.jpg&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;image_dir&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;join_code&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;da39a3ee5e6b4b0d3255bfef95601890afd80709&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;created&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;2014-08-04 10:45:45&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">19</span><span class="p">)</span>
-</span><span class='line'>      <span class="s1">&#39;modified&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;2014-08-11 14:54:34&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">19</span><span class="p">)</span>
-</span><span class='line'>  <span class="s1">&#39;LeaguesUser&#39;</span> <span class="o">=&gt;</span>
-</span><span class='line'>    <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'>      <span class="mi">0</span> <span class="o">=&gt;</span>
-</span><span class='line'>        <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;league_id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;user_id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;2&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;admin&#39;</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="k">true</span>
-</span><span class='line'>          <span class="s1">&#39;User&#39;</span> <span class="o">=&gt;</span>
-</span><span class='line'>            <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;2&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;email&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;test@example.com&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;testuser&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;predictions&#39;</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">2</span>
-</span><span class='line'>              <span class="s1">&#39;correct&#39;</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="mi">1</span> <span class="o">=&gt;</span>
-</span><span class='line'>        <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;2&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;league_id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;user_id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>          <span class="s1">&#39;admin&#39;</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="k">false</span>
-</span><span class='line'>          <span class="s1">&#39;User&#39;</span> <span class="o">=&gt;</span>
-</span><span class='line'>            <span class="k">array</span> <span class="p">(</span><span class="nx">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;email&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;testuser1@example.com&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="nx">string</span> <span class="s1">&#39;testuser1&#39;</span> <span class="p">(</span><span class="nx">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-</span><span class='line'>              <span class="s1">&#39;predictions&#39;</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">2</span>
-</span><span class='line'>              <span class="s1">&#39;correct&#39;</span> <span class="o">=&gt;</span> <span class="nx">int</span> <span class="mi">1</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>Firstly, we’ll want to create a new <code class="highlighter-rouge">private function sortByCorrect($a, $b)</code> in our controller. Then we just need to sort using it in our currenct controller method.</p>
 
+<p>The important thing to note is that the callable function passed to <code class="highlighter-rouge">usort()</code> is an array containing the current controller as the first item. <code class="highlighter-rouge">usort($data, [$this, 'callableFunction'])</code> without including <code class="highlighter-rouge">$this</code> you’ll get an error.</p>
 
-<p>So let&rsquo;s sort that <code>LeaguesUser['User']</code> dimension by the number of correct predicitons.</p>
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nv">$league</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">League</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">'first'</span><span class="p">,</span> <span class="p">[</span>
+		<span class="s1">'contain'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+			<span class="s1">'LeaguesUser'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+				<span class="s1">'User'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+					<span class="s1">'fields'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'correct'</span><span class="p">,</span> <span class="s1">'predicitons'</span><span class="p">]</span>
+				<span class="p">]</span>
+			<span class="p">]</span>
+		<span class="p">],</span>
+		<span class="s1">'conditions'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+			<span class="s1">'League.slug'</span> <span class="o">=&gt;</span> <span class="nv">$slug</span>
+		<span class="p">]</span>
+	<span class="p">]);</span>
+	
+	<span class="nb">usort</span><span class="p">(</span><span class="nv">$league</span><span class="p">,</span> <span class="p">[</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">'sortByCorrect'</span><span class="p">]);</span>
+	
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'league'</span><span class="p">,</span> <span class="nv">$league</span><span class="p">);</span>
+<span class="p">}</span>
 
-<p>Firstly, we&rsquo;ll want to create a new <code>private function sortByCorrect($a, $b)</code> in our controller. Then we just need to sort using it in our currenct controller method.</p>
+<span class="k">private</span> <span class="k">function</span> <span class="nf">sortByCorrect</span><span class="p">(</span><span class="nv">$a</span><span class="p">,</span> <span class="nv">$b</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
 
-<p>The important thing to note is that the callable function passed to <code>usort()</code> is an array containing the current controller as the first item. <code>usort($data, [$this, 'callableFunction'])</code> without including <code>$this</code> you&rsquo;ll get an error.</p>
+<span class="c1">// Rest of controller
+</span></code></pre>
+</div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$league</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">League</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="p">[</span>
-</span><span class='line'>      <span class="s1">&#39;contain&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
-</span><span class='line'>          <span class="s1">&#39;LeaguesUser&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
-</span><span class='line'>              <span class="s1">&#39;User&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
-</span><span class='line'>                  <span class="s1">&#39;fields&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;correct&#39;</span><span class="p">,</span> <span class="s1">&#39;predicitons&#39;</span><span class="p">]</span>
-</span><span class='line'>              <span class="p">]</span>
-</span><span class='line'>          <span class="p">]</span>
-</span><span class='line'>      <span class="p">],</span>
-</span><span class='line'>      <span class="s1">&#39;conditions&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
-</span><span class='line'>          <span class="s1">&#39;League.slug&#39;</span> <span class="o">=&gt;</span> <span class="nv">$slug</span>
-</span><span class='line'>      <span class="p">]</span>
-</span><span class='line'>  <span class="p">]);</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="nb">usort</span><span class="p">(</span><span class="nv">$league</span><span class="p">,</span> <span class="p">[</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;sortByCorrect&#39;</span><span class="p">]);</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;league&#39;</span><span class="p">,</span> <span class="nv">$league</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">private</span> <span class="k">function</span> <span class="nf">sortByCorrect</span><span class="p">(</span><span class="nv">$a</span><span class="p">,</span> <span class="nv">$b</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">&#39;User&#39;</span><span class="p">][</span><span class="s1">&#39;correct&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">&#39;User&#39;</span><span class="p">][</span><span class="s1">&#39;correct&#39;</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">&#39;User&#39;</span><span class="p">][</span><span class="s1">&#39;correct&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">&#39;User&#39;</span><span class="p">][</span><span class="s1">&#39;correct&#39;</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Rest of controller</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Done</h3>
-
+<h3 id="done">Done</h3>
 <p>Go make a brew! Your work here is done.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">David Yell</span></span>
-
-      
-
-
-
-
-
-
-
+  </div>
 
   
-
-
-<time datetime="2014-08-12T15:42:10+01:00" pubdate data-updated="true">Aug 12<sup>th</sup>, 2014</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/cakephp/'>cakephp</a>, <a class='category' href='/blog/categories/data-manipulation/'>data manipulation</a>, <a class='category' href='/blog/categories/php/'>php</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jedistirfry.co.uk/blog/2014-08/sorting-data/" data-via="yelldavid" data-counturl="http://jedistirfry.co.uk/blog/2014-08/sorting-data/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/" title="Previous Post: Requiring CakePHP 2.x using Composer">&laquo; Requiring CakePHP 2.x using Composer</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014-08/pt-visual-explain/" title="Next Post: Installing and using pt-visual-explain">Installing and using pt-visual-explain &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
+      </div>
+    </main>
 
-</div>
+    <footer class="site-footer">
 
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015-09/connecting-to-a-web-service/">Connecting to a remote web service</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/">Upgrading Session to Flash component in Cake 2.7</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/">How to configure flash messages using Crud plugin</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-07/finding-neighbours-in-cakephp3/">Finding neighbours in CakePHP3</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015-05/making-calendars/">Making a calendar</a>
-      </li>
-    
-  </ul>
-</section>
+  <div class="wrapper">
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
-  </ul>
-  
-  <a href="https://github.com/davidyell">@davidyell</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+    <h2 class="footer-heading">Daves dev warblings</h2>
 
-        github.showRepos({
-            user: 'davidyell',
-            count: 5,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              Daves dev warblings
+            
+            </li>
+            
+            <li><a href="mailto:neon1024@gmail.com">neon1024@gmail.com</a></li>
+            
+        </ul>
+      </div>
 
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/davidyell"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">davidyell</span></a>
 
-<section>
-  <h1>On Delicious</h1>
-  <div id="delicious"></div>
-  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/neon1024?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
-  <p><a href="http://delicious.com/neon1024">My Delicious Bookmarks &raquo;</a></p>
-</section>
+          </li>
+          
 
+          
+          <li>
+            <a href="https://twitter.com/yelldavid"><span class="icon icon--twitter"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">yelldavid</span></a>
 
+          </li>
+          
+        </ul>
+      </div>
 
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - David Yell -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      <div class="footer-col footer-col-3">
+        <p>A place to store code snippets, thoughts on coding, and other stuff.
 </p>
+      </div>
+    </div>
+
+  </div>
 
 </footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'jedistirfry';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://jedistirfry.co.uk/blog/2014-08/sorting-data/';
-        var disqus_url = 'http://jedistirfry.co.uk/blog/2014-08/sorting-data/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
+  </body>
 
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
 </html>

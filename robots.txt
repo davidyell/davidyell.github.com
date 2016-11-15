@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: http://jedistirfry.co.uk/sitemap.xml 
