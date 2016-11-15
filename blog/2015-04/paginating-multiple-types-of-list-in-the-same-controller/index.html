@@ -2,20 +2,19 @@
 <html lang="en">
 
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Paginating multiple types of list in the same controller</title>
-  <meta name="description" content="What a complicated title Okay, agreed. Perhaps an example would be better. Imagine you have a ContentsController which you use in your application to render ...">
+    <title>Paginating multiple types of list in the same controller</title>
+    <meta name="description" content="What a complicated title Okay, agreed. Perhaps an example would be better. Imagine you have a ContentsController which you use in your application to render ...">
 
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">
-  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-  
-  
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/">
+    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+
+    
 </head>
-
 
   <body>
 
@@ -72,13 +71,14 @@
 <h2 id="routing">Routing</h2>
 <p>So the first thing to do is to setup your routing so that you can keep your content separate.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>Router::scope('/', function ($routes) {
-    $routes-&gt;connect('/guides/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'Guides'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
-    $routes-&gt;connect('/guides', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'Guides'], ['pass' =&gt; ['type']]);
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nx">Router</span><span class="o">::</span><span class="na">scope</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$routes</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'/guides/:slug'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'view'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'Guides'</span><span class="p">],</span> <span class="p">[</span><span class="s1">'slug'</span> <span class="o">=&gt;</span> <span class="s1">'[a-z-]+'</span><span class="p">,</span> <span class="s1">'pass'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'slug'</span><span class="p">]]);</span>
+    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'/guides'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'Guides'</span><span class="p">],</span> <span class="p">[</span><span class="s1">'pass'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span><span class="p">]]);</span>
     
-    $routes-&gt;connect('/news/:slug', ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'News'], ['slug' =&gt; '[a-z-]+', 'pass' =&gt; ['type', 'slug']]);
-    $routes-&gt;connect('/news', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'News'], ['pass' =&gt; ['type']]);
-});
+    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'/news/:slug'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'view'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'News'</span><span class="p">],</span> <span class="p">[</span><span class="s1">'slug'</span> <span class="o">=&gt;</span> <span class="s1">'[a-z-]+'</span><span class="p">,</span> <span class="s1">'pass'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'slug'</span><span class="p">]]);</span>
+    <span class="nv">$routes</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="s1">'/news'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'News'</span><span class="p">],</span> <span class="p">[</span><span class="s1">'pass'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span><span class="p">]]);</span>
+<span class="p">});</span>
 </code></pre>
 </div>
 
@@ -87,20 +87,22 @@
 <h2 id="creating-our-links">Creating our links</h2>
 <p>So now we need to point users to our content.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// Link to the index
-echo $this-&gt;Html-&gt;link('Guides', ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; 'Guides']);
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// Link to the index
+</span><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="s1">'Guides'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'Guides'</span><span class="p">]);</span>
 
-// Link to a single item
-echo $this-&gt;Html-&gt;link($guide-&gt;title, ['controller' =&gt; 'Contents', 'action' =&gt; 'view', 'type' =&gt; 'Guides', 'slug' =&gt; $guide-&gt;slug]);
+<span class="c1">// Link to a single item
+</span><span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Html</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">,</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'view'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'Guides'</span><span class="p">,</span> <span class="s1">'slug'</span> <span class="o">=&gt;</span> <span class="nv">$guide</span><span class="o">-&gt;</span><span class="na">slug</span><span class="p">]);</span>
 </code></pre>
 </div>
 
 <p>## Paginating the index
 As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>$this-&gt;Paginator-&gt;options([
-    'url' =&gt; ['controller' =&gt; 'Contents', 'action' =&gt; 'index', 'type' =&gt; $type-&gt;name]
-]);
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">([</span>
+    <span class="s1">'url'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'Contents'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">,</span> <span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="nv">$type</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">]</span>
+<span class="p">]);</span>
 </code></pre>
 </div>
 
@@ -109,13 +111,14 @@ As we are using a single view to paginate many different lists we need to tell t
 <h2 id="getting-the-list">Getting the list</h2>
 <p>So you’ll need to process the <code class="highlighter-rouge">type</code> when it’s passed to your controller, so be sure to include it in your controllers method signature.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>class ContentsController extends AppController {
-	public function index($type)
-	{
-		// Lookup the data by type
-		// Perhaps with a custom finder
-	}
-}
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">ContentsController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">(</span><span class="nv">$type</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="c1">// Lookup the data by type
+</span>		<span class="c1">// Perhaps with a custom finder
+</span>	<span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 

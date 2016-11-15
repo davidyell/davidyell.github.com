@@ -2,20 +2,19 @@
 <html lang="en">
 
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Create an association to any object in your project</title>
-  <meta name="description" content="Adapted from my Stackoverflow answer.">
+    <title>Create an association to any object in your project</title>
+    <meta name="description" content="Adapted from my Stackoverflow answer.">
 
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="/blog/2016-06/attaching-objects-to-any-object/">
-  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-  
-  
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/blog/2016-06/attaching-objects-to-any-object/">
+    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+
+    
 </head>
-
 
   <body>
 
@@ -86,33 +85,34 @@ Table class in your application to have a policy attached to it.</p>
 
 <p>The behavior is very simple. I’ll talk through it after the code.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>namespace App\Model\Behavior;
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">namespace</span> <span class="nx">App\Model\Behavior</span><span class="p">;</span>
 
-use Cake\Event\Event;
-use Cake\ORM\Behavior;
-use Cake\ORM\Query;
+<span class="k">use</span> <span class="nx">Cake\Event\Event</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Cake\ORM\Behavior</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Cake\ORM\Query</span><span class="p">;</span>
 
-class PolicyBehavior extends Behavior
-{
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+<span class="k">class</span> <span class="nc">PolicyBehavior</span> <span class="k">extends</span> <span class="nx">Behavior</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">initialize</span><span class="p">(</span><span class="k">array</span> <span class="nv">$config</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">parent</span><span class="o">::</span><span class="na">initialize</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
 
-        $this-&gt;_table-&gt;hasMany('Policies', [
-            'className' =&gt; 'Policies',
-            'foreignKey' =&gt; 'table_foreign_key',
-            'bindingKey' =&gt; 'id',
-            'conditions' =&gt; ['table_class' =&gt; $this-&gt;_table-&gt;registryAlias()],
-            'propertyName' =&gt; 'policies'
-        ]);
-    }
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_table</span><span class="o">-&gt;</span><span class="na">hasMany</span><span class="p">(</span><span class="s1">'Policies'</span><span class="p">,</span> <span class="p">[</span>
+            <span class="s1">'className'</span> <span class="o">=&gt;</span> <span class="s1">'Policies'</span><span class="p">,</span>
+            <span class="s1">'foreignKey'</span> <span class="o">=&gt;</span> <span class="s1">'table_foreign_key'</span><span class="p">,</span>
+            <span class="s1">'bindingKey'</span> <span class="o">=&gt;</span> <span class="s1">'id'</span><span class="p">,</span>
+            <span class="s1">'conditions'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'table_class'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_table</span><span class="o">-&gt;</span><span class="na">registryAlias</span><span class="p">()],</span>
+            <span class="s1">'propertyName'</span> <span class="o">=&gt;</span> <span class="s1">'policies'</span>
+        <span class="p">]);</span>
+    <span class="p">}</span>
 
-    public function beforeFind(Event $event, Query $query, \ArrayObject $options, $primary)
-    {
-        $query-&gt;contain(['Policies']);
-        return $query;
-    }
-}
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFind</span><span class="p">(</span><span class="nx">Event</span> <span class="nv">$event</span><span class="p">,</span> <span class="nx">Query</span> <span class="nv">$query</span><span class="p">,</span> <span class="nx">\ArrayObject</span> <span class="nv">$options</span><span class="p">,</span> <span class="nv">$primary</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">contain</span><span class="p">([</span><span class="s1">'Policies'</span><span class="p">]);</span>
+        <span class="k">return</span> <span class="nv">$query</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 

@@ -2,20 +2,19 @@
 <html lang="en">
 
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Finding neighbours in CakePHP3</title>
-  <meta name="description" content="So it seems that in Cake 3 you can no longer use the find(&#39;neighbors&#39;) to find posts which are next to each other according to a defined series.">
+    <title>Finding neighbours in CakePHP3</title>
+    <meta name="description" content="So it seems that in Cake 3 you can no longer use the find(&#39;neighbors&#39;) to find posts which are next to each other according to a defined series.">
 
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="/blog/2015-07/finding-neighbours-in-cakephp3/">
-  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-  
-  
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/blog/2015-07/finding-neighbours-in-cakephp3/">
+    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+
+    
 </head>
-
 
   <body>
 
@@ -68,41 +67,44 @@
 
 <p>As I tend to use this for previous and next blog posts when viewing a blog post, I’ll note down my technique here for future reference.</p>
 
-<p>##The method</p>
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// src/Model/Table/ExamplesTable.php
-/**
+<h2 id="the-method">The method</h2>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// src/Model/Table/ExamplesTable.php
+</span><span class="sd">/**
  * Find an item from a table by slug, along with it's two adjacent items
  *
  * @param string $slug
  * @return array
- */
-public function neighbours($slug)
-{
-    $current = $this-&gt;find()
-        -&gt;where(['slug' =&gt; $slug])
-        -&gt;first();
+ */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">neighbours</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$current</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">'slug'</span> <span class="o">=&gt;</span> <span class="nv">$slug</span><span class="p">])</span>
+        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
 
-    $previous = $this-&gt;find()
-        -&gt;where(['publish_date <span class="err">&lt;</span>' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
-        -&gt;order(['publish_date' =&gt; 'DESC'])
-        -&gt;first();
+    <span class="nv">$previous</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">'publish_date &lt;'</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="o">-&gt;</span><span class="na">publish_date</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="s1">'Y-m-d'</span><span class="p">)])</span>
+        <span class="o">-&gt;</span><span class="na">order</span><span class="p">([</span><span class="s1">'publish_date'</span> <span class="o">=&gt;</span> <span class="s1">'DESC'</span><span class="p">])</span>
+        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
 
-    $next = $this-&gt;find()
-        -&gt;where(['publish_date &gt;' =&gt; $current-&gt;publish_date-&gt;format('Y-m-d')])
-        -&gt;order(['publish_date' =&gt; 'DESC'])
-        -&gt;first();
+    <span class="nv">$next</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">()</span>
+        <span class="o">-&gt;</span><span class="na">where</span><span class="p">([</span><span class="s1">'publish_date &gt;'</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="o">-&gt;</span><span class="na">publish_date</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="s1">'Y-m-d'</span><span class="p">)])</span>
+        <span class="o">-&gt;</span><span class="na">order</span><span class="p">([</span><span class="s1">'publish_date'</span> <span class="o">=&gt;</span> <span class="s1">'DESC'</span><span class="p">])</span>
+        <span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
 
-    return [
-        'current' =&gt; $current,
-        'previous' =&gt; $previous,
-        'next' =&gt; $next
-    ];
-}
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">'current'</span> <span class="o">=&gt;</span> <span class="nv">$current</span><span class="p">,</span>
+        <span class="s1">'previous'</span> <span class="o">=&gt;</span> <span class="nv">$previous</span><span class="p">,</span>
+        <span class="s1">'next'</span> <span class="o">=&gt;</span> <span class="nv">$next</span>
+    <span class="p">];</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 
-<p>##The finder
-I’ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you’d need to join two query objects.</p>
+<h2 id="the-finder">The finder</h2>
+
+<p>I’ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you’d need to join two query objects.</p>
 
 <p>There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.</p>
 

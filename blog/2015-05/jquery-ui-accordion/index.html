@@ -2,20 +2,19 @@
 <html lang="en">
 
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>jQuery UI Accordion</title>
-  <meta name="description" content="##Time for some Javascript! So I’ve implemented the jQueryUI Accordion as a menu system for a CMS that I’m building and I’ve noticed that the active header w...">
+    <title>jQuery UI Accordion</title>
+    <meta name="description" content="Time for some Javascript!">
 
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="/blog/2015-05/jquery-ui-accordion/">
-  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-  
-  
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/blog/2015-05/jquery-ui-accordion/">
+    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+
+    
 </head>
-
 
   <body>
 
@@ -64,15 +63,17 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>##Time for some Javascript!
-So I’ve implemented the <a href="https://jqueryui.com/accordion/">jQueryUI Accordion</a> as a menu system for a CMS that I’m building and I’ve noticed that the active header will not open automatically.</p>
+    <h2 id="time-for-some-javascript">Time for some Javascript!</h2>
+
+<p>So I’ve implemented the <a href="https://jqueryui.com/accordion/">jQueryUI Accordion</a> as a menu system for a CMS that I’m building and I’ve noticed that the active header will not open automatically.</p>
 
 <p>This means that when a user hits a link to visit a new page, the accordion will not display their current menu item as active.</p>
 
 <p>Time for some code!</p>
 
-<p>##Markup
-I’ve used the same markup as the example, except that because it’s a menu, I needed some bullet points.</p>
+<h2 id="markup">Markup</h2>
+
+<p>I’ve used the same markup as the example, except that because it’s a menu, I needed some bullet points.</p>
 
 <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">'accordion'</span><span class="nt">&gt;</span>
 	<span class="nt">&lt;h3&gt;</span>First Heading<span class="nt">&lt;/h3&gt;</span>
@@ -88,8 +89,9 @@ I’ve used the same markup as the example, except that because it’s a menu, I
 </code></pre>
 </div>
 
-<p>##jQuery
-So how can we use the markup to tell the javascript which heading to mark active? Turns out it’s remarkably simple.</p>
+<h2 id="jquery">jQuery</h2>
+
+<p>So how can we use the markup to tell the javascript which heading to mark active? Turns out it’s remarkably simple.</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
@@ -110,8 +112,9 @@ So how can we use the markup to tell the javascript which heading to mark active
 
 <p>The trick here is the use of <code class="highlighter-rouge">next()</code> to select the immediately adjacent <code class="highlighter-rouge">div</code> without selecting all the other siblings.</p>
 
-<p>##Go make a brew!
-All done, that’s it!</p>
+<h2 id="go-make-a-brew">Go make a brew!</h2>
+
+<p>All done, that’s it!</p>
 
   </div>
 
