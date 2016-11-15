@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Requiring CakePHP 2.x using Composer</title>
-    <meta name="description" content="Scenario You have started your project using one of the 2.x downloads. Now you are using Composer to pull in your plugins, but you are still having to commit...">
+  <title>Requiring CakePHP 2.x using Composer</title>
+  <meta name="description" content="Scenario You have started your project using one of the 2.x downloads. Now you are using Composer to pull in your plugins, but you are still having to commit...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2014-07/converting-your-2-dot-x-application-to-require-cakephp/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -101,31 +104,34 @@
 <p><strong>app/webroot/index.php</strong><br />
 You’ll want to update the <code class="highlighter-rouge">ROOT</code>, <code class="highlighter-rouge">APP_DIR</code>, <code class="highlighter-rouge">TMP</code> and the <code class="highlighter-rouge">CAKE_CORE_INCLUDE_PATH</code> constants.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>define('ROOT', dirname(dirname(__FILE__)));
-define('APP_DIR', 'app'); // I define this as a string because why not right?
-define('TMP', ROOT . DS . 'tmp' . DS);
-define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'ROOT'</span><span class="p">,</span> <span class="nb">dirname</span><span class="p">(</span><span class="nb">dirname</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">)));</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'APP_DIR'</span><span class="p">,</span> <span class="s1">'app'</span><span class="p">);</span> <span class="c1">// I define this as a string because why not right?
+</span><span class="nb">define</span><span class="p">(</span><span class="s1">'TMP'</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">'tmp'</span> <span class="o">.</span> <span class="nx">DS</span><span class="p">);</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">'CAKE_CORE_INCLUDE_PATH'</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">'vendor'</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">'cakephp'</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">'cakephp'</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">'lib'</span><span class="p">);</span>
 </code></pre>
 </div>
 
 <p><strong>app/Console/cake.php</strong><br />
 So that the console commands can still find the right lib, we need to update the include path here too.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>ini_set('include_path', '..' . $ds . 'vendor' . $ds . 'cakephp' . $ds . 'cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nb">ini_set</span><span class="p">(</span><span class="s1">'include_path'</span><span class="p">,</span> <span class="s1">'..'</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">'vendor'</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">'cakephp'</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">'cakephp'</span> <span class="o">.</span> <span class="nv">$ds</span> <span class="o">.</span> <span class="s1">'lib'</span> <span class="o">.</span> <span class="nx">PATH_SEPARATOR</span> <span class="o">.</span> <span class="nb">ini_get</span><span class="p">(</span><span class="s1">'include_path'</span><span class="p">));</span>
 </code></pre>
 </div>
 
 <p>As you are running your shell tasks from within <code class="highlighter-rouge">app</code> we can use a relative path.</p>
 
 <h4 id="edit-your-bootstrap-to-build-the-new-paths">Edit your bootstrap to build the new paths</h4>
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// app/config/bootstrap.php
-App::build(
-	[
-		'Plugin' =&gt; [ROOT . '/Plugin/', ROOT . '/app/Plugin/'],
-		'Vendor' =&gt; [ROOT . '/vendor/', ROOT . '/app/Vendor/']
-	],
-	App::RESET
-);
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// app/config/bootstrap.php
+</span><span class="nx">App</span><span class="o">::</span><span class="na">build</span><span class="p">(</span>
+	<span class="p">[</span>
+		<span class="s1">'Plugin'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">'/Plugin/'</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">'/app/Plugin/'</span><span class="p">],</span>
+		<span class="s1">'Vendor'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">'/vendor/'</span><span class="p">,</span> <span class="nx">ROOT</span> <span class="o">.</span> <span class="s1">'/app/Vendor/'</span><span class="p">]</span>
+	<span class="p">],</span>
+	<span class="nx">App</span><span class="o">::</span><span class="na">RESET</span>
+<span class="p">);</span>
 </code></pre>
 </div>
 

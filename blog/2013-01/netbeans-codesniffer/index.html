@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>How to implement CodeSniffer into Netbeans</title>
-    <meta name="description" content="###Things you will need Netbeans plugin Download the plugin from here, http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin OR http://plugin...">
+  <title>How to implement CodeSniffer into Netbeans</title>
+  <meta name="description" content="Things you will need Netbeans plugin Download the plugin from here, http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin OR http://plugins.n...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-01/netbeans-codesniffer/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-01/netbeans-codesniffer/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -45,6 +46,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -63,8 +66,8 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>###Things you will need
-<strong>Netbeans plugin</strong>
+    <h3 id="things-you-will-need">Things you will need</h3>
+<p><strong>Netbeans plugin</strong>
 Download the plugin from here, <a href="http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin">http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin</a><br />
 <strong>OR</strong><br />
 <a href="http://plugins.netbeans.org/plugin/42434/phpcsmd">http://plugins.netbeans.org/plugin/42434/phpcsmd</a><br />
@@ -95,22 +98,22 @@ If you get errors whilst installing PEAR packages, try using <code class="highli
 </div>
 <p><a href="http://phpmd.org/">http://phpmd.org/</a></p>
 
-<p>###Install the plugin
-In Netbeans click <strong>Tools</strong> &gt; <strong>Plugins</strong> and click the <strong>Downloaded</strong> tab. Click on <strong>Add Plugins…</strong> and browse to where your <code class="highlighter-rouge">.nbm</code> file is located. Install this file and restart Netbeans.</p>
+<h3 id="install-the-plugin">Install the plugin</h3>
+<p>In Netbeans click <strong>Tools</strong> &gt; <strong>Plugins</strong> and click the <strong>Downloaded</strong> tab. Click on <strong>Add Plugins…</strong> and browse to where your <code class="highlighter-rouge">.nbm</code> file is located. Install this file and restart Netbeans.</p>
 
-<p>###Configuring the plugin
-Now you need to configure the plugin so it can find your PEAR packages.
+<h3 id="configuring-the-plugin">Configuring the plugin</h3>
+<p>Now you need to configure the plugin so it can find your PEAR packages.
 You will need to configure this in <strong>Preferences</strong>.</p>
 
 <p>Click on the <strong>PHP</strong> tab, and browse to the <strong>phpMD</strong> tab. Click <strong>change</strong> and in here specify the path to your <code class="highlighter-rouge">phpmd</code>. For me this is <code class="highlighter-rouge">/usr/local/Cellar/php53/5.3.17/bin/phpcs</code> but you can test this in a terminal with <code class="highlighter-rouge">which phpmd</code> to ge the path.</p>
 
 <p>Now click on <strong>phpCodeSniffer</strong> tab and do the same as above to enter the path to your <code class="highlighter-rouge">phpcs</code> executable.</p>
 
-<p>####Other settings
-In here I tend to specify that the <code class="highlighter-rouge">tabsize</code> is 4 to conform with PSR-2.</p>
+<h4 id="other-settings">Other settings</h4>
+<p>In here I tend to specify that the <code class="highlighter-rouge">tabsize</code> is 4 to conform with PSR-2.</p>
 
-<p>###How do I ‘run’ it?
-<strong>Window</strong> &gt; <strong>Action items</strong></p>
+<h3 id="how-do-i-run-it">How do I ‘run’ it?</h3>
+<p><strong>Window</strong> &gt; <strong>Action items</strong></p>
 
 <p>or <code class="highlighter-rouge">CMD</code> + <code class="highlighter-rouge">6</code></p>
 

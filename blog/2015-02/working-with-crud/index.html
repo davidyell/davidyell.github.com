@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Working with the Crud plugin in CakePHP</title>
-    <meta name="description" content="So what is it? It’s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake yous...">
+  <title>Working with the Crud plugin in CakePHP</title>
+  <meta name="description" content="So what is it? It’s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake yous...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2015-02/working-with-crud/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2015-02/working-with-crud/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -81,65 +84,66 @@
 Here we’ll assume the plugin is loaded already, the trait is being used and we have a model called <code class="highlighter-rouge">Examples</code>.
 The following example is for Cake 2, as in Cake 3, there is no need to use the <code class="highlighter-rouge">prefix_method</code> notation.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// I tend to configure Crud in my AppController to save on repitition
-class AppController extends Controller {
-	use CrudControllerTrait;
-	
-	public $components = [
-		// Here we can configure our action maps, finders and all kinds of things
-		'Crud.Crud' =&gt; [
-			'actions' =&gt; [
-				'index' =&gt; 'Crud.index', // Map any index action to the Crud index action handler
-				'view' =&gt; [
-					// Configure the options for this action method
-					'className' =&gt; 'Crud.view',
-					'validateId' =&gt; false
-				],
-				'admin_index' =&gt; 'Crud.index', // We can even hookup prefix methods
-				'admin_add' =&gt; 'Crud.add',
-				'admin_edit' =&gt; 'Crud.edit',
-				'admin_delete' =&gt; 'Crud.delete'
-			]
-		]
-	];
-}
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// I tend to configure Crud in my AppController to save on repitition
+</span><span class="k">class</span> <span class="nc">AppController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+    <span class="k">use</span> <span class="nx">CrudControllerTrait</span><span class="p">;</span>
 
-// Create your ExamplesController.php
-class ExamplesController extends AppController {
-	// We don't need any code here because Crud plugin can handle the methods for us!
-	
-	// If we want to just change how this action finds it's data we can specify a custom 
-	// finder method and still have Crud do the rest of the work for us
-    public function view($slug) {
-        $this-&gt;Crud-&gt;action()-&gt;findMethod('slug');
-		return $this-&gt;Crud-&gt;execute();
-    }
+    <span class="k">public</span> <span class="nv">$components</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1">// Here we can configure our action maps, finders and all kinds of things
+</span>        <span class="s1">'Crud.Crud'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'actions'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                <span class="s1">'index'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.index'</span><span class="p">,</span> <span class="c1">// Map any index action to the Crud index action handler
+</span>                <span class="s1">'view'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                    <span class="c1">// Configure the options for this action method
+</span>                    <span class="s1">'className'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.view'</span><span class="p">,</span>
+                    <span class="s1">'validateId'</span> <span class="o">=&gt;</span> <span class="kc">false</span>
+                <span class="p">],</span>
+                <span class="s1">'admin_index'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.index'</span><span class="p">,</span> <span class="c1">// We can even hookup prefix methods
+</span>                <span class="s1">'admin_add'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.add'</span><span class="p">,</span>
+                <span class="s1">'admin_edit'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.edit'</span><span class="p">,</span>
+                <span class="s1">'admin_delete'</span> <span class="o">=&gt;</span> <span class="s1">'Crud.delete'</span>
+            <span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// Create your ExamplesController.php
+</span><span class="k">class</span> <span class="nc">ExamplesController</span> <span class="k">extends</span> <span class="nx">AppController</span> <span class="p">{</span>
+    <span class="c1">// We don't need any code here because Crud plugin can handle the methods for us!
+</span>
+    <span class="c1">// If we want to just change how this action finds it's data we can specify a custom
+</span>    <span class="c1">// finder method and still have Crud do the rest of the work for us
+</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">findMethod</span><span class="p">(</span><span class="s1">'slug'</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+    <span class="p">}</span>
     
-    // What if we want to change the pagination in the index action?
-    public function index() {
-    	// We can hook the beforePaginate event to make changes
-    	$this-&gt;Crud-&gt;on('beforePaginate', function (CakeEvent $event) {
-    		// The event subject here is the controller, and paginator is the 
-    		// paginator component.
-    		// So we can change the page limit to 10 to include 10 items per page
-    		// and we could contain a related model too!
-    		$event-&gt;subject()-&gt;paginator-&gt;settings = [
-    			'contain' =&gt; [
-    				'User'
-    			],
-    			'limit' =&gt; 10
-    		];
-    	});
-		
-		// Let crud handle the rest of the action
-		return $this-&gt;Crud-&gt;execute();
-    }
-}
+    <span class="c1">// What if we want to change the pagination in the index action?
+</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// We can hook the beforePaginate event to make changes
+</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'beforePaginate'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">CakeEvent</span> <span class="nv">$event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// The event subject here is the controller, and paginator is the
+</span>            <span class="c1">// paginator component.
+</span>            <span class="c1">// So we can change the page limit to 10 to include 10 items per page
+</span>            <span class="c1">// and we could contain a related model too!
+</span>            <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">paginator</span><span class="o">-&gt;</span><span class="na">settings</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'contain'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                    <span class="s1">'User'</span>
+                <span class="p">],</span>
+                <span class="s1">'limit'</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+            <span class="p">];</span>
+        <span class="p">});</span>
 
-// Create our view Examples/index.ctp
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'examples index'</span><span class="nt">&gt;</span>
-	<span class="cp">&lt;?php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$examples</span> <span class="k">as</span> <span class="nv">$example</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">echo</span> <span class="nv">$example</span><span class="p">[</span><span class="s1">'Example'</span><span class="p">][</span><span class="s1">'title'</span><span class="p">];</span>
+        <span class="c1">// Let crud handle the rest of the action
+</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Create our view Examples/index.ctp
+</span><span class="o">&lt;</span><span class="nx">div</span> <span class="k">class</span><span class="err">='</span><span class="nc">examples</span> <span class="nx">index</span><span class="s1">'&gt;
+	&lt;?php foreach($examples as $example) {
+		echo $example['</span><span class="nx">Example</span><span class="s1">']['</span><span class="nx">title</span><span class="err">'</span><span class="p">];</span>
 	<span class="p">}</span><span class="cp">?&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
 </code></pre>

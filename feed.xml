@@ -6,9 +6,9 @@
 </description>
     <link>http://jedistirfry.co.uk/</link>
     <atom:link href="http://jedistirfry.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Nov 2016 16:05:47 +0000</pubDate>
-    <lastBuildDate>Tue, 15 Nov 2016 16:05:47 +0000</lastBuildDate>
-    <generator>Jekyll v3.2.1</generator>
+    <pubDate>Tue, 15 Nov 2016 16:31:20 +0000</pubDate>
+    <lastBuildDate>Tue, 15 Nov 2016 16:31:20 +0000</lastBuildDate>
+    <generator>Jekyll v3.3.1</generator>
     
       <item>
         <title>Create an association to any object in your project</title>
@@ -656,65 +656,66 @@ As we are using a single view to paginate many different lists we need to tell t
 Here we’ll assume the plugin is loaded already, the trait is being used and we have a model called &lt;code class=&quot;highlighter-rouge&quot;&gt;Examples&lt;/code&gt;.
 The following example is for Cake 2, as in Cake 3, there is no need to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;prefix_method&lt;/code&gt; notation.&lt;/p&gt;
 
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// I tend to configure Crud in my AppController to save on repitition
-class AppController extends Controller {
-	use CrudControllerTrait;
-	
-	public $components = [
-		// Here we can configure our action maps, finders and all kinds of things
-		'Crud.Crud' =&amp;gt; [
-			'actions' =&amp;gt; [
-				'index' =&amp;gt; 'Crud.index', // Map any index action to the Crud index action handler
-				'view' =&amp;gt; [
-					// Configure the options for this action method
-					'className' =&amp;gt; 'Crud.view',
-					'validateId' =&amp;gt; false
-				],
-				'admin_index' =&amp;gt; 'Crud.index', // We can even hookup prefix methods
-				'admin_add' =&amp;gt; 'Crud.add',
-				'admin_edit' =&amp;gt; 'Crud.edit',
-				'admin_delete' =&amp;gt; 'Crud.delete'
-			]
-		]
-	];
-}
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// I tend to configure Crud in my AppController to save on repitition
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AppController&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Controller&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CrudControllerTrait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-// Create your ExamplesController.php
-class ExamplesController extends AppController {
-	// We don't need any code here because Crud plugin can handle the methods for us!
-	
-	// If we want to just change how this action finds it's data we can specify a custom 
-	// finder method and still have Crud do the rest of the work for us
-    public function view($slug) {
-        $this-&amp;gt;Crud-&amp;gt;action()-&amp;gt;findMethod('slug');
-		return $this-&amp;gt;Crud-&amp;gt;execute();
-    }
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$components&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Here we can configure our action maps, finders and all kinds of things
+&lt;/span&gt;        &lt;span class=&quot;s1&quot;&gt;'Crud.Crud'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;'actions'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'index'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.index'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Map any index action to the Crud index action handler
+&lt;/span&gt;                &lt;span class=&quot;s1&quot;&gt;'view'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// Configure the options for this action method
+&lt;/span&gt;                    &lt;span class=&quot;s1&quot;&gt;'className'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.view'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                    &lt;span class=&quot;s1&quot;&gt;'validateId'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'admin_index'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.index'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// We can even hookup prefix methods
+&lt;/span&gt;                &lt;span class=&quot;s1&quot;&gt;'admin_add'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.add'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'admin_edit'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.edit'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'admin_delete'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Crud.delete'&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Create your ExamplesController.php
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExamplesController&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AppController&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// We don't need any code here because Crud plugin can handle the methods for us!
+&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// If we want to just change how this action finds it's data we can specify a custom
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// finder method and still have Crud do the rest of the work for us
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$slug&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Crud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'slug'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Crud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     
-    // What if we want to change the pagination in the index action?
-    public function index() {
-    	// We can hook the beforePaginate event to make changes
-    	$this-&amp;gt;Crud-&amp;gt;on('beforePaginate', function (CakeEvent $event) {
-    		// The event subject here is the controller, and paginator is the 
-    		// paginator component.
-    		// So we can change the page limit to 10 to include 10 items per page
-    		// and we could contain a related model too!
-    		$event-&amp;gt;subject()-&amp;gt;paginator-&amp;gt;settings = [
-    			'contain' =&amp;gt; [
-    				'User'
-    			],
-    			'limit' =&amp;gt; 10
-    		];
-    	});
-		
-		// Let crud handle the rest of the action
-		return $this-&amp;gt;Crud-&amp;gt;execute();
-    }
-}
+    &lt;span class=&quot;c1&quot;&gt;// What if we want to change the pagination in the index action?
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// We can hook the beforePaginate event to make changes
+&lt;/span&gt;        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Crud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'beforePaginate'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;CakeEvent&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// The event subject here is the controller, and paginator is the
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// paginator component.
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// So we can change the page limit to 10 to include 10 items per page
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// and we could contain a related model too!
+&lt;/span&gt;            &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;paginator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;settings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'contain'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                    &lt;span class=&quot;s1&quot;&gt;'User'&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'limit'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 
-// Create our view Examples/index.ctp
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'examples index'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$examples&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Example'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'title'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Let crud handle the rest of the action
+&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Crud&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Create our view Examples/index.ctp
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;='&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;examples&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;gt;
+	&amp;lt;?php foreach($examples as $example) {
+		echo $example['&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Example&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;']['&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
 	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -804,8 +805,8 @@ Yep, with the above example, we’ve created all our admin prefixed Example meth
 
 &lt;p&gt;You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.&lt;/p&gt;
 
-&lt;p&gt;###Done
-That’s it! Pretty simple really, apart from all that crap with Perl ;)&lt;/p&gt;
+&lt;h3 id=&quot;done&quot;&gt;Done&lt;/h3&gt;
+&lt;p&gt;That’s it! Pretty simple really, apart from all that crap with Perl ;)&lt;/p&gt;
 </description>
         <pubDate>Thu, 28 Aug 2014 17:14:00 +0100</pubDate>
         <link>http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</link>

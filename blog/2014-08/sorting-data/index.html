@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Sorting multi-dimension model data</title>
-    <meta name="description" content="Scenario So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a certain ...">
+  <title>Sorting multi-dimension model data</title>
+  <meta name="description" content="Scenario So often you have a large collection of collated data, probably with some calculated fields and you want to sort one of the dimensions by a certain ...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2014-08/sorting-data/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2014-08/sorting-data/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -125,32 +128,32 @@
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 <span class="k">public</span> <span class="k">function</span> <span class="nf">view</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nv">$league</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">League</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">'first'</span><span class="p">,</span> <span class="p">[</span>
-		<span class="s1">'contain'</span> <span class="o">=&gt;</span> <span class="p">[</span>
-			<span class="s1">'LeaguesUser'</span> <span class="o">=&gt;</span> <span class="p">[</span>
-				<span class="s1">'User'</span> <span class="o">=&gt;</span> <span class="p">[</span>
-					<span class="s1">'fields'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'correct'</span><span class="p">,</span> <span class="s1">'predicitons'</span><span class="p">]</span>
-				<span class="p">]</span>
-			<span class="p">]</span>
-		<span class="p">],</span>
-		<span class="s1">'conditions'</span> <span class="o">=&gt;</span> <span class="p">[</span>
-			<span class="s1">'League.slug'</span> <span class="o">=&gt;</span> <span class="nv">$slug</span>
-		<span class="p">]</span>
-	<span class="p">]);</span>
-	
-	<span class="nb">usort</span><span class="p">(</span><span class="nv">$league</span><span class="p">,</span> <span class="p">[</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">'sortByCorrect'</span><span class="p">]);</span>
-	
-	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'league'</span><span class="p">,</span> <span class="nv">$league</span><span class="p">);</span>
+    <span class="nv">$league</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">League</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">'first'</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">'contain'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'LeaguesUser'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                <span class="s1">'User'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+                    <span class="s1">'fields'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'correct'</span><span class="p">,</span> <span class="s1">'predicitons'</span><span class="p">]</span>
+                <span class="p">]</span>
+            <span class="p">]</span>
+        <span class="p">],</span>
+        <span class="s1">'conditions'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">'League.slug'</span> <span class="o">=&gt;</span> <span class="nv">$slug</span>
+        <span class="p">]</span>
+    <span class="p">]);</span>
+
+    <span class="nb">usort</span><span class="p">(</span><span class="nv">$league</span><span class="p">,</span> <span class="p">[</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">'sortByCorrect'</span><span class="p">]);</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'league'</span><span class="p">,</span> <span class="nv">$league</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="k">private</span> <span class="k">function</span> <span class="nf">sortByCorrect</span><span class="p">(</span><span class="nv">$a</span><span class="p">,</span> <span class="nv">$b</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-	<span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$b</span><span class="p">[</span><span class="s1">'User'</span><span class="p">][</span><span class="s1">'correct'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">// Rest of controller

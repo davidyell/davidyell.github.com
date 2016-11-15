@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Sharing folders from a Mac to Ubuntu using Samba</title>
-    <meta name="description" content="So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads o...">
+  <title>Sharing folders from a Mac to Ubuntu using Samba</title>
+  <meta name="description" content="So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads o...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-01/loading-remote-shares/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-01/loading-remote-shares/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -45,6 +46,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -65,15 +68,15 @@
   <div class="post-content" itemprop="articleBody">
     <p>So due to snow I had to work from home. I needed to mount my work files over the VPN so that I could use my work Mac as my server. This would save me loads of time, allowing me to edit the files remotely and view them using my Macs nginx server.</p>
 
-<p>##Using Samba / CIFS
-###Setup
-For this method you’ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> &gt; <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you’ll want to share a folder, probably your home folder, <code class="highlighter-rouge">/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
+<h2 id="using-samba--cifs">Using Samba / CIFS</h2>
+<h3 id="setup">Setup</h3>
+<p>For this method you’ll need to enable file sharing on the Mac locally in <strong>System Preferences</strong> &gt; <strong>Sharing</strong> and enable <strong>File Sharing</strong>. Then you’ll want to share a folder, probably your home folder, <code class="highlighter-rouge">/Users/david</code>. Hit <strong>Options</strong> and enable sharing with SMB. Be sure to click the account that you want to use, and enter your password.</p>
 
-<p>###Connecting to the share
-In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code class="highlighter-rouge">smb://192.168.0.1</code> then enter your local machine login.</p>
+<h3 id="connecting-to-the-share">Connecting to the share</h3>
+<p>In Ubuntu or Windows, you should be able to connect to the folder using the IP address of your computer, in the format of <code class="highlighter-rouge">smb://192.168.0.1</code> then enter your local machine login.</p>
 
-<p>###Mounting the share
-Check to make sure that you have <code class="highlighter-rouge">cifs</code> installed by looking for <code class="highlighter-rouge">cifs-utils</code> package.</p>
+<h3 id="mounting-the-share">Mounting the share</h3>
+<p>Check to make sure that you have <code class="highlighter-rouge">cifs</code> installed by looking for <code class="highlighter-rouge">cifs-utils</code> package.</p>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>dpkg --get-selections cifs-utils
 </code></pre>
 </div>
@@ -84,9 +87,9 @@ Check to make sure that you have <code class="highlighter-rouge">cifs</code> ins
 </code></pre>
 </div>
 
-<p>##Using NFS
-###Setup
-Firstly you need to edit the <code class="highlighter-rouge">/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code class="highlighter-rouge">"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
+<h2 id="using-nfs">Using NFS</h2>
+<h3 id="setup-1">Setup</h3>
+<p>Firstly you need to edit the <code class="highlighter-rouge">/etc/exports</code> on the Mac to add the folder that you want to share. Something like <code class="highlighter-rouge">"/Users/david" -alldirs -mapall=501</code> will share the home folder to everyone on your network, fine for internal mounting.</p>
 
 <p>Next we need to make sure that the file is correct and nfsd is running.</p>
 
@@ -98,8 +101,8 @@ Firstly you need to edit the <code class="highlighter-rouge">/etc/exports</code>
 </code></pre>
 </div>
 
-<p>###Mount the share
-<code class="highlighter-rouge">sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
+<h3 id="mount-the-share">Mount the share</h3>
+<p><code class="highlighter-rouge">sudo mount -t nfs -o 'proto=tcp,port=2049,nolock' hostname:/Users/david /mnt/david_mac/</code></p>
 
 <p>##Done
 Have a celebratory cup of tea. You deserve it.</p>

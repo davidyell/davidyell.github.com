@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Third party libraries with CakePHP</title>
-    <meta name="description" content="I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as PSR0.">
+  <title>Third party libraries with CakePHP</title>
+  <meta name="description" content="I always struggle to include third party library files in my Cake project as they very often do not adhere to any coding standard such as PSR0.">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-08/third-party-libraries-with-cakephp/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-08/third-party-libraries-with-cakephp/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -72,16 +75,16 @@
 <p><strong>Update, 6 March 2015</strong><br />
 One of the core developers for the framework <a href="http://stackoverflow.com/questions/8158129/loading-vendor-files-in-cakephp-2-0/8158269#8158269">advices against using the technique</a> I describe in this post. So I am amending the post to reflect this.</p>
 
-<p>####Using require_once
-In order to include third party library files, you can use <code class="highlighter-rouge">require_once()</code>. The only complication is getting the correct path to use.</p>
+<h4 id="using-requireonce">Using require_once</h4>
+<p>In order to include third party library files, you can use <code class="highlighter-rouge">require_once()</code>. The only complication is getting the correct path to use.</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code>// To load app/Vendor/DavesLibrary/DavesClass.php
 require_once(APP . 'Vendor' . DS . 'DavesLibrary' . DS . 'DavesClass.php');
 </code></pre>
 </div>
 
-<p>####The older way
-Usually you will want to use the <code class="highlighter-rouge">App</code> class to load your third party classes into your application using <code class="highlighter-rouge">App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
+<h4 id="the-older-way">The older way</h4>
+<p>Usually you will want to use the <code class="highlighter-rouge">App</code> class to load your third party classes into your application using <code class="highlighter-rouge">App::import()</code>. The parameters of this in the api do not match the usage, which apparently is for backwards compatibility.</p>
 
 <p><a href="http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#including-files-with-app-import">The App class in the cookbook</a>.</p>
 

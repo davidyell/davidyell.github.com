@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Merging Admin specific helpers</title>
-    <meta name="description" content="The scenario You have a bunch of helpers which you are only using in the /admin section of your website. We don’t need to load these on the front-end part of...">
+  <title>Merging Admin specific helpers</title>
+  <meta name="description" content="The scenario You have a bunch of helpers which you are only using in the /admin section of your website. We don’t need to load these on the front-end part of...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-09/merging-admin-specific-helpers/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-09/merging-admin-specific-helpers/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -69,15 +72,15 @@
 <h3 id="solution">Solution</h3>
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 <span class="c1">// app/AppController.php
-</span>	<span class="k">public</span> <span class="nv">$helpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-		<span class="s1">'Html'</span><span class="p">,</span>
-		<span class="s1">'Form'</span><span class="p">,</span>
-	<span class="p">);</span>
+</span><span class="k">public</span> <span class="nv">$helpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'Html'</span><span class="p">,</span>
+    <span class="s1">'Form'</span><span class="p">,</span>
+<span class="p">);</span>
 
-	<span class="k">public</span> <span class="nv">$adminHelpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-        <span class="s1">'NiceAdmin.Actions'</span><span class="p">,</span>
-        <span class="s1">'NiceAdmin.Boolean'</span><span class="p">,</span>
-	<span class="p">);</span>
+<span class="k">public</span> <span class="nv">$adminHelpers</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'NiceAdmin.Actions'</span><span class="p">,</span>
+    <span class="s1">'NiceAdmin.Boolean'</span><span class="p">,</span>
+<span class="p">);</span>
 
 <span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">()</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="o">-&gt;</span><span class="na">params</span><span class="p">[</span><span class="s1">'admin'</span><span class="p">]))</span> <span class="p">{</span>

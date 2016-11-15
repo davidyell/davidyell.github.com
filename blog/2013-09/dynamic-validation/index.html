@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dynamic validation in CakePHP</title>
-    <meta name="description" content="The scenario You have two different forms which both submit data for the same model. Each of these forms has different fields, but both need to be validated ...">
+  <title>Dynamic validation in CakePHP</title>
+  <meta name="description" content="The scenario You have two different forms which both submit data for the same model. Each of these forms has different fields, but both need to be validated ...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-09/dynamic-validation/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-09/dynamic-validation/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -79,81 +82,81 @@
  *
  * @var array $validate
  */</span>
-	<span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-		<span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-			<span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-				<span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
-				<span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please enter a title'</span><span class="p">,</span>
-				<span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
-			<span class="p">),</span>
-			<span class="s1">'two'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-				<span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'minLength'</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-				<span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Title must be more than 10 characters'</span>
-			<span class="p">)</span>
-		<span class="p">)</span>
-	<span class="p">);</span>
+    <span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
+                <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please enter a title'</span><span class="p">,</span>
+                <span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
+            <span class="p">),</span>
+            <span class="s1">'two'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'minLength'</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Title must be more than 10 characters'</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">);</span>
 
 <span class="sd">/**
  * Validation rules for when editing a post
  * 
  * @var array $validatePost
  */</span>
-	<span class="k">public</span> <span class="nv">$validatePost</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-		<span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-			<span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-				<span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
-				<span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please enter some content'</span><span class="p">,</span>
-				<span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
-			<span class="p">)</span>
-		<span class="p">)</span>
-	<span class="p">);</span>
+    <span class="k">public</span> <span class="nv">$validatePost</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
+                <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please enter some content'</span><span class="p">,</span>
+                <span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">);</span>
 
 <span class="sd">/**
  * Validate Author
  * 
  * @var array $validateAuthor
  */</span>
-	<span class="k">public</span> <span class="nv">$validateAuthor</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-		<span class="s1">'author_id'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-			<span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-				<span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
-				<span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please select an Author'</span><span class="p">,</span>
-				<span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
-			<span class="p">)</span>
-		<span class="p">),</span>
-	<span class="p">);</span>
+    <span class="k">public</span> <span class="nv">$validateAuthor</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'author_id'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'notEmpty'</span><span class="p">,</span>
+                <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Please select an Author'</span><span class="p">,</span>
+                <span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">true</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">);</span>
 
 <span class="sd">/**
  * Here we can check some conditions to see what validation we need
  * 
  * @return boolean
  */</span>
-	<span class="k">public</span> <span class="k">function</span> <span class="nf">beforeValidate</span><span class="p">()</span> <span class="p">{</span>
-		<span class="c1">// We might want to check data
-</span>		<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'author_id'</span><span class="p">]))</span> <span class="p">{</span>
-			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validateAuthor</span><span class="p">);</span>
-		<span class="p">}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">beforeValidate</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// We might want to check data
+</span>        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'author_id'</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validateAuthor</span><span class="p">);</span>
+        <span class="p">}</span>
 
-		<span class="c1">// Maybe only on an edit action?
-</span>		<span class="c1">// We know it's edit because there is an id
-</span>		<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]))</span> <span class="p">{</span>
-			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validatePost</span><span class="p">);</span>
-		<span class="p">}</span>
+        <span class="c1">// Maybe only on an edit action?
+</span>        <span class="c1">// We know it's edit because there is an id
+</span>        <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validatePost</span><span class="p">);</span>
+        <span class="p">}</span>
 
-		<span class="c1">// Perhaps we want to add a single new rule for add using the validator?
-</span>		<span class="c1">// We know it's add because there is no id
-</span>		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]))</span> <span class="p">{</span>
-			<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validator</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'pubDate'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
-					<span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-						<span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'datetime'</span><span class="p">,</span> <span class="s1">'ymd'</span><span class="p">),</span>
-						<span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Publish date must be ymd'</span>
-					<span class="p">)</span>
-				<span class="p">)</span>
-			<span class="p">)</span>
-		<span class="p">}</span>
+        <span class="c1">// Perhaps we want to add a single new rule for add using the validator?
+</span>        <span class="c1">// We know it's add because there is no id
+</span>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Post'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">validator</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'pubDate'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+                    <span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                        <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'datetime'</span><span class="p">,</span> <span class="s1">'ymd'</span><span class="p">),</span>
+                        <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Publish date must be ymd'</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
 
-		<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-	<span class="p">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
 </code></pre>
 </div>
