@@ -4,11 +4,81 @@
     <title>Daves dev warblings</title>
     <description>A place to store code snippets, thoughts on coding, and other stuff.
 </description>
-    <link>http://jedistirfry.co.uk/</link>
-    <atom:link href="http://jedistirfry.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Nov 2016 16:35:17 +0000</pubDate>
-    <lastBuildDate>Tue, 15 Nov 2016 16:35:17 +0000</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 15 Nov 2016 17:03:34 +0000</pubDate>
+    <lastBuildDate>Tue, 15 Nov 2016 17:03:34 +0000</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
+    
+      <item>
+        <title>Pagination inside a View Cell</title>
+        <description>&lt;h2 id=&quot;what&quot;&gt;What?&lt;/h2&gt;
+&lt;p&gt;So I encountered a use-case where I wanted to be able to render a complex table simply whilst allowing it to be easily
+integrated with other things in the template.&lt;/p&gt;
+
+&lt;p&gt;The obvious choice here was to use a &lt;a href=&quot;http://book.cakephp.org/3.0/en/views/cells.html&quot;&gt;View Cell&lt;/a&gt; so that it would be neatly enclosed.&lt;/p&gt;
+
+&lt;p&gt;However this meant that I’d need to load the data and paginate it inside the View Cell.&lt;/p&gt;
+
+&lt;h2 id=&quot;how&quot;&gt;How?&lt;/h2&gt;
+&lt;p&gt;Working in your &lt;code class=&quot;highlighter-rouge&quot;&gt;ExampleCell.php&lt;/code&gt; file, in your method you can instanciate a new controller, with the request and attach 
+the Paginator.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// In /src/View/Cell/ExampleCell.php
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Cake\Controller\Component\PaginatorComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Cake\Controller\ComponentRegistry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Cake\Controller\Controller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$controller&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Controller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$componentRegistry&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ComponentRegistry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$componentRegistry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$controller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$paginator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PaginatorComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$componentRegistry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    
+    &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loadModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Examples'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    
+    &lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$paginator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;paginate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Examples&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    
+    &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'examples'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This code will build a new controller instance using the request sent to the View Cell. Load the Paginator component and then paginate
+ the query. Because the request is sent, the Paginator can already read from the query strings in the url, so all the pagination happens automatically.&lt;/p&gt;
+
+&lt;h2 id=&quot;implementing-the-view-cell&quot;&gt;Implementing the View Cell&lt;/h2&gt;
+&lt;p&gt;In your template you can simply call the Cell as you would normally.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cell&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Example'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The View Cell gets the request anyway, so there is no need to pass it in via the options.&lt;/p&gt;
+
+&lt;h2 id=&quot;make-a-brew&quot;&gt;Make a brew!&lt;/h2&gt;
+&lt;p&gt;That’s it. You can now have a paginated View Cell of data right in your template!&lt;/p&gt;
+
+&lt;h2 id=&quot;cleverclogs&quot;&gt;Cleverclogs&lt;/h2&gt;
+&lt;p&gt;If you’re feeling clever, perhaps you can call the Cell using Ajax to update it right inside the page!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 15 Nov 2016 16:36:20 +0000</pubDate>
+        <link>http://localhost:4000/blog/2016-11/pagination-inside-a-view-cell/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016-11/pagination-inside-a-view-cell/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp3</category>
+        
+        <category>pagination</category>
+        
+        <category>view cells</category>
+        
+      </item>
     
       <item>
         <title>Create an association to any object in your project</title>
@@ -95,8 +165,8 @@ This just reads data, you’ll need to ensure that you save the table alias, and
 
 </description>
         <pubDate>Mon, 13 Jun 2016 14:41:01 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</guid>
+        <link>http://localhost:4000/blog/2016-06/attaching-objects-to-any-object/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016-06/attaching-objects-to-any-object/</guid>
         
         
         <category>cakephp</category>
@@ -228,8 +298,8 @@ the name you used in your &lt;code class=&quot;highlighter-rouge&quot;&gt;app.ph
 &lt;p&gt;Job done! Have a brew.&lt;/p&gt;
 </description>
         <pubDate>Fri, 11 Sep 2015 12:21:14 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</guid>
+        <link>http://localhost:4000/blog/2015-09/connecting-to-a-web-service/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-09/connecting-to-a-web-service/</guid>
         
         
         <category>cakephp</category>
@@ -274,8 +344,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;Time for a brew!&lt;/p&gt;
 </description>
         <pubDate>Wed, 02 Sep 2015 12:30:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</guid>
+        <link>http://localhost:4000/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</guid>
         
         
         <category>cakephp</category>
@@ -318,8 +388,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;That’s it! Go make a brew.&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Jul 2015 21:33:09 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</guid>
+        <link>http://localhost:4000/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</guid>
         
         
         <category>cakephp</category>
@@ -380,8 +450,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;If you have any ideas on how to tackle this challenge, please let me know in the comments.&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Jul 2015 20:37:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</guid>
+        <link>http://localhost:4000/blog/2015-07/finding-neighbours-in-cakephp3/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-07/finding-neighbours-in-cakephp3/</guid>
         
         
         <category>cakephp3</category>
@@ -481,8 +551,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;That’s it, you now have a nice horizontal calendar similar to Google Calendar!&lt;/p&gt;
 </description>
         <pubDate>Fri, 29 May 2015 11:04:12 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-05/making-calendars/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/making-calendars/</guid>
+        <link>http://localhost:4000/blog/2015-05/making-calendars/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-05/making-calendars/</guid>
         
         
         <category>php</category>
@@ -549,8 +619,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;All done, that’s it!&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 May 2015 16:14:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</guid>
+        <link>http://localhost:4000/blog/2015-05/jquery-ui-accordion/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-05/jquery-ui-accordion/</guid>
         
         
         <category>jquery</category>
@@ -624,8 +694,8 @@ As we are using a single view to paginate many different lists we need to tell t
 &lt;p&gt;It really is that simple!&lt;/p&gt;
 </description>
         <pubDate>Wed, 29 Apr 2015 11:57:10 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</guid>
+        <link>http://localhost:4000/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</guid>
         
         
         <category>cakephp</category>
@@ -728,8 +798,8 @@ Yep, with the above example, we’ve created all our admin prefixed Example meth
 &lt;p&gt;Why not eh? You’ve got loads of spare time now.&lt;/p&gt;
 </description>
         <pubDate>Fri, 13 Feb 2015 12:31:00 +0000</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-02/working-with-crud/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-02/working-with-crud/</guid>
+        <link>http://localhost:4000/blog/2015-02/working-with-crud/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-02/working-with-crud/</guid>
         
         
         <category>cakephp</category>
@@ -739,85 +809,6 @@ Yep, with the above example, we’ve created all our admin prefixed Example meth
         <category>rad</category>
         
         <category>plugin</category>
-        
-      </item>
-    
-      <item>
-        <title>Installing and using pt-visual-explain</title>
-        <description>&lt;h3 id=&quot;why&quot;&gt;Why?&lt;/h3&gt;
-&lt;p&gt;So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the &lt;a href=&quot;https://joind.in/talk/view/11599&quot;&gt;Profiling and Optimisation: A practical approach&lt;/a&gt; by &lt;a href=&quot;http://mark-story.com/&quot;&gt;Mark Story&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;One the tools mentioned was &lt;code class=&quot;highlighter-rouge&quot;&gt;pt-visual-explain&lt;/code&gt;, and I’ve been playing with it to see how it can help me better understand my queries and what is happening when I’m getting data.&lt;/p&gt;
-
-&lt;p&gt;I thought that I would document the process so I don’t forget it.&lt;/p&gt;
-
-&lt;h3 id=&quot;install&quot;&gt;Install&lt;/h3&gt;
-&lt;p&gt;Go grab your specific platform download of &lt;a href=&quot;http://www.percona.com/downloads/percona-toolkit/LATEST&quot;&gt;Percona Toolkit&lt;/a&gt;. Personally I used the &lt;strong&gt;tarball&lt;/strong&gt; option for my work machine as it’s OS X.&lt;/p&gt;
-
-&lt;h4 id=&quot;mac-osx&quot;&gt;Mac OSX&lt;/h4&gt;
-&lt;p&gt;Here are the instructions for installation on a Mac. I’ve not tried it on my Ubuntu laptop, but when I do, I’ll update this post.&lt;/p&gt;
-
-&lt;p&gt;Then I unzipped the tarball into a folder. You’ll notice that there is a &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile.PL&lt;/code&gt;, this is a Perl script for building the various executables you’ll need.&lt;/p&gt;
-
-&lt;p&gt;Make sure you have Perl installed, &lt;code class=&quot;highlighter-rouge&quot;&gt;perl --version&lt;/code&gt;, which you should be default I think. Then it’s time to build the various executables.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;percona-toolkit-2.2.10
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl Makefile.PL
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Then you’ll probably find some warnings or errors about a missing Perl package called &lt;code class=&quot;highlighter-rouge&quot;&gt;DBD::MySQL&lt;/code&gt;. So let’s install this. I used &lt;a href=&quot;http://bixsolutions.net/forum/thread-8.html&quot;&gt;this guide&lt;/a&gt;, but I will summarise it here.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl -MCPAN -e &lt;span class=&quot;s1&quot;&gt;'shell'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;If this is the first time you’ve used the Cpan module on your Mac you will be asked about configuring your Cpan set-up.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;get DBI
-&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;get DBD::mysql
-&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
-
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo perl -MCPAN -e &lt;span class=&quot;s1&quot;&gt;'install DBI'&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/.cpan/build/DBD-mysql-x.xxx/
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl Makefile.PL --testuser&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'daz'&lt;/span&gt; --testpassword&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'YOUR_PASSWORD'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Don’t include the &lt;code class=&quot;highlighter-rouge&quot;&gt;--testpassword=''&lt;/code&gt; argument if your database doesn’t have a password.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;make
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make install
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;So now it’s time to run it and see what our queries look like.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pt-visual-explain --connect --host&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;localhost --user&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root --database&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;myDatabase ~/Percona/MyExampleQuery.sql
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.&lt;/p&gt;
-
-&lt;h3 id=&quot;done&quot;&gt;Done&lt;/h3&gt;
-&lt;p&gt;That’s it! Pretty simple really, apart from all that crap with Perl ;)&lt;/p&gt;
-</description>
-        <pubDate>Thu, 28 Aug 2014 17:14:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</guid>
-        
-        
-        <category>mysql</category>
-        
-        <category>percona</category>
-        
-        <category>optimisation</category>
         
       </item>
     

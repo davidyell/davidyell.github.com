@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Handy htaccess rules</title>
-  <meta name="description" content="I don’t tend to use Apache these days, having swapped over to using Nginx, but these always caught me out.">
+  <title>Pagination inside a View Cell</title>
+  <meta name="description" content="What? So I encountered a use-case where I wanted to be able to render a complex table simply whilst allowing it to be easily integrated with other things in ...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2008-11/handy-htaccess/">
+  <link rel="canonical" href="http://localhost:4000/blog/2016-11/pagination-inside-a-view-cell/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -61,26 +61,63 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Handy htaccess rules</h1>
-    <p class="post-meta"><time datetime="2008-11-20T09:43:25+00:00" itemprop="datePublished">Nov 20, 2008</time></p>
+    <h1 class="post-title" itemprop="name headline">Pagination inside a View Cell</h1>
+    <p class="post-meta"><time datetime="2016-11-15T16:36:20+00:00" itemprop="datePublished">Nov 15, 2016</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>I don’t tend to use Apache these days, having swapped over to using Nginx, but these always caught me out.</p>
+    <h2 id="what">What?</h2>
+<p>So I encountered a use-case where I wanted to be able to render a complex table simply whilst allowing it to be easily
+integrated with other things in the template.</p>
 
-<div class="language-apache highlighter-rouge"><pre class="highlight"><code><span class="c"># Pass all the /forums stuff through the routing</span>
-<span class="nc">RewriteCond</span> %{REQUEST_URI} "/forums/"
-<span class="nc">RewriteRule</span> (.*) $1 [L]
+<p>The obvious choice here was to use a <a href="http://book.cakephp.org/3.0/en/views/cells.html">View Cell</a> so that it would be neatly enclosed.</p>
 
-<span class="c"># If you need to lock down access to a folder, such as a CMS, then use the following</span>
-<span class="nc">RewriteRule</span> ^cms(.*)$ /maintenance.html [R=301,L]
+<p>However this meant that I’d need to load the data and paginate it inside the View Cell.</p>
 
-<span class="c"># Redirecting everyone to maintenance</span>
-<span class="c"># Reference, http://www.techiecorner.com/97/redirect-to-maintenance-page-during-upgrade-using-htaccess/</span>
-<span class="nc">RewriteCond</span> %{REQUEST_URI} !/maintenance.html$
-<span class="nc">RewriteRule</span> $ /maintenance.html [R=302,L]
+<h2 id="how">How?</h2>
+<p>Working in your <code class="highlighter-rouge">ExampleCell.php</code> file, in your method you can instanciate a new controller, with the request and attach 
+the Paginator.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// In /src/View/Cell/ExampleCell.php
+</span>
+<span class="k">use</span> <span class="nx">Cake\Controller\Component\PaginatorComponent</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Cake\Controller\ComponentRegistry</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Cake\Controller\Controller</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">display</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$controller</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Controller</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">);</span>
+    <span class="nv">$componentRegistry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ComponentRegistry</span><span class="p">();</span>
+    <span class="nv">$componentRegistry</span><span class="o">-&gt;</span><span class="na">setController</span><span class="p">(</span><span class="nv">$controller</span><span class="p">);</span>
+    <span class="nv">$paginator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PaginatorComponent</span><span class="p">(</span><span class="nv">$componentRegistry</span><span class="p">);</span>
+    
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">loadModel</span><span class="p">(</span><span class="s1">'Examples'</span><span class="p">);</span>
+    
+    <span class="nv">$query</span> <span class="o">=</span> <span class="nv">$paginator</span><span class="o">-&gt;</span><span class="na">paginate</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Examples</span><span class="p">);</span>
+    
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'examples'</span><span class="p">,</span> <span class="nv">$query</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre>
 </div>
+
+<p>This code will build a new controller instance using the request sent to the View Cell. Load the Paginator component and then paginate
+ the query. Because the request is sent, the Paginator can already read from the query strings in the url, so all the pagination happens automatically.</p>
+
+<h2 id="implementing-the-view-cell">Implementing the View Cell</h2>
+<p>In your template you can simply call the Cell as you would normally.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cell</span><span class="p">(</span><span class="s1">'Example'</span><span class="p">);</span><span class="cp">?&gt;</span>
+</code></pre>
+</div>
+
+<p>The View Cell gets the request anyway, so there is no need to pass it in via the options.</p>
+
+<h2 id="make-a-brew">Make a brew!</h2>
+<p>That’s it. You can now have a paginated View Cell of data right in your template!</p>
+
+<h2 id="cleverclogs">Cleverclogs</h2>
+<p>If you’re feeling clever, perhaps you can call the Cell using Ajax to update it right inside the page!</p>
 
   </div>
 
