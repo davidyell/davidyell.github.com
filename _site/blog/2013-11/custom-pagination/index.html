@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Custom Pagination Helper links</title>
-    <meta name="description" content="###Scenario You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles ...">
+  <title>Custom Pagination Helper links</title>
+  <meta name="description" content="Scenario You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by ...">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2013-11/custom-pagination/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -45,6 +46,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -63,14 +66,15 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>###Scenario
-You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
+    <h3 id="scenario">Scenario</h3>
+<p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
 
 <p>The url I wanted to use was <code class="highlighter-rouge">/news/category/daves-awesome-category</code> and then paginating results on <code class="highlighter-rouge">/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn’t want to play ball.</p>
 
 <p>I had already created my route.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>Router::connect('/news/category/:category/*', array('controller' =&gt; 'news_articles', 'action' =&gt; 'index'), array('category' =&gt; '[a-z0-9-]+', 'pass' =&gt; array('category')));
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nx">Router</span><span class="o">::</span><span class="na">connect</span><span class="p">(</span><span class="s1">'/news/category/:category/*'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'news_articles'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'category'</span> <span class="o">=&gt;</span> <span class="s1">'[a-z0-9-]+'</span><span class="p">,</span> <span class="s1">'pass'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)));</span>
 </code></pre>
 </div>
 
@@ -81,12 +85,13 @@ You are paginating a set of records but you want to use a custom url for that sp
 
 <p>Here is my pagination including the fix to adjust the url if a category is set.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>if (isset($category)) {
-	$this-&gt;Paginator-&gt;options['url'] = array('controller' =&gt; 'news_articles', 'action' =&gt; 'index', 'category' =&gt; $category['NewsCategory']['slug']);
-}
-echo $this-&gt;Paginator-&gt;prev('<span class="err">&lt;</span> ' . __('previous'), array(), null, array('class' =&gt; 'prev disabled'));
-echo $this-&gt;Paginator-&gt;numbers(array('separator' =&gt; ''));
-echo $this-&gt;Paginator-&gt;next(__('next') . ' &gt;', array(), null, array('class' =&gt; 'next disabled'));
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$category</span><span class="p">))</span> <span class="p">{</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">options</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'controller'</span> <span class="o">=&gt;</span> <span class="s1">'news_articles'</span><span class="p">,</span> <span class="s1">'action'</span> <span class="o">=&gt;</span> <span class="s1">'index'</span><span class="p">,</span> <span class="s1">'category'</span> <span class="o">=&gt;</span> <span class="nv">$category</span><span class="p">[</span><span class="s1">'NewsCategory'</span><span class="p">][</span><span class="s1">'slug'</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">prev</span><span class="p">(</span><span class="s1">'&lt; '</span> <span class="o">.</span> <span class="nx">__</span><span class="p">(</span><span class="s1">'previous'</span><span class="p">),</span> <span class="k">array</span><span class="p">(),</span> <span class="kc">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'prev disabled'</span><span class="p">));</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">numbers</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'separator'</span> <span class="o">=&gt;</span> <span class="s1">''</span><span class="p">));</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Paginator</span><span class="o">-&gt;</span><span class="na">next</span><span class="p">(</span><span class="nx">__</span><span class="p">(</span><span class="s1">'next'</span><span class="p">)</span> <span class="o">.</span> <span class="s1">' &gt;'</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="kc">null</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'next disabled'</span><span class="p">));</span>
 </code></pre>
 </div>
 
@@ -94,6 +99,9 @@ echo $this-&gt;Paginator-&gt;next(__('next') . ' &gt;', array(), null, array('cl
 <p>Make a brew, and probably have a biscuit too. Why not eh? You’ve earned it.</p>
 
   </div>
+
+  
+    
 
   
 </article>

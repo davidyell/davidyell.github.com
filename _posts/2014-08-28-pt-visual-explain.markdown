@@ -64,5 +64,5 @@ $ pt-visual-explain --connect --host=localhost --user=root --database=myDatabase
 
 You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.
 
-###Done
+### Done
 That's it! Pretty simple really, apart from all that crap with Perl ;)

@@ -68,32 +68,32 @@ The important thing to note is that the callable function passed to `usort()` is
 ```php
 <?php
 public function view($slug) {
-	$league = $this->League->find('first', [
-		'contain' => [
-			'LeaguesUser' => [
-				'User' => [
-					'fields' => ['id', 'email', 'username', 'correct', 'predicitons']
-				]
-			]
-		],
-		'conditions' => [
-			'League.slug' => $slug
-		]
-	]);
-	
-	usort($league, [$this, 'sortByCorrect']);
-	
-	$this->set('league', $league);
+    $league = $this->League->find('first', [
+        'contain' => [
+            'LeaguesUser' => [
+                'User' => [
+                    'fields' => ['id', 'email', 'username', 'correct', 'predicitons']
+                ]
+            ]
+        ],
+        'conditions' => [
+            'League.slug' => $slug
+        ]
+    ]);
+
+    usort($league, [$this, 'sortByCorrect']);
+
+    $this->set('league', $league);
 }
 
 private function sortByCorrect($a, $b) {
-	if ($a['User']['correct'] < $b['User']['correct']) {
-		return 1;
-	} elseif ($a['User']['correct'] == $b['User']['correct']) {
-		return 0;
-	} else {
-		return -1;
-	}
+    if ($a['User']['correct'] < $b['User']['correct']) {
+        return 1;
+    } elseif ($a['User']['correct'] == $b['User']['correct']) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 // Rest of controller

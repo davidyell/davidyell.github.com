@@ -2,19 +2,20 @@
 <html lang="en">
 
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Filtering dates using CakeDC/Search</title>
-    <meta name="description" content="Scenario I needed to do a search on a date field in my database which was stored as a DATE, but only filtering by month.">
+  <title>Filtering dates using CakeDC/Search</title>
+  <meta name="description" content="Scenario I needed to do a search on a date field in my database which was stored as a DATE, but only filtering by month.">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/blog/2014-03/filtering-dates-using-cakedc-slash-search/">
-    <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
-
-    
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2014-03/filtering-dates-using-cakedc-slash-search/">
+  <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
+  
+  
 </head>
+
 
   <body>
 
@@ -37,6 +38,8 @@
         
           
           <a class="page-link" href="/about/">About Dave</a>
+          
+        
           
         
           
@@ -71,40 +74,43 @@
 
 <p>My model already had the <code class="highlighter-rouge">filterArgs</code> setup.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>/**
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="sd">/**
  * Setup default search filters
  *
  * @var array
- */
-	public $filterArgs = [
-		'day_type_id' =&gt; ['type' =&gt; 'value'],
-        'month' =&gt; ['type' =&gt; 'query', 'method' =&gt; 'filterByMonth']
-	];
+ */</span>
+	<span class="k">public</span> <span class="nv">$filterArgs</span> <span class="o">=</span> <span class="p">[</span>
+		<span class="s1">'day_type_id'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'value'</span><span class="p">],</span>
+        <span class="s1">'month'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'type'</span> <span class="o">=&gt;</span> <span class="s1">'query'</span><span class="p">,</span> <span class="s1">'method'</span> <span class="o">=&gt;</span> <span class="s1">'filterByMonth'</span><span class="p">]</span>
+	<span class="p">];</span>
 </code></pre>
 </div>
 
 <p>So I just added a <code class="highlighter-rouge">type</code> of <code class="highlighter-rouge">query</code> and passed in a <code class="highlighter-rouge">method</code>.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>/**
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="sd">/**
  * Filter the pagination by month
  *
  * @param array $data
  * @return array
- **/
-    public function filterByMonth(array $data = array()) {
-        return [
-            "DATE_FORMAT({$this-&gt;alias}.date, '%c')" =&gt; (int)$data['month']
-        ];
-    }
+ **/</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">filterByMonth</span><span class="p">(</span><span class="k">array</span> <span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s2">"DATE_FORMAT(</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">alias</span><span class="si">}</span><span class="s2">.date, '%c')"</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">int</span><span class="p">)</span><span class="nv">$data</span><span class="p">[</span><span class="s1">'month'</span><span class="p">]</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
 </code></pre>
 </div>
 
 <p>The <code class="highlighter-rouge">$data</code> array will contain all the fields setup in your model along with their values. So for me it looked like</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>[
-    'day_type_id' =&gt; 3,
-    'month' =&gt; '08' // Note the string type, hence why I cast to int
-]
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="p">[</span>
+    <span class="s1">'day_type_id'</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">'month'</span> <span class="o">=&gt;</span> <span class="s1">'08'</span> <span class="c1">// Note the string type, hence why I cast to int
+</span><span class="p">]</span>
 </code></pre>
 </div>
 
@@ -112,6 +118,9 @@
 <p>Make a brew!</p>
 
   </div>
+
+  
+    
 
   
 </article>

@@ -13,15 +13,15 @@ You have a bunch of helpers which you are only using in the `/admin` section of 
 ```php
 <?php
 // app/AppController.php
-	public $helpers = array(
-		'Html',
-		'Form',
-	);
+public $helpers = array(
+    'Html',
+    'Form',
+);
 
-	public $adminHelpers = array(
-        'NiceAdmin.Actions',
-        'NiceAdmin.Boolean',
-	);
+public $adminHelpers = array(
+    'NiceAdmin.Actions',
+    'NiceAdmin.Boolean',
+);
 
 public function beforeFilter() {
 	if (isset($this->request->params['admin'])) {

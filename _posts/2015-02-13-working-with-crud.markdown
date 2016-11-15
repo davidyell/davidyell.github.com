@@ -24,58 +24,59 @@ Here we'll assume the plugin is loaded already, the trait is being used and we h
 The following example is for Cake 2, as in Cake 3, there is no need to use the `prefix_method` notation.
 
 ```php
+<?php
 // I tend to configure Crud in my AppController to save on repitition
 class AppController extends Controller {
-	use CrudControllerTrait;
-	
-	public $components = [
-		// Here we can configure our action maps, finders and all kinds of things
-		'Crud.Crud' => [
-			'actions' => [
-				'index' => 'Crud.index', // Map any index action to the Crud index action handler
-				'view' => [
-					// Configure the options for this action method
-					'className' => 'Crud.view',
-					'validateId' => false
-				],
-				'admin_index' => 'Crud.index', // We can even hookup prefix methods
-				'admin_add' => 'Crud.add',
-				'admin_edit' => 'Crud.edit',
-				'admin_delete' => 'Crud.delete'
-			]
-		]
-	];
+    use CrudControllerTrait;
+
+    public $components = [
+        // Here we can configure our action maps, finders and all kinds of things
+        'Crud.Crud' => [
+            'actions' => [
+                'index' => 'Crud.index', // Map any index action to the Crud index action handler
+                'view' => [
+                    // Configure the options for this action method
+                    'className' => 'Crud.view',
+                    'validateId' => false
+                ],
+                'admin_index' => 'Crud.index', // We can even hookup prefix methods
+                'admin_add' => 'Crud.add',
+                'admin_edit' => 'Crud.edit',
+                'admin_delete' => 'Crud.delete'
+            ]
+        ]
+    ];
 }
 
 // Create your ExamplesController.php
 class ExamplesController extends AppController {
-	// We don't need any code here because Crud plugin can handle the methods for us!
-	
-	// If we want to just change how this action finds it's data we can specify a custom 
-	// finder method and still have Crud do the rest of the work for us
+    // We don't need any code here because Crud plugin can handle the methods for us!
+
+    // If we want to just change how this action finds it's data we can specify a custom
+    // finder method and still have Crud do the rest of the work for us
     public function view($slug) {
         $this->Crud->action()->findMethod('slug');
-		return $this->Crud->execute();
+        return $this->Crud->execute();
     }
     
     // What if we want to change the pagination in the index action?
     public function index() {
-    	// We can hook the beforePaginate event to make changes
-    	$this->Crud->on('beforePaginate', function (CakeEvent $event) {
-    		// The event subject here is the controller, and paginator is the 
-    		// paginator component.
-    		// So we can change the page limit to 10 to include 10 items per page
-    		// and we could contain a related model too!
-    		$event->subject()->paginator->settings = [
-    			'contain' => [
-    				'User'
-    			],
-    			'limit' => 10
-    		];
-    	});
-		
-		// Let crud handle the rest of the action
-		return $this->Crud->execute();
+        // We can hook the beforePaginate event to make changes
+        $this->Crud->on('beforePaginate', function (CakeEvent $event) {
+            // The event subject here is the controller, and paginator is the
+            // paginator component.
+            // So we can change the page limit to 10 to include 10 items per page
+            // and we could contain a related model too!
+            $event->subject()->paginator->settings = [
+                'contain' => [
+                    'User'
+                ],
+                'limit' => 10
+            ];
+        });
+
+        // Let crud handle the rest of the action
+        return $this->Crud->execute();
     }
 }
 

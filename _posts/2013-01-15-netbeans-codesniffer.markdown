@@ -7,7 +7,7 @@ categories: [pear, phpcs, phpmd, netbeans]
 date: 2013-01-15 09:43:25
 ---
 
-###Things you will need
+### Things you will need
 **Netbeans plugin**
 Download the plugin from here, [http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin](http://plugins.netbeans.org/plugin/40282/phpmd-php-codesniffer-plugin)  
 **OR**  
@@ -39,10 +39,10 @@ $ pear install --alldeps phpmd/PHP_PMD
 ```  
 [http://phpmd.org/](http://phpmd.org/)
 
-###Install the plugin
+### Install the plugin
 In Netbeans click **Tools** > **Plugins** and click the **Downloaded** tab. Click on **Add Plugins…** and browse to where your `.nbm` file is located. Install this file and restart Netbeans.
 
-###Configuring the plugin
+### Configuring the plugin
 Now you need to configure the plugin so it can find your PEAR packages.
 You will need to configure this in **Preferences**.
 
@@ -50,10 +50,10 @@ Click on the **PHP** tab, and browse to the **phpMD** tab. Click **change** and 
 
 Now click on **phpCodeSniffer** tab and do the same as above to enter the path to your `phpcs` executable.
 
-####Other settings
+#### Other settings
 In here I tend to specify that the `tabsize` is 4 to conform with PSR-2.
 
-###How do I 'run' it?
+### How do I 'run' it?
 **Window** > **Action items**
 
 or `CMD` + `6`

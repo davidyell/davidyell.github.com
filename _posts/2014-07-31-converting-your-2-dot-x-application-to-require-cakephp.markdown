@@ -43,6 +43,7 @@ The next task is to tell CakePHP that we have a new place for it to find the cor
 You'll want to update the `ROOT`, `APP_DIR`, `TMP` and the `CAKE_CORE_INCLUDE_PATH` constants.
 
 ```php
+<?php
 define('ROOT', dirname(dirname(__FILE__)));
 define('APP_DIR', 'app'); // I define this as a string because why not right?
 define('TMP', ROOT . DS . 'tmp' . DS);
@@ -53,6 +54,7 @@ define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'c
 So that the console commands can still find the right lib, we need to update the include path here too.
 
 ```php
+<?php
 ini_set('include_path', '..' . $ds . 'vendor' . $ds . 'cakephp' . $ds . 'cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
 ```
 
@@ -60,6 +62,7 @@ As you are running your shell tasks from within `app` we can use a relative path
 
 #### Edit your bootstrap to build the new paths
 ```php
+<?php
 // app/config/bootstrap.php
 App::build(
 	[

@@ -23,81 +23,81 @@ The method that I use to solve this is very simple. You can create two validatio
  *
  * @var array $validate
  */
-	public $validate = array(
-		'title' => array(
-			'one' => array(
-				'rule' => 'notEmpty',
-				'message' => 'Please enter a title',
-				'required' => true
-			),
-			'two' => array(
-				'rule' => array('minLength', 10),
-				'message' => 'Title must be more than 10 characters'
-			)
-		)
-	);
+    public $validate = array(
+        'title' => array(
+            'one' => array(
+                'rule' => 'notEmpty',
+                'message' => 'Please enter a title',
+                'required' => true
+            ),
+            'two' => array(
+                'rule' => array('minLength', 10),
+                'message' => 'Title must be more than 10 characters'
+            )
+        )
+    );
 
 /**
  * Validation rules for when editing a post
  * 
  * @var array $validatePost
  */
-	public $validatePost = array(
-		'content' => array(
-			'one' => array(
-				'rule' => 'notEmpty',
-				'message' => 'Please enter some content',
-				'required' => true
-			)
-		)
-	);
+    public $validatePost = array(
+        'content' => array(
+            'one' => array(
+                'rule' => 'notEmpty',
+                'message' => 'Please enter some content',
+                'required' => true
+            )
+        )
+    );
 
 /**
  * Validate Author
  * 
  * @var array $validateAuthor
  */
-	public $validateAuthor = array(
-		'author_id' => array(
-			'one' => array(
-				'rule' => 'notEmpty',
-				'message' => 'Please select an Author',
-				'required' => true
-			)
-		),
-	);
+    public $validateAuthor = array(
+        'author_id' => array(
+            'one' => array(
+                'rule' => 'notEmpty',
+                'message' => 'Please select an Author',
+                'required' => true
+            )
+        ),
+    );
 
 /**
  * Here we can check some conditions to see what validation we need
  * 
  * @return boolean
  */
-	public function beforeValidate() {
-		// We might want to check data
-		if (isset($this->data['Post']['author_id'])) {
-			$this->validate = array_merge($this->validate, $this->validateAuthor);
-		}
+    public function beforeValidate() {
+        // We might want to check data
+        if (isset($this->data['Post']['author_id'])) {
+            $this->validate = array_merge($this->validate, $this->validateAuthor);
+        }
 
-		// Maybe only on an edit action?
-		// We know it's edit because there is an id
-		if (isset($this->data['Post']['id'])) {
-			$this->validate = array_merge($this->validate, $this->validatePost);
-		}
+        // Maybe only on an edit action?
+        // We know it's edit because there is an id
+        if (isset($this->data['Post']['id'])) {
+            $this->validate = array_merge($this->validate, $this->validatePost);
+        }
 
-		// Perhaps we want to add a single new rule for add using the validator?
-		// We know it's add because there is no id
-		if (!isset($this->data['Post']['id'])) {
-			$this->validator()->add('pubDate', array(
-					'one' => array(
-						'rule' => array('datetime', 'ymd'),
-						'message' => 'Publish date must be ymd'
-					)
-				)
-			)
-		}
+        // Perhaps we want to add a single new rule for add using the validator?
+        // We know it's add because there is no id
+        if (!isset($this->data['Post']['id'])) {
+            $this->validator()->add('pubDate', array(
+                    'one' => array(
+                        'rule' => array('datetime', 'ymd'),
+                        'message' => 'Publish date must be ymd'
+                    )
+                )
+            )
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 ```
 

@@ -15,6 +15,7 @@ So I had already implemented the [CakeDC/Search](https://github.com/cakedc/searc
 My model already had the `filterArgs` setup.  
 
 ```php
+<?php
 /**
  * Setup default search filters
  *
@@ -29,6 +30,7 @@ My model already had the `filterArgs` setup.
 So I just added a `type` of `query` and passed in a `method`.  
 
 ```php
+<?php
 /**
  * Filter the pagination by month
  *
@@ -45,6 +47,7 @@ So I just added a `type` of `query` and passed in a `method`.
 The `$data` array will contain all the fields setup in your model along with their values. So for me it looked like  
 
 ```php
+<?php
 [
     'day_type_id' => 3,
     'month' => '08' // Note the string type, hence why I cast to int
