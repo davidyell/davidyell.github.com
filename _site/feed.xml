@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Daves dev warblings</title>
+    <description>A place to store code snippets, thoughts on coding, and other stuff.
+</description>
+    <link>http://jedistirfry.co.uk/</link>
+    <atom:link href="http://jedistirfry.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 15 Nov 2016 15:19:24 +0000</pubDate>
+    <lastBuildDate>Tue, 15 Nov 2016 15:19:24 +0000</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Create an association to any object in your project</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/31953090/cakephp3-link-one-table-to-multiple-tables-depending-on-type/32965679#32965679&quot;&gt;Adapted from my Stackoverflow answer&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;why&quot;&gt;Why?&lt;/h2&gt;
+&lt;p&gt;Well if you have a project where you need to add arbitrary information to 
+anything across your whole application, you’ll need a way to create that 
+association in a simple way.&lt;/p&gt;
+
+&lt;p&gt;The real-life example which got me learning this technique was that I needed to 
+be able to add an exit click url to any item across my whole project, so that I 
+could control traffic leaving the website.&lt;/p&gt;
+
+&lt;h2 id=&quot;hows-it-work&quot;&gt;How’s it work?&lt;/h2&gt;
+&lt;p&gt;For this example, we’ll allow attaching of a Policy to any item in the system.&lt;/p&gt;
+
+&lt;p&gt;This is actually a lot simpler than it first appears. I’ve done this a few times 
+so I’ll detail the technique that I use.&lt;/p&gt;
+
+&lt;p&gt;The first thing to do is create a behavior. This will allow you to enable any 
+Table class in your application to have a policy attached to it.&lt;/p&gt;
+
+&lt;p&gt;The behavior is very simple. I’ll talk through it after the code.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;namespace App\Model\Behavior;
+
+use Cake\Event\Event;
+use Cake\ORM\Behavior;
+use Cake\ORM\Query;
+
+class PolicyBehavior extends Behavior
+{
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this-&amp;gt;_table-&amp;gt;hasMany('Policies', [
+            'className' =&amp;gt; 'Policies',
+            'foreignKey' =&amp;gt; 'table_foreign_key',
+            'bindingKey' =&amp;gt; 'id',
+            'conditions' =&amp;gt; ['table_class' =&amp;gt; $this-&amp;gt;_table-&amp;gt;registryAlias()],
+            'propertyName' =&amp;gt; 'policies'
+        ]);
+    }
+
+    public function beforeFind(Event $event, Query $query, \ArrayObject $options, $primary)
+    {
+        $query-&amp;gt;contain(['Policies']);
+        return $query;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So the in the &lt;code class=&quot;highlighter-rouge&quot;&gt;initialize()&lt;/code&gt; method we need to create a relationship to the table we attached the behavior to. This will create a &lt;code class=&quot;highlighter-rouge&quot;&gt;Table hasMany Policies&lt;/code&gt; relationship, meaning that any item in your system can have many policies. You can update this relationship to match how you’re working.&lt;/p&gt;
+
+&lt;p&gt;You can see that there are a number of options defined in the relationship. These are important, as they link the tables items together. So the &lt;code class=&quot;highlighter-rouge&quot;&gt;table_foreign_key&lt;/code&gt; is a field in your &lt;code class=&quot;highlighter-rouge&quot;&gt;policies&lt;/code&gt; db table used to store the primaryKey of the related item. So if you’re attaching a Policy to a Car, this would be the &lt;code class=&quot;highlighter-rouge&quot;&gt;Car.id&lt;/code&gt;. The &lt;code class=&quot;highlighter-rouge&quot;&gt;bindingKey&lt;/code&gt; is the key used in the Policy table to join on.&lt;/p&gt;
+
+&lt;p&gt;In order to filter the different types of attachments, you need the &lt;code class=&quot;highlighter-rouge&quot;&gt;table_class&lt;/code&gt; field in your &lt;code class=&quot;highlighter-rouge&quot;&gt;policies&lt;/code&gt; db table. This will be the name of the attached table class. So &lt;code class=&quot;highlighter-rouge&quot;&gt;Cars&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Cats&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Houses&lt;/code&gt; etc. Then we can use this in the conditions, so anything pulling the primary table class will automatically filter the related &lt;code class=&quot;highlighter-rouge&quot;&gt;Policies&lt;/code&gt; to match.&lt;/p&gt;
+
+&lt;p&gt;I’ve also configured the &lt;code class=&quot;highlighter-rouge&quot;&gt;propertyName&lt;/code&gt;, this means that any item you look for which contains &lt;code class=&quot;highlighter-rouge&quot;&gt;Policies&lt;/code&gt; will have an entity property called &lt;code class=&quot;highlighter-rouge&quot;&gt;policies&lt;/code&gt; with the related data inside.&lt;/p&gt;
+
+&lt;p&gt;The last function in the behavior is the &lt;code class=&quot;highlighter-rouge&quot;&gt;beforeFind&lt;/code&gt;, this just ensures that whenever you look for the primary table class, you always return the related &lt;code class=&quot;highlighter-rouge&quot;&gt;policies&lt;/code&gt;, you don’t have to use this if you don’t want to, but I found it handy to always have the related data in my use-case.&lt;/p&gt;
+
+&lt;p&gt;So then, how do we use this new behavior? Just attach it like you would any other behavior, and that’s it. &lt;code class=&quot;highlighter-rouge&quot;&gt;$this-&amp;gt;addBehavior('Policy')&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Be aware&lt;/strong&gt;&lt;br /&gt;
+This just reads data, you’ll need to ensure that you save the table alias, and the &lt;code class=&quot;highlighter-rouge&quot;&gt;foreignKey&lt;/code&gt; into the related table when creating new items.&lt;/p&gt;
+
+&lt;p&gt;Easiest way is to just use a &lt;code class=&quot;highlighter-rouge&quot;&gt;beforeSave()&lt;/code&gt; and append the current Table class &lt;code class=&quot;highlighter-rouge&quot;&gt;alias()&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;primaryKey()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Just for clarity, your &lt;code class=&quot;highlighter-rouge&quot;&gt;policies&lt;/code&gt; table schema will need, at a minimum.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;policies&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;policies&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table_class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VARCHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;policies&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table_foreign_key&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;thats-it&quot;&gt;That’s it!&lt;/h2&gt;
+&lt;p&gt;Go make a brew, and have a biscuit.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 13 Jun 2016 14:41:01 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp3</category>
+        
+        <category>associations</category>
+        
+      </item>
+    
+      <item>
+        <title>Connecting to a remote web service</title>
+        <description>&lt;h2 id=&quot;first-things-first&quot;&gt;First things first&lt;/h2&gt;
+&lt;p&gt;So the first thing you’ll need is the &lt;a href=&quot;https://github.com/UseMuffin/Webservice&quot;&gt;Webservice plugin&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;composer require muffin/webservice:dev-master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then you need to load the plugin in your &lt;code class=&quot;highlighter-rouge&quot;&gt;config/bootstrap.php&lt;/code&gt; and tell the 
+ConnectionManager to consume your config.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plugin::load('Muffin/Webservice');
+ConnectionManager::config(Configure::consume('Webservices'));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then be sure to add the configuration for your service to the &lt;code class=&quot;highlighter-rouge&quot;&gt;config/app.php&lt;/code&gt; file. 
+This means you need to add another array key to your config, it should contain something like the following.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;return [
+	// The rest of your app config
+	
+	'Webservices' =&amp;gt; [
+	    'Twitter' =&amp;gt; [
+	        'className' =&amp;gt; 'Muffin\Webservice\Connection',
+	        'service' =&amp;gt; 'App\Lib\Twitter\Driver\Twitter',
+	        'username' =&amp;gt; env('GITHUB_USERNAME'),
+	        'password' =&amp;gt; env('GITHUB_PASSWORD'),
+	    ]
+	]
+]; // This is the end of your config/app.php file, so the key sits on the 
+   // same array level as 'Session' above
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’ll talk through the various config options here.&lt;/p&gt;
+
+&lt;h3 id=&quot;classname&quot;&gt;className&lt;/h3&gt;
+&lt;p&gt;This is a proxy class which will pass method calls through to your own driver class.&lt;/p&gt;
+
+&lt;h3 id=&quot;service&quot;&gt;service&lt;/h3&gt;
+&lt;p&gt;This is your driver class where you’ll write your code and connect to the service.&lt;/p&gt;
+
+&lt;h3 id=&quot;usernamepassword&quot;&gt;username/password&lt;/h3&gt;
+&lt;p&gt;Any login credentials you need will have to be included.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-your-driver-class&quot;&gt;Creating your driver class&lt;/h2&gt;
+&lt;p&gt;So you need to create a new driver class, which uses the Webservice plugin as a base. 
+For my example, I’ve created my Twitter driver class in &lt;code class=&quot;highlighter-rouge&quot;&gt;src/Lib/Twitter/Driver/Twitter.php&lt;/code&gt; which 
+extends &lt;code class=&quot;highlighter-rouge&quot;&gt;Muffin\Webservice\AbstractDriver&lt;/code&gt;, and I’ve implemented the stub method, which is just &lt;code class=&quot;highlighter-rouge&quot;&gt;initialize&lt;/code&gt;, 
+to setup the client you want to use.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// src/Lib/Twitter/Driver/Twitter.php
+namespace App\Lib\Twitter\Driver;
+
+use Cake\Network\Http\Client;
+use Muffin\Webservice\AbstractDriver;
+
+class Twitter extends AbstractDriver
+{
+	public function initialize()
+	{
+		// Let's use the CakePHP Http client class
+		$this-&amp;gt;_client = new \Cake\Network\Http\Client();
+	}
+	
+	// etc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;There is a gotcha here!&lt;/strong&gt;&lt;br /&gt;
+You will need to implement some methods from &lt;code class=&quot;highlighter-rouge&quot;&gt;Cake\Database\Connection&lt;/code&gt; into 
+your driver class so that DebugKit can interact with your driver. These methods 
+can be copied and pasted from the Connection class.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;configName()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logQueries()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logger()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;creating-your-method&quot;&gt;Creating your method&lt;/h2&gt;
+&lt;p&gt;So assuming we want to get some tweets, we can create a method for that inside 
+our driver class.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	public function tweets()
+	{
+		// Do some setup for Twitter
+		return $this-&amp;gt;_client-&amp;gt;post($url, $dataArray);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This will use the CakePHP Http Client to post to a Twitter url and return the response.&lt;/p&gt;
+
+&lt;p&gt;## Using your new driver
+So now we need to actually get the data to play with. In our controller we need to 
+instantiate the connection and call our new method.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// ExamplesController.php
+	public function getTweets()
+	{
+		$connection = ConnectionManager::get('Twitter');
+		$tweets = $connection-&amp;gt;tweets();
+		$this-&amp;gt;set('tweets', $tweets);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You must make sure that the name of the connection you give to ConnectionManager matches 
+the name you used in your &lt;code class=&quot;highlighter-rouge&quot;&gt;app.php&lt;/code&gt; config setup.&lt;/p&gt;
+
+&lt;h2 id=&quot;thats-it&quot;&gt;That’s it!&lt;/h2&gt;
+&lt;p&gt;Job done! Have a brew.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Sep 2015 12:21:14 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp3</category>
+        
+      </item>
+    
+      <item>
+        <title>Upgrading Session to Flash component in Cake 2.7</title>
+        <description>&lt;h2 id=&quot;changes-in-27&quot;&gt;Changes in 2.7&lt;/h2&gt;
+&lt;p&gt;So one of the major changes which was made to CakePHP with the 2.7 release was that the flash messages from the Session component 
+have been refactored into the Flash Component, as they were with Cake 3.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://book.cakephp.org/2.0/en/appendices/2-7-migration-guide.html#sessioncomponent&quot;&gt;You can view the change in the migration log&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-to-update&quot;&gt;How to update?&lt;/h2&gt;
+&lt;p&gt;If, like me you’re using the &lt;code class=&quot;highlighter-rouge&quot;&gt;setFlash&lt;/code&gt; method for all your controller feedback, you’ll need to update all that code.&lt;/p&gt;
+
+&lt;p&gt;I used this regular expression which captures the various params and re-orders them for replacement in PHP Storm.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Regex search
+this-&amp;gt;Session-&amp;gt;setFlash\((.*),\s(.*),\s(.*)\);
+
+// Replace
+this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will convert stuff like this,&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$this-&amp;gt;Session-&amp;gt;setFlash('Provider updated successfully', 'NiceAdmin.alert-box', array('class' =&amp;gt; 'alert-success'));
+// into
+$this-&amp;gt;Flash-&amp;gt;set('Provider updated successfully', ['params' =&amp;gt; array('class' =&amp;gt; 'alert-success')]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So that’s it, you can run this per script if you want to check it, or just across all your controllers.&lt;/p&gt;
+
+&lt;h2 id=&quot;all-done&quot;&gt;All done!&lt;/h2&gt;
+&lt;p&gt;Time for a brew!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 02 Sep 2015 12:30:00 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp2</category>
+        
+        <category>session</category>
+        
+        <category>flash</category>
+        
+        <category>upgrade</category>
+        
+      </item>
+    
+      <item>
+        <title>How to configure flash messages using Crud plugin</title>
+        <description>&lt;h2 id=&quot;scenario&quot;&gt;Scenario&lt;/h2&gt;
+&lt;p&gt;You’re using the &lt;a href=&quot;https://github.com/friendsofcake/crud&quot;&gt;Crud&lt;/a&gt; plugin you might find that it will use the default flash message elements, so if, like me, you want to use something like &lt;a href=&quot;http://getbootstrap.com/components/#alerts&quot;&gt;Twitter Boostrap Alerts&lt;/a&gt;, you’re out of luck.&lt;/p&gt;
+
+&lt;p&gt;Never fear, help is at hand.&lt;/p&gt;
+
+&lt;p&gt;##Customise flash&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// src/Controller/AppController.php
+public function beforeFilter(Event $event)
+{
+	$this-&amp;gt;eventManager()-&amp;gt;on('Crud.beforeHandle', function () {
+    	$this-&amp;gt;Crud-&amp;gt;action()-&amp;gt;config('messages.success', ['params' =&amp;gt; ['class' =&amp;gt; 'alert alert-success alert-dismissible']]);
+    	$this-&amp;gt;Crud-&amp;gt;action()-&amp;gt;config('messages.error', ['params' =&amp;gt; ['class' =&amp;gt; 'alert alert-danger alert-dismissible']]);
+	});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I tend to put this, as per the example, in my &lt;code class=&quot;highlighter-rouge&quot;&gt;AppController&lt;/code&gt; because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.&lt;/p&gt;
+
+&lt;p&gt;##Success!
+That’s it! Go make a brew.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 21 Jul 2015 21:33:09 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp3</category>
+        
+        <category>crud</category>
+        
+      </item>
+    
+      <item>
+        <title>Finding neighbours in CakePHP3</title>
+        <description>&lt;p&gt;So it seems that in Cake 3 you can no longer use the &lt;code class=&quot;highlighter-rouge&quot;&gt;find('neighbors')&lt;/code&gt; to find posts which are next to each other according to a defined series.&lt;/p&gt;
+
+&lt;p&gt;As I tend to use this for previous and next blog posts when viewing a blog post, I’ll note down my technique here for future reference.&lt;/p&gt;
+
+&lt;p&gt;##The method&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// src/Model/Table/ExamplesTable.php
+/**
+ * Find an item from a table by slug, along with it's two adjacent items
+ *
+ * @param string $slug
+ * @return array
+ */
+public function neighbours($slug)
+{
+    $current = $this-&amp;gt;find()
+        -&amp;gt;where(['slug' =&amp;gt; $slug])
+        -&amp;gt;first();
+
+    $previous = $this-&amp;gt;find()
+        -&amp;gt;where(['publish_date &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;' =&amp;gt; $current-&amp;gt;publish_date-&amp;gt;format('Y-m-d')])
+        -&amp;gt;order(['publish_date' =&amp;gt; 'DESC'])
+        -&amp;gt;first();
+
+    $next = $this-&amp;gt;find()
+        -&amp;gt;where(['publish_date &amp;gt;' =&amp;gt; $current-&amp;gt;publish_date-&amp;gt;format('Y-m-d')])
+        -&amp;gt;order(['publish_date' =&amp;gt; 'DESC'])
+        -&amp;gt;first();
+
+    return [
+        'current' =&amp;gt; $current,
+        'previous' =&amp;gt; $previous,
+        'next' =&amp;gt; $next
+    ];
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;##The finder
+I’ve not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you’d need to join two query objects.&lt;/p&gt;
+
+&lt;p&gt;There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.&lt;/p&gt;
+
+&lt;p&gt;If you have any ideas on how to tackle this challenge, please let me know in the comments.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 21 Jul 2015 20:37:00 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</guid>
+        
+        
+        <category>cakephp3</category>
+        
+        <category>cakephp</category>
+        
+        <category>finders</category>
+        
+        <category>neighbours</category>
+        
+        <category>neighbors</category>
+        
+      </item>
+    
+      <item>
+        <title>Making a calendar</title>
+        <description>&lt;h2 id=&quot;how-to-generate-a-calendar-using-php&quot;&gt;How to generate a calendar using PHP?&lt;/h2&gt;
+&lt;p&gt;At work I built a new holiday calendar system to replace the old system which was being closed down. The company needed a way for employees to request holiday and also managers to check booked holidays by team.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://i.imgur.com/079nh27.png&quot;&gt;This is what it looks like once it’s been styled&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-have-i-written-my-own-code&quot;&gt;Why have I written my own code?&lt;/h2&gt;
+&lt;p&gt;A few reasons really, primarily because it’s a learning experience and secondly because I don’t recall being able to find a decent library with did it. No doubt there are a few, if you know any, please leave a comment and I’ll update this post, thanks!&lt;/p&gt;
+
+&lt;h2 id=&quot;calendar-code&quot;&gt;Calendar code&lt;/h2&gt;
+&lt;p&gt;Just a point to note, this is written in a &lt;a href=&quot;http://cakephp.org/&quot;&gt;CakePHP&lt;/a&gt; view, and uses a table.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;summary=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;calendar&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table table-bordered&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;holiday-calendar&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;thead&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Monday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tuesday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Wednesday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Thursday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Friday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Saturday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;th&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Sunday'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/th&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/thead&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;tbody&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;// $days is a CakePHP2 data array of days
+&lt;/span&gt;			
+			&lt;span class=&quot;c1&quot;&gt;// Work out when the month starts in the grid
+&lt;/span&gt;			&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'N'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;strtotime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Day'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'date'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;c1&quot;&gt;// This is a CakePHP element to make a table cell for the day
+&lt;/span&gt;					&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'calendar-day'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'day'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]);&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;td&amp;gt;&amp;amp;nbsp;&amp;lt;/td&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+			&lt;span class=&quot;nv&quot;&gt;$numOutput&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			&lt;span class=&quot;nv&quot;&gt;$remainingCells&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+			&lt;span class=&quot;c1&quot;&gt;// Output the remaining cells after the first day
+&lt;/span&gt;			&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$remainingCells&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'calendar-day'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'day'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]);&lt;/span&gt;
+				&lt;span class=&quot;nv&quot;&gt;$numOutput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
+
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+			&lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+			&lt;span class=&quot;c1&quot;&gt;// Output the remaining rows
+&lt;/span&gt;			&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$numOutput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'calendar-day'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'day'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]);&lt;/span&gt;
+
+				&lt;span class=&quot;c1&quot;&gt;// Look for the end of the week to roll a new row
+&lt;/span&gt;				&lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+			&lt;span class=&quot;c1&quot;&gt;// Finish off the table with empty rows
+&lt;/span&gt;			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$dayOfWeek&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;td&amp;gt;&amp;amp;nbsp;&amp;lt;/td&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
+
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tbody&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;all-done&quot;&gt;All done&lt;/h3&gt;
+&lt;p&gt;That’s it, you now have a nice horizontal calendar similar to Google Calendar!&lt;/p&gt;
+</description>
+        <pubDate>Fri, 29 May 2015 11:04:12 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-05/making-calendars/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/making-calendars/</guid>
+        
+        
+        <category>php</category>
+        
+        <category>dates</category>
+        
+        <category>calendar</category>
+        
+      </item>
+    
+      <item>
+        <title>jQuery UI Accordion</title>
+        <description>&lt;p&gt;##Time for some Javascript!
+So I’ve implemented the &lt;a href=&quot;https://jqueryui.com/accordion/&quot;&gt;jQueryUI Accordion&lt;/a&gt; as a menu system for a CMS that I’m building and I’ve noticed that the active header will not open automatically.&lt;/p&gt;
+
+&lt;p&gt;This means that when a user hits a link to visit a new page, the accordion will not display their current menu item as active.&lt;/p&gt;
+
+&lt;p&gt;Time for some code!&lt;/p&gt;
+
+&lt;p&gt;##Markup
+I’ve used the same markup as the example, except that because it’s a menu, I needed some bullet points.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'accordion'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;First Heading&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Add an active class how you want to --&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;li&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'active'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;First item&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;Second item&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- More items repeated --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;##jQuery
+So how can we use the markup to tell the javascript which heading to mark active? Turns out it’s remarkably simple.&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//  Accordian navigation&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'#accordion'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;accordion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;heightStyle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;content&quot;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'#accordion h3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'div'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'li.active'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;#accordion&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;accordion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;option&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;active&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+    
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The trick here is the use of &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; to select the immediately adjacent &lt;code class=&quot;highlighter-rouge&quot;&gt;div&lt;/code&gt; without selecting all the other siblings.&lt;/p&gt;
+
+&lt;p&gt;##Go make a brew!
+All done, that’s it!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 20 May 2015 16:14:00 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</guid>
+        
+        
+        <category>jquery</category>
+        
+        <category>jqueryui</category>
+        
+      </item>
+    
+      <item>
+        <title>Paginating multiple types of list in the same controller</title>
+        <description>&lt;h2 id=&quot;what-a-complicated-title&quot;&gt;What a complicated title&lt;/h2&gt;
+&lt;p&gt;Okay, agreed. Perhaps an example would be better. Imagine you have a &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentsController&lt;/code&gt; which you use in your application to render lots of different types of content. You might have &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentTypes&lt;/code&gt; such as News, Guides, Articles, Pages, etc. so there is no point creating lots of controllers, when your &lt;code class=&quot;highlighter-rouge&quot;&gt;ContentsController::index()&lt;/code&gt; method could just output the same thing with just different data.&lt;/p&gt;
+
+&lt;p&gt;This post is about how you deal with those lists in your routing and how to paginate them so that you can preserve your urls.&lt;/p&gt;
+
+&lt;h2 id=&quot;routing&quot;&gt;Routing&lt;/h2&gt;
+&lt;p&gt;So the first thing to do is to setup your routing so that you can keep your content separate.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Router::scope('/', function ($routes) {
+    $routes-&amp;gt;connect('/guides/:slug', ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'view', 'type' =&amp;gt; 'Guides'], ['slug' =&amp;gt; '[a-z-]+', 'pass' =&amp;gt; ['type', 'slug']]);
+    $routes-&amp;gt;connect('/guides', ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'index', 'type' =&amp;gt; 'Guides'], ['pass' =&amp;gt; ['type']]);
+    
+    $routes-&amp;gt;connect('/news/:slug', ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'view', 'type' =&amp;gt; 'News'], ['slug' =&amp;gt; '[a-z-]+', 'pass' =&amp;gt; ['type', 'slug']]);
+    $routes-&amp;gt;connect('/news', ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'index', 'type' =&amp;gt; 'News'], ['pass' =&amp;gt; ['type']]);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This now means that we can access all our different types of content on different urls so that it makes sense to the user.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-our-links&quot;&gt;Creating our links&lt;/h2&gt;
+&lt;p&gt;So now we need to point users to our content.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Link to the index
+echo $this-&amp;gt;Html-&amp;gt;link('Guides', ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'index', 'type' =&amp;gt; 'Guides']);
+
+// Link to a single item
+echo $this-&amp;gt;Html-&amp;gt;link($guide-&amp;gt;title, ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'view', 'type' =&amp;gt; 'Guides', 'slug' =&amp;gt; $guide-&amp;gt;slug]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;## Paginating the index
+As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$this-&amp;gt;Paginator-&amp;gt;options([
+    'url' =&amp;gt; ['controller' =&amp;gt; 'Contents', 'action' =&amp;gt; 'index', 'type' =&amp;gt; $type-&amp;gt;name]
+]);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will now pass the &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt; correctly in all our pagination links, which means that it’ll match the routing correctly and you should end up with nicely paginated urls which match your routing such as &lt;code class=&quot;highlighter-rouge&quot;&gt;/guides?page=2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-the-list&quot;&gt;Getting the list&lt;/h2&gt;
+&lt;p&gt;So you’ll need to process the &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt; when it’s passed to your controller, so be sure to include it in your controllers method signature.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class ContentsController extends AppController {
+	public function index($type)
+	{
+		// Lookup the data by type
+		// Perhaps with a custom finder
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;make-a-brew&quot;&gt;Make a brew&lt;/h2&gt;
+&lt;p&gt;It really is that simple!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 29 Apr 2015 11:57:10 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>cakephp3</category>
+        
+        <category>pagination</category>
+        
+      </item>
+    
+      <item>
+        <title>Working with the Crud plugin in CakePHP</title>
+        <description>&lt;h2 id=&quot;so-what-is-it&quot;&gt;So what is it?&lt;/h2&gt;
+&lt;p&gt;It’s a plugin for CakePHP 2 and CakePHP 3 which saves you time and energy by automating basic tasks which you would usually write or bake youself. These are the CRUD operations (Create, Read, Update and Delete), hence the name of the plugin.&lt;/p&gt;
+
+&lt;p&gt;The idea is that instead of writing repeated controller actions the same functionality can be provided for any model automatically using the events system.&lt;/p&gt;
+
+&lt;p&gt;This post is about Crud v3 which is for Cake 2.x&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/FriendsOfCake/crud&quot;&gt;Read more about the plugin in the repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;im-sold-how-do-i-use-it&quot;&gt;I’m sold, how do I use it?&lt;/h2&gt;
+&lt;p&gt;Once the plugin is installed all you have to do is map a controller action to a crud action, create a controller and a view and you’re job done. It’s really that simple.&lt;/p&gt;
+
+&lt;p&gt;Let’s do an example. I will add comments to the code for various techniques.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Assumptions&lt;/strong&gt;&lt;br /&gt;
+Here we’ll assume the plugin is loaded already, the trait is being used and we have a model called &lt;code class=&quot;highlighter-rouge&quot;&gt;Examples&lt;/code&gt;.
+The following example is for Cake 2, as in Cake 3, there is no need to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;prefix_method&lt;/code&gt; notation.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// I tend to configure Crud in my AppController to save on repitition
+class AppController extends Controller {
+	use CrudControllerTrait;
+	
+	public $components = [
+		// Here we can configure our action maps, finders and all kinds of things
+		'Crud.Crud' =&amp;gt; [
+			'actions' =&amp;gt; [
+				'index' =&amp;gt; 'Crud.index', // Map any index action to the Crud index action handler
+				'view' =&amp;gt; [
+					// Configure the options for this action method
+					'className' =&amp;gt; 'Crud.view',
+					'validateId' =&amp;gt; false
+				],
+				'admin_index' =&amp;gt; 'Crud.index', // We can even hookup prefix methods
+				'admin_add' =&amp;gt; 'Crud.add',
+				'admin_edit' =&amp;gt; 'Crud.edit',
+				'admin_delete' =&amp;gt; 'Crud.delete'
+			]
+		]
+	];
+}
+
+// Create your ExamplesController.php
+class ExamplesController extends AppController {
+	// We don't need any code here because Crud plugin can handle the methods for us!
+	
+	// If we want to just change how this action finds it's data we can specify a custom 
+	// finder method and still have Crud do the rest of the work for us
+    public function view($slug) {
+        $this-&amp;gt;Crud-&amp;gt;action()-&amp;gt;findMethod('slug');
+		return $this-&amp;gt;Crud-&amp;gt;execute();
+    }
+    
+    // What if we want to change the pagination in the index action?
+    public function index() {
+    	// We can hook the beforePaginate event to make changes
+    	$this-&amp;gt;Crud-&amp;gt;on('beforePaginate', function (CakeEvent $event) {
+    		// The event subject here is the controller, and paginator is the 
+    		// paginator component.
+    		// So we can change the page limit to 10 to include 10 items per page
+    		// and we could contain a related model too!
+    		$event-&amp;gt;subject()-&amp;gt;paginator-&amp;gt;settings = [
+    			'contain' =&amp;gt; [
+    				'User'
+    			],
+    			'limit' =&amp;gt; 10
+    		];
+    	});
+		
+		// Let crud handle the rest of the action
+		return $this-&amp;gt;Crud-&amp;gt;execute();
+    }
+}
+
+// Create our view Examples/index.ctp
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'examples index'&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$examples&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Example'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'title'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;## Woah, we just did loads!
+Yep, with the above example, we’ve created all our admin prefixed Example methods, both our index and view methods. It’s amazing how much quicker you can do stuff when you focus on the parts of your system which are not in the basic four CRUD actions.&lt;/p&gt;
+
+&lt;h2 id=&quot;make-a-brew&quot;&gt;Make a brew&lt;/h2&gt;
+&lt;p&gt;Why not eh? You’ve got loads of spare time now.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 13 Feb 2015 12:31:00 +0000</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2015-02/working-with-crud/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-02/working-with-crud/</guid>
+        
+        
+        <category>cakephp</category>
+        
+        <category>crud</category>
+        
+        <category>rad</category>
+        
+        <category>plugin</category>
+        
+      </item>
+    
+      <item>
+        <title>Installing and using pt-visual-explain</title>
+        <description>&lt;h3 id=&quot;why&quot;&gt;Why?&lt;/h3&gt;
+&lt;p&gt;So I attended CakeFest this year and it was brilliant. One of the talks which I took at homework was the &lt;a href=&quot;https://joind.in/talk/view/11599&quot;&gt;Profiling and Optimisation: A practical approach&lt;/a&gt; by &lt;a href=&quot;http://mark-story.com/&quot;&gt;Mark Story&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One the tools mentioned was &lt;code class=&quot;highlighter-rouge&quot;&gt;pt-visual-explain&lt;/code&gt;, and I’ve been playing with it to see how it can help me better understand my queries and what is happening when I’m getting data.&lt;/p&gt;
+
+&lt;p&gt;I thought that I would document the process so I don’t forget it.&lt;/p&gt;
+
+&lt;h3 id=&quot;install&quot;&gt;Install&lt;/h3&gt;
+&lt;p&gt;Go grab your specific platform download of &lt;a href=&quot;http://www.percona.com/downloads/percona-toolkit/LATEST&quot;&gt;Percona Toolkit&lt;/a&gt;. Personally I used the &lt;strong&gt;tarball&lt;/strong&gt; option for my work machine as it’s OS X.&lt;/p&gt;
+
+&lt;h4 id=&quot;mac-osx&quot;&gt;Mac OSX&lt;/h4&gt;
+&lt;p&gt;Here are the instructions for installation on a Mac. I’ve not tried it on my Ubuntu laptop, but when I do, I’ll update this post.&lt;/p&gt;
+
+&lt;p&gt;Then I unzipped the tarball into a folder. You’ll notice that there is a &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile.PL&lt;/code&gt;, this is a Perl script for building the various executables you’ll need.&lt;/p&gt;
+
+&lt;p&gt;Make sure you have Perl installed, &lt;code class=&quot;highlighter-rouge&quot;&gt;perl --version&lt;/code&gt;, which you should be default I think. Then it’s time to build the various executables.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;percona-toolkit-2.2.10
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl Makefile.PL
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then you’ll probably find some warnings or errors about a missing Perl package called &lt;code class=&quot;highlighter-rouge&quot;&gt;DBD::MySQL&lt;/code&gt;. So let’s install this. I used &lt;a href=&quot;http://bixsolutions.net/forum/thread-8.html&quot;&gt;this guide&lt;/a&gt;, but I will summarise it here.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl -MCPAN -e &lt;span class=&quot;s1&quot;&gt;'shell'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If this is the first time you’ve used the Cpan module on your Mac you will be asked about configuring your Cpan set-up.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;get DBI
+&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;get DBD::mysql
+&lt;span class=&quot;gp&quot;&gt;cpan&amp;gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo perl -MCPAN -e &lt;span class=&quot;s1&quot;&gt;'install DBI'&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/.cpan/build/DBD-mysql-x.xxx/
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perl Makefile.PL --testuser&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'daz'&lt;/span&gt; --testpassword&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'YOUR_PASSWORD'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Don’t include the &lt;code class=&quot;highlighter-rouge&quot;&gt;--testpassword=''&lt;/code&gt; argument if your database doesn’t have a password.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;make
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;make &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So now it’s time to run it and see what our queries look like.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pt-visual-explain --connect --host&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;localhost --user&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root --database&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;myDatabase ~/Percona/MyExampleQuery.sql
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You should get a nice visual output of what is going on with your query. At this point you can add indexes, change the query and keep running the visual explainer against it to see how things are changing.&lt;/p&gt;
+
+&lt;p&gt;###Done
+That’s it! Pretty simple really, apart from all that crap with Perl ;)&lt;/p&gt;
+</description>
+        <pubDate>Thu, 28 Aug 2014 17:14:00 +0100</pubDate>
+        <link>http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</link>
+        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2014-08/pt-visual-explain/</guid>
+        
+        
+        <category>mysql</category>
+        
+        <category>percona</category>
+        
+        <category>optimisation</category>
+        
+      </item>
+    
+  </channel>
+</rss>
