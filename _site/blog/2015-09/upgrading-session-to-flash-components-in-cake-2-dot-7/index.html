@@ -84,9 +84,10 @@ this-&gt;Flash-&gt;set($1, ['params' =&gt; $3]);
 
 <p>This will convert stuff like this,</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>$this-&gt;Session-&gt;setFlash('Provider updated successfully', 'NiceAdmin.alert-box', array('class' =&gt; 'alert-success'));
-// into
-$this-&gt;Flash-&gt;set('Provider updated successfully', ['params' =&gt; array('class' =&gt; 'alert-success')]);
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Session</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="s1">'Provider updated successfully'</span><span class="p">,</span> <span class="s1">'NiceAdmin.alert-box'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'alert-success'</span><span class="p">));</span>
+<span class="c1">// into
+</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Flash</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'Provider updated successfully'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'params'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'alert-success'</span><span class="p">)]);</span>
 </code></pre>
 </div>
 

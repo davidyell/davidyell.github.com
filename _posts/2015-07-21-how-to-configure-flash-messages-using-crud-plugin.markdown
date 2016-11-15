@@ -10,8 +10,10 @@ You're using the [Crud](https://github.com/friendsofcake/crud) plugin you might 
 
 Never fear, help is at hand.
 
-##Customise flash
+## Customise flash
+
 ```php
+<?php
 // src/Controller/AppController.php
 public function beforeFilter(Event $event)
 {
@@ -24,5 +26,6 @@ public function beforeFilter(Event $event)
 
 I tend to put this, as per the example, in my `AppController` because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.
 
-##Success!
+## Success!
+
 That's it! Go make a brew.

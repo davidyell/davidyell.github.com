@@ -16,6 +16,7 @@ Then you need to load the plugin in your `config/bootstrap.php` and tell the
 ConnectionManager to consume your config.
 
 ```php
+<?php
 Plugin::load('Muffin/Webservice');
 ConnectionManager::config(Configure::consume('Webservices'));
 ```
@@ -24,6 +25,7 @@ Then be sure to add the configuration for your service to the `config/app.php` f
 This means you need to add another array key to your config, it should contain something like the following.
 
 ```php
+<?php
 return [
 	// The rest of your app config
 	
@@ -57,6 +59,7 @@ extends `Muffin\Webservice\AbstractDriver`, and I've implemented the stub method
 to setup the client you want to use.
 
 ```php
+<?php
 // src/Lib/Twitter/Driver/Twitter.php
 namespace App\Lib\Twitter\Driver;
 
@@ -88,11 +91,12 @@ So assuming we want to get some tweets, we can create a method for that inside
 our driver class.
 
 ```php
-	public function tweets()
-	{
-		// Do some setup for Twitter
-		return $this->_client->post($url, $dataArray);
-	}
+<?php
+public function tweets()
+{
+    // Do some setup for Twitter
+    return $this->_client->post($url, $dataArray);
+}
 ```
 This will use the CakePHP Http Client to post to a Twitter url and return the response.
 
@@ -101,13 +105,14 @@ So now we need to actually get the data to play with. In our controller we need 
 instantiate the connection and call our new method.
 
 ```php
+<?php
 // ExamplesController.php
-	public function getTweets()
-	{
-		$connection = ConnectionManager::get('Twitter');
-		$tweets = $connection->tweets();
-		$this->set('tweets', $tweets);
-	}
+public function getTweets()
+{
+    $connection = ConnectionManager::get('Twitter');
+    $tweets = $connection->tweets();
+    $this->set('tweets', $tweets);
+}
 ```
 
 You must make sure that the name of the connection you give to ConnectionManager matches 

@@ -73,28 +73,30 @@
 <p>Then you need to load the plugin in your <code class="highlighter-rouge">config/bootstrap.php</code> and tell the 
 ConnectionManager to consume your config.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>Plugin::load('Muffin/Webservice');
-ConnectionManager::config(Configure::consume('Webservices'));
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nx">Plugin</span><span class="o">::</span><span class="na">load</span><span class="p">(</span><span class="s1">'Muffin/Webservice'</span><span class="p">);</span>
+<span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">config</span><span class="p">(</span><span class="nx">Configure</span><span class="o">::</span><span class="na">consume</span><span class="p">(</span><span class="s1">'Webservices'</span><span class="p">));</span>
 </code></pre>
 </div>
 
 <p>Then be sure to add the configuration for your service to the <code class="highlighter-rouge">config/app.php</code> file. 
 This means you need to add another array key to your config, it should contain something like the following.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>return [
-	// The rest of your app config
-	
-	'Webservices' =&gt; [
-	    'Twitter' =&gt; [
-	        'className' =&gt; 'Muffin\Webservice\Connection',
-	        'service' =&gt; 'App\Lib\Twitter\Driver\Twitter',
-	        'username' =&gt; env('GITHUB_USERNAME'),
-	        'password' =&gt; env('GITHUB_PASSWORD'),
-	    ]
-	]
-]; // This is the end of your config/app.php file, so the key sits on the 
-   // same array level as 'Session' above
-</code></pre>
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">return</span> <span class="p">[</span>
+	<span class="c1">// The rest of your app config
+</span>	
+	<span class="s1">'Webservices'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+	    <span class="s1">'Twitter'</span> <span class="o">=&gt;</span> <span class="p">[</span>
+	        <span class="s1">'className'</span> <span class="o">=&gt;</span> <span class="s1">'Muffin\Webservice\Connection'</span><span class="p">,</span>
+	        <span class="s1">'service'</span> <span class="o">=&gt;</span> <span class="s1">'App\Lib\Twitter\Driver\Twitter'</span><span class="p">,</span>
+	        <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">'GITHUB_USERNAME'</span><span class="p">),</span>
+	        <span class="s1">'password'</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">'GITHUB_PASSWORD'</span><span class="p">),</span>
+	    <span class="p">]</span>
+	<span class="p">]</span>
+<span class="p">];</span> <span class="c1">// This is the end of your config/app.php file, so the key sits on the 
+</span>   <span class="c1">// same array level as 'Session' above
+</span></code></pre>
 </div>
 
 <p>I’ll talk through the various config options here.</p>
@@ -114,22 +116,23 @@ For my example, I’ve created my Twitter driver class in <code class="highlight
 extends <code class="highlighter-rouge">Muffin\Webservice\AbstractDriver</code>, and I’ve implemented the stub method, which is just <code class="highlighter-rouge">initialize</code>, 
 to setup the client you want to use.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// src/Lib/Twitter/Driver/Twitter.php
-namespace App\Lib\Twitter\Driver;
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// src/Lib/Twitter/Driver/Twitter.php
+</span><span class="k">namespace</span> <span class="nx">App\Lib\Twitter\Driver</span><span class="p">;</span>
 
-use Cake\Network\Http\Client;
-use Muffin\Webservice\AbstractDriver;
+<span class="k">use</span> <span class="nx">Cake\Network\Http\Client</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Muffin\Webservice\AbstractDriver</span><span class="p">;</span>
 
-class Twitter extends AbstractDriver
-{
-	public function initialize()
-	{
-		// Let's use the CakePHP Http client class
-		$this-&gt;_client = new \Cake\Network\Http\Client();
-	}
+<span class="k">class</span> <span class="nc">Twitter</span> <span class="k">extends</span> <span class="nx">AbstractDriver</span>
+<span class="p">{</span>
+	<span class="k">public</span> <span class="k">function</span> <span class="nf">initialize</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="c1">// Let's use the CakePHP Http client class
+</span>		<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Cake\Network\Http\Client</span><span class="p">();</span>
+	<span class="p">}</span>
 	
-	// etc
-</code></pre>
+	<span class="c1">// etc
+</span></code></pre>
 </div>
 
 <p><strong>There is a gotcha here!</strong><br />
@@ -147,11 +150,12 @@ can be copied and pasted from the Connection class.</p>
 <p>So assuming we want to get some tweets, we can create a method for that inside 
 our driver class.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>	public function tweets()
-	{
-		// Do some setup for Twitter
-		return $this-&gt;_client-&gt;post($url, $dataArray);
-	}
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">tweets</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Do some setup for Twitter
+</span>    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_client</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="nv">$dataArray</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 <p>This will use the CakePHP Http Client to post to a Twitter url and return the response.</p>
@@ -160,13 +164,14 @@ our driver class.</p>
 So now we need to actually get the data to play with. In our controller we need to 
 instantiate the connection and call our new method.</p>
 
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// ExamplesController.php
-	public function getTweets()
-	{
-		$connection = ConnectionManager::get('Twitter');
-		$tweets = $connection-&gt;tweets();
-		$this-&gt;set('tweets', $tweets);
-	}
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// ExamplesController.php
+</span><span class="k">public</span> <span class="k">function</span> <span class="nf">getTweets</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$connection</span> <span class="o">=</span> <span class="nx">ConnectionManager</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'Twitter'</span><span class="p">);</span>
+    <span class="nv">$tweets</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">tweets</span><span class="p">();</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'tweets'</span><span class="p">,</span> <span class="nv">$tweets</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 

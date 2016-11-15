@@ -27,3 +27,8 @@ markdown: kramdown
 theme: minima
 
 permalink: /blog/:year-:month/:title/
+
+disqus:
+  shortname: jedistirfry
+
+google_analytics: UA-2775424-18

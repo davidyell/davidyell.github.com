@@ -9,8 +9,10 @@ So it seems that in Cake 3 you can no longer use the `find('neighbors')` to find
 
 As I tend to use this for previous and next blog posts when viewing a blog post, I'll note down my technique here for future reference.
 
-##The method
+## The method
+
 ```php
+<?php
 // src/Model/Table/ExamplesTable.php
 /**
  * Find an item from a table by slug, along with it's two adjacent items
@@ -42,7 +44,8 @@ public function neighbours($slug)
 }
 ```
 
-##The finder
+## The finder
+
 I've not been able to develop a finder for this as a custom find only gets passed a single query object and in order to do a Union between the previous and next you'd need to join two query objects.
 
 There is also the fact that you need to execute the query to return the result of the parent item so that its value can be passed to the query to find the siblings.

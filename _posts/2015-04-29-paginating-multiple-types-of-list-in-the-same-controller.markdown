@@ -14,6 +14,7 @@ This post is about how you deal with those lists in your routing and how to pagi
 So the first thing to do is to setup your routing so that you can keep your content separate.
 
 ```php
+<?php
 Router::scope('/', function ($routes) {
     $routes->connect('/guides/:slug', ['controller' => 'Contents', 'action' => 'view', 'type' => 'Guides'], ['slug' => '[a-z-]+', 'pass' => ['type', 'slug']]);
     $routes->connect('/guides', ['controller' => 'Contents', 'action' => 'index', 'type' => 'Guides'], ['pass' => ['type']]);
@@ -29,6 +30,7 @@ This now means that we can access all our different types of content on differen
 So now we need to point users to our content.
 
 ```php
+<?php
 // Link to the index
 echo $this->Html->link('Guides', ['controller' => 'Contents', 'action' => 'index', 'type' => 'Guides']);
 
@@ -40,6 +42,7 @@ echo $this->Html->link($guide->title, ['controller' => 'Contents', 'action' => '
 As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.
 
 ```php
+<?php
 $this->Paginator->options([
     'url' => ['controller' => 'Contents', 'action' => 'index', 'type' => $type->name]
 ]);
@@ -51,6 +54,7 @@ This will now pass the `type` correctly in all our pagination links, which means
 So you'll need to process the `type` when it's passed to your controller, so be sure to include it in your controllers method signature.
 
 ```php
+<?php
 class ContentsController extends AppController {
 	public function index($type)
 	{

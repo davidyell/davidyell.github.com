@@ -27,6 +27,7 @@ this->Flash->set($1, ['params' => $3]);
 This will convert stuff like this,
 
 ```php
+<?php
 $this->Session->setFlash('Provider updated successfully', 'NiceAdmin.alert-box', array('class' => 'alert-success'));
 // into
 $this->Flash->set('Provider updated successfully', ['params' => array('class' => 'alert-success')]);

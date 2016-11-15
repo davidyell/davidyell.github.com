@@ -68,22 +68,25 @@
 
 <p>Never fear, help is at hand.</p>
 
-<p>##Customise flash</p>
-<div class="language-php highlighter-rouge"><pre class="highlight"><code>// src/Controller/AppController.php
-public function beforeFilter(Event $event)
-{
-	$this-&gt;eventManager()-&gt;on('Crud.beforeHandle', function () {
-    	$this-&gt;Crud-&gt;action()-&gt;config('messages.success', ['params' =&gt; ['class' =&gt; 'alert alert-success alert-dismissible']]);
-    	$this-&gt;Crud-&gt;action()-&gt;config('messages.error', ['params' =&gt; ['class' =&gt; 'alert alert-danger alert-dismissible']]);
-	});
-}
+<h2 id="customise-flash">Customise flash</h2>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// src/Controller/AppController.php
+</span><span class="k">public</span> <span class="k">function</span> <span class="nf">beforeFilter</span><span class="p">(</span><span class="nx">Event</span> <span class="nv">$event</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">eventManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">on</span><span class="p">(</span><span class="s1">'Crud.beforeHandle'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">config</span><span class="p">(</span><span class="s1">'messages.success'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'params'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'alert alert-success alert-dismissible'</span><span class="p">]]);</span>
+    	<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Crud</span><span class="o">-&gt;</span><span class="na">action</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">config</span><span class="p">(</span><span class="s1">'messages.error'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'params'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'alert alert-danger alert-dismissible'</span><span class="p">]]);</span>
+	<span class="p">});</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 
 <p>I tend to put this, as per the example, in my <code class="highlighter-rouge">AppController</code> because that way it will only configure the messages for any action which will be handled by the Crud plugin, but across all my controllers.</p>
 
-<p>##Success!
-That’s it! Go make a brew.</p>
+<h2 id="success">Success!</h2>
+
+<p>That’s it! Go make a brew.</p>
 
   </div>
 

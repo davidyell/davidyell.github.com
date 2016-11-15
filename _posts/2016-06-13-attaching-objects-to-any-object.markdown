@@ -29,6 +29,7 @@ Table class in your application to have a policy attached to it.
 The behavior is very simple. I'll talk through it after the code.
 
 ```php
+<?php
 namespace App\Model\Behavior;
 
 use Cake\Event\Event;
