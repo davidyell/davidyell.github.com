@@ -10,7 +10,7 @@
   <meta name="description" content="So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the .lck files to the server, you’ll want this.">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2011-07/removing-lck-files/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2011-07/removing-lck-files/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,21 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">How to remove all .lck files from a folder</h1>
-    <p class="post-meta"><time datetime="2011-07-21T10:43:25+01:00" itemprop="datePublished">Jul 21, 2011</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">How to remove all .lck files from a folder</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2011-07-21T10:43:25+01:00" itemprop="datePublished">Jul 21, 2011</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Dreamweaver,
+            
+            Bash
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code class="highlighter-rouge">.lck</code> files to the server, you’ll want this.</p>
+    <div class="post-content" itemprop="articleBody">
+        <p>So if you have ever worked on a project and someone is using Dreamweaver as their IDE and uploading all the <code class="highlighter-rouge">.lck</code> files to the server, you’ll want this.</p>
 
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>find . -name <span class="s2">"*.LCK"</span> -exec rm <span class="o">{}</span> <span class="se">\;</span>
 </code></pre>
@@ -74,14 +80,13 @@
 
 <p>Ref: <a href="http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html">http://www.mediacollege.com/adobe/dreamweaver/site-management/lck-remove.html</a></p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 

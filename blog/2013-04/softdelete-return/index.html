@@ -10,7 +10,7 @@
   <meta name="description" content="Use case You have downloaded and installed the Utils.SoftDelete behaviour, but when you delete an item the return is false because the behaviour has stopped ...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2013-04/softdelete-return/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-04/softdelete-return/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,23 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Hack to fix SoftDelete behaviour return in CakePHP</h1>
-    <p class="post-meta"><time datetime="2013-04-16T10:43:25+01:00" itemprop="datePublished">Apr 16, 2013</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Hack to fix SoftDelete behaviour return in CakePHP</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2013-04-16T10:43:25+01:00" itemprop="datePublished">Apr 16, 2013</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Cakephp,
+            
+            Softdelete,
+            
+            Return
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <h3 id="use-case">Use case</h3>
+    <div class="post-content" itemprop="articleBody">
+        <h3 id="use-case">Use case</h3>
 <p>You have downloaded and installed the <a href="https://github.com/cakedc/utils">Utils.SoftDelete</a> behaviour, but when you delete an item the return is <code class="highlighter-rouge">false</code> because the behaviour has stopped the delete and run an update instead.</p>
 
 <p>You still need to feedback to the user that the item has been deleted succesfully, ie, returning a <code class="highlighter-rouge">true</code>.</p>
@@ -97,14 +105,13 @@
 
 <p>Go make a brew!</p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 

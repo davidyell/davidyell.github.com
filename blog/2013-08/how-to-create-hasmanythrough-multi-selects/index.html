@@ -10,7 +10,7 @@
   <meta name="description" content="Updated 6th November 2013">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2013-08/how-to-create-hasmanythrough-multi-selects/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-08/how-to-create-hasmanythrough-multi-selects/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,27 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">How to create hasManyThrough multi-selects</h1>
-    <p class="post-meta"><time datetime="2013-08-13T16:29:00+01:00" itemprop="datePublished">Aug 13, 2013</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">How to create hasManyThrough multi-selects</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2013-08-13T16:29:00+01:00" itemprop="datePublished">Aug 13, 2013</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Cakephp,
+            
+            Hasmanythrough,
+            
+            Habtm,
+            
+            Select,
+            
+            Checkbox
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p><strong>Updated 6th November 2013</strong></p>
+    <div class="post-content" itemprop="articleBody">
+        <p><strong>Updated 6th November 2013</strong></p>
 
 <h3 id="the-scenario">The scenario</h3>
 <p>In your CMS you have a HABTM relationship between two models, something like <code class="highlighter-rouge">Post</code> and <code class="highlighter-rouge">Tag</code>. However you want to store some extra data about the <code class="highlighter-rouge">Tag</code>, such as who created it. This means that the relationship between the two models will in fact need to be a <code class="highlighter-rouge">hasManyThrough</code> and use a join model. <a href="http://book.cakephp.org/2.0/en/models/associations-linking-models-together.html#hasmany-through-the-join-model">You can read more about this type of relationship in the CakePHP CookBook</a>.</p>
@@ -225,14 +237,13 @@ If you are using checkboxes and want to validate your data you will need to ensu
 <h3 id="success">Success</h3>
 <p>Make a brew!</p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 

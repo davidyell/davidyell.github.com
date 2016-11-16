@@ -10,7 +10,7 @@
   <meta name="description" content="So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information.">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2008-11/removing-svn-folders/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2008-11/removing-svn-folders/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,21 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">How to remove all .svn folders from a repo</h1>
-    <p class="post-meta"><time datetime="2008-11-07T09:43:25+00:00" itemprop="datePublished">Nov 7, 2008</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">How to remove all .svn folders from a repo</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2008-11-07T09:43:25+00:00" itemprop="datePublished">Nov 7, 2008</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Svn,
+            
+            Bash
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information.</p>
+    <div class="post-content" itemprop="articleBody">
+        <p>So when you accidentally upload a dev folder controlled by subversion you can strip out all svn information.</p>
 
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>find . -name <span class="s2">".svn"</span> -type d -exec rm -rf <span class="o">{}</span> <span class="se">\;</span>
 </code></pre>
@@ -74,14 +80,13 @@
 
 <p>Reference from, <a href="http://snippets.dzone.com/posts/show/2486">http://snippets.dzone.com/posts/show/2486</a></p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 
