@@ -37,3 +37,13 @@ $on-laptop:        800px;
 
 // Import partials from the `minima` theme.
 @import "minima";
+
+img.gravatar {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+ul.post-list {
+  li h2 {
+    margin-bottom: 0;
+  }
+}

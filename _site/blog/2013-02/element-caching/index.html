@@ -10,7 +10,7 @@
   <meta name="description" content="So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it’s in the book but I always strug...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2013-02/element-caching/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-02/element-caching/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,23 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">How to cache an element in CakePHP</h1>
-    <p class="post-meta"><time datetime="2013-02-07T09:43:25+00:00" itemprop="datePublished">Feb 7, 2013</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">How to cache an element in CakePHP</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2013-02-07T09:43:25+00:00" itemprop="datePublished">Feb 7, 2013</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Cakephp,
+            
+            Cache,
+            
+            Element
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it’s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
+    <div class="post-content" itemprop="articleBody">
+        <p>So this is something that I do on a regular basis and can never quite remember the correct order of the options. Oh sure, it’s in the <a href="http://book.cakephp.org">book</a> but I always struggle to find the bit I need.</p>
 
 <blockquote>
   <p>The url is here, <a href="http://book.cakephp.org/2.0/en/views.html#caching-elements">http://book.cakephp.org/2.0/en/views.html#caching-elements</a></p>
@@ -88,14 +96,13 @@ Name of element, array of data then options. Ref, <a href="http://api.cakephp.or
 <strong>NB</strong><br />
 It’s also worth remebering that if you are caching something it will be cached in that state from the moment it’s called. If you something is dynamic and you are caching it, <em>always</em> use a proper <code class="highlighter-rouge">key</code> for it in the options array! Or use <code class="highlighter-rouge">$this-&gt;here</code> to use the current url slug as the key.</p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 

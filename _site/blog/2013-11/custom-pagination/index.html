@@ -10,7 +10,7 @@
   <meta name="description" content="Scenario You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by ...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2013-11/custom-pagination/">
+  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2013-11/custom-pagination/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -46,8 +46,6 @@
         
           
         
-          
-        
       </div>
     </nav>
 
@@ -60,13 +58,21 @@
       <div class="wrapper">
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Custom Pagination Helper links</h1>
-    <p class="post-meta"><time datetime="2013-11-27T11:00:00+00:00" itemprop="datePublished">Nov 27, 2013</time></p>
-  </header>
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Custom Pagination Helper links</h1>
+        <p class="post-meta">
+            Posted on <time datetime="2013-11-27T11:00:00+00:00" itemprop="datePublished">Nov 27, 2013</time>
+            by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
+            
+            Cakephp,
+            
+            Pagination
+            
+        </p>
+    </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <h3 id="scenario">Scenario</h3>
+    <div class="post-content" itemprop="articleBody">
+        <h3 id="scenario">Scenario</h3>
 <p>You are paginating a set of records but you want to use a custom url for that specific filter. For me this was pagination a set of news articles by category.</p>
 
 <p>The url I wanted to use was <code class="highlighter-rouge">/news/category/daves-awesome-category</code> and then paginating results on <code class="highlighter-rouge">/news/category/daves-awesome-category/page:3</code>. However the Paginator helper didn’t want to play ball.</p>
@@ -98,14 +104,13 @@
 <h3 id="done">Done!</h3>
 <p>Make a brew, and probably have a biscuit too. Why not eh? You’ve earned it.</p>
 
-  </div>
+    </div>
 
-  
+    
     
 
-  
+    
 </article>
-
       </div>
     </main>
 
