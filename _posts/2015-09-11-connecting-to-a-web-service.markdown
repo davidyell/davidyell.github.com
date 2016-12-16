@@ -100,7 +100,7 @@ public function tweets()
 ```
 This will use the CakePHP Http Client to post to a Twitter url and return the response.
 
-## Using your new driver
+## Using your new driver
 So now we need to actually get the data to play with. In our controller we need to 
 instantiate the connection and call our new method.
 
