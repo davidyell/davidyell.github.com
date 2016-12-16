@@ -4,10 +4,10 @@
     <title>Daves dev warblings</title>
     <description>A place to store code snippets, thoughts on coding, and other stuff.
 </description>
-    <link>http://jedistirfry.co.uk/</link>
-    <atom:link href="http://jedistirfry.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 16 Dec 2016 15:06:06 +0000</pubDate>
-    <lastBuildDate>Fri, 16 Dec 2016 15:06:06 +0000</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 16 Dec 2016 15:09:06 +0000</pubDate>
+    <lastBuildDate>Fri, 16 Dec 2016 15:09:06 +0000</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -59,8 +59,8 @@ the fluent interface&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;That’s it, make a brew.&lt;/p&gt;
 </description>
         <pubDate>Thu, 15 Dec 2016 12:04:35 +0000</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2016-12/cake-3-shell-help-output/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2016-12/cake-3-shell-help-output/</guid>
+        <link>http://localhost:4000/blog/2016-12/cake-3-shell-help-output/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016-12/cake-3-shell-help-output/</guid>
         
         
         <category>cakephp</category>
@@ -131,8 +131,8 @@ the Paginator.&lt;/p&gt;
 &lt;p&gt;If you’re feeling clever, perhaps you can call the Cell using Ajax to update it right inside the page!&lt;/p&gt;
 </description>
         <pubDate>Tue, 15 Nov 2016 16:36:20 +0000</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2016-11/pagination-inside-a-view-cell/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2016-11/pagination-inside-a-view-cell/</guid>
+        <link>http://localhost:4000/blog/2016-11/pagination-inside-a-view-cell/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016-11/pagination-inside-a-view-cell/</guid>
         
         
         <category>cakephp</category>
@@ -230,8 +230,8 @@ This just reads data, you’ll need to ensure that you save the table alias, and
 
 </description>
         <pubDate>Mon, 13 Jun 2016 14:41:01 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2016-06/attaching-objects-to-any-object/</guid>
+        <link>http://localhost:4000/blog/2016-06/attaching-objects-to-any-object/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016-06/attaching-objects-to-any-object/</guid>
         
         
         <category>cakephp</category>
@@ -341,8 +341,8 @@ our driver class.&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;This will use the CakePHP Http Client to post to a Twitter url and return the response.&lt;/p&gt;
 
-&lt;p&gt;## Using your new driver
-So now we need to actually get the data to play with. In our controller we need to 
+&lt;h2 id=&quot;using-your-new-driver&quot;&gt;Using your new driver&lt;/h2&gt;
+&lt;p&gt;So now we need to actually get the data to play with. In our controller we need to 
 instantiate the connection and call our new method.&lt;/p&gt;
 
 &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
@@ -363,8 +363,8 @@ the name you used in your &lt;code class=&quot;highlighter-rouge&quot;&gt;app.ph
 &lt;p&gt;Job done! Have a brew.&lt;/p&gt;
 </description>
         <pubDate>Fri, 11 Sep 2015 12:21:14 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/</guid>
+        <link>http://localhost:4000/blog/2015-09/connecting-to-a-web-service/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-09/connecting-to-a-web-service/</guid>
         
         
         <category>cakephp</category>
@@ -409,8 +409,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;Time for a brew!&lt;/p&gt;
 </description>
         <pubDate>Wed, 02 Sep 2015 12:30:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</guid>
+        <link>http://localhost:4000/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-09/upgrading-session-to-flash-components-in-cake-2-dot-7/</guid>
         
         
         <category>cakephp</category>
@@ -453,8 +453,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;That’s it! Go make a brew.&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Jul 2015 21:33:09 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</guid>
+        <link>http://localhost:4000/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-07/how-to-configure-flash-messages-using-crud-plugin/</guid>
         
         
         <category>cakephp</category>
@@ -515,8 +515,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;If you have any ideas on how to tackle this challenge, please let me know in the comments.&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Jul 2015 20:37:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-07/finding-neighbours-in-cakephp3/</guid>
+        <link>http://localhost:4000/blog/2015-07/finding-neighbours-in-cakephp3/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-07/finding-neighbours-in-cakephp3/</guid>
         
         
         <category>cakephp3</category>
@@ -616,8 +616,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;That’s it, you now have a nice horizontal calendar similar to Google Calendar!&lt;/p&gt;
 </description>
         <pubDate>Fri, 29 May 2015 11:04:12 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-05/making-calendars/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/making-calendars/</guid>
+        <link>http://localhost:4000/blog/2015-05/making-calendars/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-05/making-calendars/</guid>
         
         
         <category>php</category>
@@ -684,8 +684,8 @@ this-&amp;gt;Flash-&amp;gt;set($1, ['params' =&amp;gt; $3]);
 &lt;p&gt;All done, that’s it!&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 May 2015 16:14:00 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-05/jquery-ui-accordion/</guid>
+        <link>http://localhost:4000/blog/2015-05/jquery-ui-accordion/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-05/jquery-ui-accordion/</guid>
         
         
         <category>jquery</category>
@@ -759,8 +759,8 @@ As we are using a single view to paginate many different lists we need to tell t
 &lt;p&gt;It really is that simple!&lt;/p&gt;
 </description>
         <pubDate>Wed, 29 Apr 2015 11:57:10 +0100</pubDate>
-        <link>http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</link>
-        <guid isPermaLink="true">http://jedistirfry.co.uk/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</guid>
+        <link>http://localhost:4000/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015-04/paginating-multiple-types-of-list-in-the-same-controller/</guid>
         
         
         <category>cakephp</category>

@@ -10,7 +10,7 @@
   <meta name="description" content="First things first So the first thing you’ll need is the Webservice plugin.">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/">
+  <link rel="canonical" href="http://localhost:4000/blog/2015-09/connecting-to-a-web-service/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -179,8 +179,8 @@ our driver class.</p>
 </div>
 <p>This will use the CakePHP Http Client to post to a Twitter url and return the response.</p>
 
-<p>## Using your new driver
-So now we need to actually get the data to play with. In our controller we need to 
+<h2 id="using-your-new-driver">Using your new driver</h2>
+<p>So now we need to actually get the data to play with. In our controller we need to 
 instantiate the connection and call our new method.</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
@@ -206,7 +206,7 @@ the name you used in your <code class="highlighter-rouge">app.php</code> config 
     <div id="disqus_thread"></div>
     <script>
          var disqus_config = function () {
-         this.page.url = "http://jedistirfry.co.uk/blog/2015-09/connecting-to-a-web-service/";
+         this.page.url = "http://localhost:4000/blog/2015-09/connecting-to-a-web-service/";
          this.page.identifier = "Connecting to a remote web service";
          };
 
