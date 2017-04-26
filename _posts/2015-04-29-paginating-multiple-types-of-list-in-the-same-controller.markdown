@@ -38,7 +38,7 @@ echo $this->Html->link('Guides', ['controller' => 'Contents', 'action' => 'index
 echo $this->Html->link($guide->title, ['controller' => 'Contents', 'action' => 'view', 'type' => 'Guides', 'slug' => $guide->slug]);
 ```
 
-## Paginating the index
+## Paginating the index
 As we are using a single view to paginate many different lists we need to tell the Pagination helper how to form the url properly.
 
 ```php
