@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Only One validation for CakePHP</title>
-  <meta name="description" content="Use case You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.">
+  <title>Adding data attributes to select elements</title>
+  <meta name="description" content="Use case You’ve loaded a collection of entities, and would like to create a select element out of it without having to do an extra find(&#39;list&#39;) in your contr...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/blog/2013-04/onlyone-cake-validation/">
+  <link rel="canonical" href="http://localhost:4000/blog/2018-08/adding-data-attributes-to-select-elements/">
   <link rel="alternate" type="application/rss+xml" title="Daves dev warblings" href="/feed.xml">
   
   
@@ -86,77 +86,77 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Only One validation for CakePHP</h1>
+        <h1 class="post-title" itemprop="name headline">Adding data attributes to select elements</h1>
         <p class="post-meta">
-            Posted on <time datetime="2013-04-06T10:43:25+01:00" itemprop="datePublished">Apr 6, 2013</time>
+            Posted on <time datetime="2018-08-16T10:08:35+01:00" itemprop="datePublished">Aug 16, 2018</time>
             by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">David Yell</span></span> in
             
             Cakephp,
             
-            Validation,
+            Cakephp3,
             
-            Onlyone
+            Select,
+            
+            Collection,
+            
+            Attributes
             
         </p>
     </header>
 
     <div class="post-content" itemprop="articleBody">
-        <h3 id="use-case">Use case</h3>
-<p>You want to set a default for a collection of items and you need to validate that there is only one default set in the collection.</p>
+        <h2 id="use-case">Use case</h2>
+<p>You’ve loaded a collection of entities, and would like to create a select element out of it without having to do an extra <code class="highlighter-rouge">find('list')</code> in your controller.</p>
 
-<h3 id="setup">Setup</h3>
+<h2 id="organising-your-data">Organising your data</h2>
+<p>There are two approaches here depending on what you’d like to achieve.</p>
 
-<p>I tend to use a <code class="highlighter-rouge">bool NOT NULL DEFAULT 0</code> field for this in the database. Then in my model I’ll implement a custom validation function.</p>
+<h3 id="just-an-option-value-and-text">Just an option value and text</h3>
+<p>Firstly, let’s look at just taking two fields from the entities and using them. This uses the <code class="highlighter-rouge">combine</code> method from the <a href="https://book.cakephp.org/3.0/en/core-libraries/collections.html#Cake\Collection\Collection::combine">Collections class</a>.</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-<span class="k">public</span> <span class="nv">$validate</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-        <span class="s1">'default'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// Name of the field
-</span>            <span class="s1">'one'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// The name of the rule
-</span>                <span class="s1">'rule'</span> <span class="o">=&gt;</span> <span class="s1">'onlyOne'</span><span class="p">,</span> <span class="c1">// My custom validation
-</span>                <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'Only one can be default. A default already exists'</span><span class="p">,</span>
-                <span class="s1">'required'</span> <span class="o">=&gt;</span> <span class="kc">false</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-<span class="p">);</span>
+<span class="nv">$optionsData</span> <span class="o">=</span> <span class="nv">$entities</span><span class="o">-&gt;</span><span class="na">combine</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">);</span>
 
-<span class="sd">/**
- * Checks to ensure that only one record has the default flag
- * @param array $check An array containing {field}=&gt;{value}
- * @return bool
- */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">onlyOne</span><span class="p">(</span><span class="nv">$check</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// If turning off default, we don't mind
-</span>        <span class="k">if</span> <span class="p">(</span><span class="nv">$check</span><span class="p">[</span><span class="s1">'default'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Find the current default
-</span>        <span class="nv">$default</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="s1">'first'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
-            <span class="s1">'conditions'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-                <span class="s1">'default'</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="s1">'fields'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">)</span>
-            <span class="p">));</span>
-
-        <span class="c1">// No default exists
-</span>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$default</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// If we are updating the current default
-</span>        <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">[</span><span class="s1">'Model'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">[</span><span class="s1">'Model'</span><span class="p">][</span><span class="s1">'id'</span><span class="p">])</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">}</span>
-    
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">control</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'options'</span> <span class="o">=&gt;</span> <span class="nv">$optionsData</span><span class="p">]);</span>
 </code></pre>
 </div>
 
-<h3 id="success">Success</h3>
+<p>Output would be something like the following</p>
 
-<p>Go make a brew!</p>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">"example"</span> <span class="na">id=</span><span class="s">"example"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"1"</span><span class="nt">&gt;</span>First<span class="nt">&lt;/option&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"2"</span><span class="nt">&gt;</span>Second<span class="nt">&lt;/option&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="adding-data-attributes">Adding data attributes</h3>
+<p>Secondly we might want to add some more data to the DOM, perhaps for Javascript to interact with. This uses the <code class="highlighter-rouge">map</code> method from the <a href="https://book.cakephp.org/3.0/en/core-libraries/collections.html#Cake\Collection\Collection::map">Collections class</a>.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$optionsData</span> <span class="o">=</span> <span class="nv">$entities</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$value</span><span class="p">,</span> <span class="nv">$key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">'value'</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span>
+        <span class="s1">'text'</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">,</span>
+        <span class="s1">'data-created'</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="o">-&gt;</span><span class="na">created</span>
+    <span class="p">];</span>
+<span class="p">});</span>
+
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">Form</span><span class="o">-&gt;</span><span class="na">control</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'options'</span> <span class="o">=&gt;</span> <span class="nv">$optionsData</span><span class="p">]);</span>
+</code></pre>
+</div>
+
+<p>Output would be something like the following</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">"example"</span> <span class="na">id=</span><span class="s">"example"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"1"</span> <span class="na">data-created=</span><span class="s">"2018-08-16 11:15:10"</span><span class="nt">&gt;</span>First<span class="nt">&lt;/option&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"2"</span> <span class="na">data-created=</span><span class="s">"2018-08-16 11:16:22"</span><span class="nt">&gt;</span>Second<span class="nt">&lt;/option&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="make-a-brew">Make a brew</h2>
+<p>That’s it, make a brew.</p>
 
     </div>
 
@@ -164,8 +164,8 @@
     <div id="disqus_thread"></div>
     <script>
          var disqus_config = function () {
-         this.page.url = "http://localhost:4000/blog/2013-04/onlyone-cake-validation/";
-         this.page.identifier = "Only One validation for CakePHP";
+         this.page.url = "http://localhost:4000/blog/2018-08/adding-data-attributes-to-select-elements/";
+         this.page.identifier = "Adding data attributes to select elements";
          };
 
         (function() { // DON'T EDIT BELOW THIS LINE
